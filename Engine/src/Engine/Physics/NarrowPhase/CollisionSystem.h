@@ -2,8 +2,9 @@
 
 #include "Engine/Core/Components/Components.h"
 
+#include "Engine/Physics/Components/Components.h"
+
 #include "Engine/ECS/System/iSystem.h"
-#include "Engine/ECS/Components.h"
 
 namespace MyEngine
 {
@@ -38,7 +39,7 @@ namespace MyEngine
 		void m_CheckSphereOverlaps(std::shared_ptr<Scene> pScene,
 								   Entity entityIdA,
 								   TransformComponent& transformA,
-								   SphereColliderComponent& sphereA,
+								   RigidBodyComponent& sphereA,
 								   const int index,
 								   const std::vector<Entity>& activeEntities,
 								   const std::vector<Entity>& passiveEntities,
@@ -47,7 +48,7 @@ namespace MyEngine
 		bool m_CheckSphereEntityOverlap(std::shared_ptr<Scene> pScene,
 										Entity entityIdA,
 										TransformComponent& transformA,
-										SphereColliderComponent& sphereA,
+										RigidBodyComponent& sphereA,
 										Entity entityIdB);
 	};
 }

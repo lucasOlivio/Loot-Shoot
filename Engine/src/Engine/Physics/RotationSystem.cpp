@@ -4,8 +4,9 @@
 
 #include "Engine/Core/Components/Components.h"
 
+#include "Engine/Physics/Components/Components.h"
+
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Utils/TransformUtils.h"
 

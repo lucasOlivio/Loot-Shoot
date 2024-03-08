@@ -76,9 +76,6 @@
         },
         "rigidBody": {
             "bodyType": 1,
-            "shapeType": 1
-        },
-        "sphereCollider": {
             "radius": 1.0
         },
         "player": {

@@ -2,11 +2,13 @@
 
 #include "SceneSerializerJSON.h"
 
+#include "Engine/Core/Components/CoreLocator.h"
+
 #include "Engine/Utils/ParserJSON.h"
 
 #include "Engine/Graphics/Components/GraphicsLocator.h"
-#include "Engine/Core/Components/CoreLocator.h"
-#include "Engine/ECS/SingletonComponents/PhysicsLocator.h"
+
+#include "Engine/Physics/Components/PhysicsLocator.h"
 
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/filewritestream.h>
@@ -282,15 +284,6 @@ namespace MyEngine
                 RigidBodyComponent& rigidBody = sceneIn.Get<RigidBodyComponent>(entity);
                 m_ParseRigidBodyToDoc(rigidBodyObject, rigidBody, allocator);
                 entityObject.AddMember("rigidBody", rigidBodyObject, allocator);
-            }
-            if (sceneIn.HasComponent(entity, sceneIn.GetComponentType<SphereColliderComponent>()))
-            {
-                Value sphereColliderObject;
-                sphereColliderObject.SetObject();
-
-                SphereColliderComponent& sphereCollider = sceneIn.Get<SphereColliderComponent>(entity);
-                m_ParseSphereColliderToDoc(sphereColliderObject, sphereCollider, allocator);
-                entityObject.AddMember("sphereCollider", sphereColliderObject, allocator);
             }
             if (sceneIn.HasComponent(entity, sceneIn.GetComponentType<PlayerComponent>()))
             {
@@ -601,29 +594,7 @@ namespace MyEngine
         ParserJSON parser = ParserJSON();
 
         parser.SetMember(jsonObject, "bodyType", rigidBodyIn.bodyType, allocator);
-        parser.SetMember(jsonObject, "shapeType", rigidBodyIn.shapeType, allocator);
-
-        return true;
-    }
-
-    bool SceneSerializerJSON::m_ParseSphereColliderToDoc(rapidjson::Value& jsonObject, SphereColliderComponent& sphereIn, rapidjson::Document::AllocatorType& allocator)
-    {
-        using namespace rapidjson;
-
-        ParserJSON parser = ParserJSON();
-
-        parser.SetMember(jsonObject, "radius", sphereIn.radius, allocator);
-
-        return true;
-    }
-
-    bool SceneSerializerJSON::m_ParseMeshColliderToDoc(rapidjson::Value& jsonObject, MeshColliderComponent& meshIn, rapidjson::Document::AllocatorType& allocator)
-    {
-        using namespace rapidjson;
-
-        ParserJSON parser = ParserJSON();
-
-        parser.SetMember(jsonObject, "name", meshIn.name, allocator);
+        parser.SetMember(jsonObject, "radius", rigidBodyIn.radius, allocator);
 
         return true;
     }
@@ -791,11 +762,6 @@ namespace MyEngine
                 {
                     RigidBodyComponent& rigidBody = sceneOut.AddComponent<RigidBodyComponent>(entityId);
                     m_ParseDocToRigidBody(componentObject, rigidBody);
-                }
-                else if (componentName == "sphereCollider")
-                {
-                    SphereColliderComponent& sphereCollider = sceneOut.AddComponent<SphereColliderComponent>(entityId);
-                    m_ParseDocToSphereCollider(componentObject, sphereCollider);
                 }
                 else if (componentName == "player")
                 {
@@ -1133,31 +1099,9 @@ namespace MyEngine
     {
         ParserJSON parser = ParserJSON();
         int bodyType = 0;
-        int shapeType = 0;
 
         parser.GetValue(jsonObject["bodyType"], bodyType);
-        parser.GetValue(jsonObject["shapeType"], shapeType);
-
-        rigidbodyOut.bodyType = (eBody)bodyType;
-        rigidbodyOut.shapeType = (eShape)shapeType;
-
-        return true;
-    }
-
-    bool SceneSerializerJSON::m_ParseDocToSphereCollider(rapidjson::Value& jsonObject, SphereColliderComponent& sphereOut)
-    {
-        ParserJSON parser = ParserJSON();
-
-        parser.GetValue(jsonObject["radius"], sphereOut.radius);
-
-        return true;
-    }
-
-    bool SceneSerializerJSON::m_ParseDocToMeshCollider(rapidjson::Value& jsonObject, MeshColliderComponent& meshOut)
-    {
-        ParserJSON parser = ParserJSON();
-
-        parser.GetValue(jsonObject["name"], meshOut.name);
+        parser.GetValue(jsonObject["radius"], rigidbodyOut.radius);
 
         return true;
     }

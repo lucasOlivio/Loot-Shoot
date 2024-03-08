@@ -3,16 +3,14 @@
 #include "Engine.h"
 
 #include "Engine/Core/Configs/ConfigSerializerFactory.h"
+#include "Engine/Core/Components/CoreLocator.h"
 
 #include "Engine/Events/EventBus.hpp"
 #include "Engine/Events/EventBusLocator.hpp"
 
 #include "Engine/ECS/Scene/SceneManager.h"
 #include "Engine/ECS/Scene/SceneManagerLocator.h"
-#include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/ECS/SingletonComponents/DebugLocator.h"
-#include "Engine/Graphics/Components/GraphicsLocator.h"
-#include "Engine/ECS/SingletonComponents/PhysicsLocator.h"
 #include "Engine/ECS/System/SystemBuilder.h"    
 
 #include "Engine/Graphics/VAO/VAOManagerLocator.h"
@@ -27,8 +25,11 @@
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 #include "Engine/Graphics/Particles/ParticleManager.h"
 #include "Engine/Graphics/Particles/ParticleManagerLocator.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
 
 #include "Engine/Utils/InputUtils.h"
+
+#include "Engine/Physics/Components/PhysicsLocator.h"
 
 namespace MyEngine
 {

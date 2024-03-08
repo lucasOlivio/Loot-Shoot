@@ -18,6 +18,8 @@
 #include "Engine/Utils/InputUtils.h"
 #include "Engine/Utils/TransformUtils.h"
 
+#include "Engine/Physics/Components/Components.h"
+
 namespace MyEngine
 {
 	void PlayerControllerSystem::Init()

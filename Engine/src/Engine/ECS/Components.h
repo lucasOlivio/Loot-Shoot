@@ -8,7 +8,6 @@
 #include "Engine/Graphics/Animations/AnimationProperties.h"
 #include "Engine/Graphics/Particles/ParticlesProperties.h"
 
-#include "Engine/Physics/PhysicsProperties.h"
 
 #include "Engine/Gameplay/GameplayProperties.h"
 
@@ -17,45 +16,6 @@
 
 namespace MyEngine
 {
-
-	// Physics components
-	// ------------------------
-
-	struct MovementComponent : public iComponent
-	{
-		glm::vec3 velocity;
-		glm::vec3 acceleration;
-
-		float drag;
-		float maxSpeed;
-	};
-
-	struct RotationComponent : public iComponent
-	{
-		glm::vec3 velocity;
-		glm::vec3 acceleration;
-
-		float drag;
-		float maxSpeed;
-	};
-
-	struct RigidBodyComponent : public iComponent
-	{
-		eBody bodyType;
-		eShape shapeType;
-	};
-
-	struct MeshColliderComponent : public iComponent
-	{
-		std::string name;
-		sMesh* pMesh;
-	};
-
-	struct SphereColliderComponent : public iComponent
-	{
-		float radius;
-	};
-
 	// TODO: Player Gameplay would be better separated from engine, using scripts instead of components
 	// Gameplay
 	// -------------------------------------------------------------

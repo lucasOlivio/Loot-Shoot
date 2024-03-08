@@ -4,10 +4,11 @@
 
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 
-#include "Engine/ECS/SingletonComponents/PhysicsLocator.h"
 #include "Engine/ECS/SingletonComponents/DebugLocator.h"
 
 #include "Engine/Utils/TransformUtils.h"
+
+#include "Engine/Physics/Components/PhysicsLocator.h"
 
 namespace MyEngine
 {

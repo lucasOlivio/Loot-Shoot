@@ -2,11 +2,11 @@
 
 #include "DrawCollisionSystem.h"
 
+#include "Engine/Core/Components/CoreLocator.h"
+
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 
 #include "Engine/ECS/SingletonComponents/DebugLocator.h"
-#include "Engine/ECS/SingletonComponents/PhysicsLocator.h"
-#include "Engine/Core/Components/CoreLocator.h"
 
 #include "Engine/Utils/GraphicsUtils.h"
 #include "Engine/Utils/CollisionsUtils.h"

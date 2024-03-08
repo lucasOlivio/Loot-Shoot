@@ -13,6 +13,8 @@
 #include "Engine/Utils/TransformUtils.h"
 #include "Engine/Utils/GameplayUtils.h"
 
+#include "Engine/Physics/Components/Components.h"
+
 namespace MyEngine
 {
     void SteeringBehaviorSystem::Init()

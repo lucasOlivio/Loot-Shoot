@@ -2,11 +2,12 @@
 
 #include "CollisionsUtils.h"
 
-#include "Engine/ECS/SingletonComponents/PhysicsLocator.h"
 #include "Engine/Core/Components/CoreLocator.h"
 
 #include "Engine/Utils/TransformUtils.h"
 #include "Engine/Utils/Math.h"
+
+#include "Engine/Physics/Components/PhysicsLocator.h"
 
 #include <glm/mat4x4.hpp>
 

@@ -5,12 +5,13 @@
 #include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/Core/Components/Components.h"
 
-#include "Engine/ECS/Components.h"
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/SingletonComponents/PhysicsLocator.h"
 
 #include "Engine/Utils/GridUtils.h"
 #include "Engine/Utils/TransformUtils.h"
+
+#include "Engine/Physics/Components/Components.h"
+#include "Engine/Physics/Components/PhysicsLocator.h"
 
 namespace MyEngine
 {
@@ -167,16 +168,8 @@ namespace MyEngine
 			uint idxpos = GridUtils::LocatePoint(transform.worldPosition, pGrid->lengthPerBox);
 			m_InsertEntity(entityId, idxpos, rigidBody.bodyType);
 
-			if (rigidBody.shapeType == eShape::SPHERE)
-			{
-				SphereColliderComponent& sphere = pScene->Get<SphereColliderComponent>(entityId);
-				m_InsertSphere(entityId, idxpos, transform.position,
-					sphere.radius, rigidBody.bodyType, pGrid);
-			}
-			else
-			{
-				LOG_WARNING("Shape type not implemented yet: " + std::to_string(rigidBody.shapeType));
-			}
+			m_InsertSphere(entityId, idxpos, transform.position,
+						   rigidBody.radius, rigidBody.bodyType, pGrid);
 		}
 	}
 

@@ -2,9 +2,9 @@
 
 #include "CollisionSystem.h"
 
-#include "Engine/ECS/Components.h"
-#include "Engine/ECS/SingletonComponents/PhysicsLocator.h"
 #include "Engine/Core/Components/CoreLocator.h"
+
+#include "Engine/Physics/Components/PhysicsLocator.h"
 
 #include "Engine/Events/EventBusLocator.hpp"
 #include "Engine/Events/CollisionEvent.h"
@@ -44,23 +44,10 @@ namespace MyEngine
                 TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
                 RigidBodyComponent& rigidBody = pScene->Get<RigidBodyComponent>(entityId);
 
-                // Get the right collider to test against
-                switch (rigidBody.shapeType)
-                {
-                case eShape::SPHERE:
-                {
-                    SphereColliderComponent& sphere = pScene->Get<SphereColliderComponent>(entityId);
-                    m_CheckSphereOverlaps(pScene, entityId, transform, sphere, i,
-                        activeGroup,
-                        passiveGroup,
-                        staticGroup);
-
-                    break;
-                }
-                default:
-                    LOG_WARNING("Unknown shape for entity " + std::to_string(entityId));
-                    continue;
-                }
+                m_CheckSphereOverlaps(pScene, entityId, transform, rigidBody, i,
+                                        activeGroup,
+                                        passiveGroup,
+                                        staticGroup);
             }
         }
     }
@@ -100,91 +87,83 @@ namespace MyEngine
     }
 
     void CollisionSystem::m_CheckSphereOverlaps(std::shared_ptr<Scene> pScene,
-								                Entity entityIdA,
-                                                TransformComponent& transformA,
-                                                SphereColliderComponent& sphereA,
-                                                const int index,
-                                                const std::vector<Entity>& activeEntities,
-                                                const std::vector<Entity>& passiveEntities,
-                                                const std::vector<Entity>& staticEntities)
+        Entity entityIdA,
+        TransformComponent& transformA,
+        RigidBodyComponent& sphereA,
+        const int index,
+        const std::vector<Entity>& activeEntities,
+        const std::vector<Entity>& passiveEntities,
+        const std::vector<Entity>& staticEntities)
     {
         // Start from one entity ahead so we dont test repeated
         for (int i = index + 1; i < activeEntities.size(); i++)
         {
             Entity entityIdB = activeEntities[i];
             bool isCollision = m_CheckSphereEntityOverlap(pScene, entityIdA,
-                                                          transformA,
-                                                          sphereA, 
-                                                          entityIdB);
+                transformA,
+                sphereA,
+                entityIdB);
         }
 
         for (int i = 0; i < staticEntities.size(); i++)
         {
             Entity entityIdB = activeEntities[i];
             bool isCollision = m_CheckSphereEntityOverlap(pScene, entityIdA,
-                                                          transformA,
-                                                          sphereA, 
-                                                          entityIdB);
+                transformA,
+                sphereA,
+                entityIdB);
         }
     }
 
     bool CollisionSystem::m_CheckSphereEntityOverlap(std::shared_ptr<Scene> pScene,
-										             Entity entityIdA,
-										             TransformComponent& transformA,
-										             SphereColliderComponent& sphereA,
-										             Entity entityIdB)
+                                                    Entity entityIdA,
+                                                    TransformComponent& transformA,
+                                                    RigidBodyComponent& sphereA,
+                                                    Entity entityIdB)
     {
+        MovementComponent& movementA = pScene->Get<MovementComponent>(entityIdA);
+
         TransformComponent& transformB = pScene->Get<TransformComponent>(entityIdB);
         RigidBodyComponent& rigidBodyB = pScene->Get<RigidBodyComponent>(entityIdB);
 
-        MovementComponent& movementA = pScene->Get<MovementComponent>(entityIdA);
+        // Check if is colliding with entityB
+        bool isCollision = false;
+        
+        RigidBodyComponent& sphereB = pScene->Get<RigidBodyComponent>(entityIdB);
+        isCollision = CollisionsUtils::SphereSphere_Overlap(sphereA.radius,
+            transformA.worldPosition,
+            sphereB.radius,
+            transformB.worldPosition);
+
+        if (!isCollision)
+        {
+            return false;
+        }
+
+        // Is colliding, so send collision event
+        sCollisionData collData = sCollisionData();
+        collData.entityA = entityIdA;
+        collData.entityB = entityIdB;
+        collData.collisionNormalA = CollisionsUtils::SphereSphere_Normal(transformA.worldPosition,
+                                                                        transformB.worldPosition);
+        collData.collisionNormalB = -collData.collisionNormalA;
+        collData.contactPoint = CollisionsUtils::SphereSphere_CollisionPoint(sphereA.radius,
+                                                                            transformA.worldPosition,
+                                                                            collData.collisionNormalA,
+                                                                            sphereB.radius,
+                                                                            transformB.worldPosition);
+        collData.velocityAtCollisionA = movementA.velocity;
+
+        collData.pScene = pScene;
 
         bool hasMovement = false;
         MovementComponent& movementB = pScene->Get<MovementComponent>(entityIdB, hasMovement);
-
-        // Get the right collider to test against
-        bool isCollision = false;
-        switch (rigidBodyB.shapeType)
+        if (hasMovement)
         {
-        case eShape::SPHERE:
-        {
-            SphereColliderComponent& sphereB = pScene->Get<SphereColliderComponent>(entityIdB);
-            isCollision = CollisionsUtils::SphereSphere_Overlap(sphereA.radius,
-                                                                transformA.worldPosition,
-                                                                sphereB.radius,
-                                                                transformB.worldPosition);
-
-            if (isCollision)
-            {
-                sCollisionData collData = sCollisionData();
-                collData.entityA = entityIdA;
-                collData.entityB = entityIdB;
-                collData.collisionNormalA = CollisionsUtils::SphereSphere_Normal(transformA.worldPosition, 
-                                                                                 transformB.worldPosition);
-                collData.collisionNormalB = -collData.collisionNormalA;
-                collData.contactPoint = CollisionsUtils::SphereSphere_CollisionPoint(sphereA.radius,
-                                                                                      transformA.worldPosition,
-                                                                                      collData.collisionNormalA,
-                                                                                      sphereB.radius,
-                                                                                      transformB.worldPosition);
-                collData.velocityAtCollisionA = movementA.velocity;
-
-                collData.pScene = pScene;
-
-                if (hasMovement)
-                {
-                    collData.velocityAtCollisionB = movementB.velocity;
-                }
-
-                m_TriggerCollision(collData);
-            }
-
-            break;
+            collData.velocityAtCollisionB = movementB.velocity;
         }
-        default:
-            LOG_WARNING("Unknown shape for entity " + std::to_string(entityIdB));
-            return false;
-        }
+
+        m_TriggerCollision(collData);
 
         return isCollision;
     }
