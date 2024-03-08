@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Core/Shapes.hpp"
-#include "Engine/Core/StateProperties.h"
 
 #include "Engine/ECS/Base.h"
 #include "Engine/ECS/Scene/Scene.h"
@@ -32,24 +31,7 @@ namespace MyEngine
 		GLFWwindow* pGLFWWindow;
 	};
 
-	struct ConfigPathComponent
-	{
-		std::string pathModels;
-		std::string pathAudio;
-		std::string pathShaders;
-		std::string pathScripts;
-		std::string pathTextures;
-		std::string pathScenes;
-
-		// Path to debug models inside models default folder
-		std::string pathDebugSquare; 
-		std::string pathDebugSphere;
-	};
-
-	struct TransparentEntitiesComponent
-	{
-		std::vector<Entity> entities;
-	};
+	
 
 	struct AnimationControllerComponent
 	{
@@ -58,13 +40,6 @@ namespace MyEngine
 
 		float speed = 1.0f;
 		bool reset = false;
-	};
-
-	struct FrameCounterComponent
-	{
-		int frameCount;
-		float fpsTimer;
-		float fps;
 	};
 
 	struct GridBroadphaseComponent
@@ -93,38 +68,6 @@ namespace MyEngine
 		std::set<sCollisionParticleData> particleCollisions[FRAME_RATE];
 		size_t currSize;
 		size_t currParticlesSize;
-	};
-
-	struct KeyInputComponent
-	{
-		// One for each key code from glfw
-		bool key[350];
-	};
-
-	struct MouseInputComponent
-	{
-		// One for each mouse button code from glfw
-		bool button[7];
-
-		float posX;
-		float posY;
-
-		float lastPosX;
-		float lastPosY;
-
-		float sensitivity;
-
-		bool mouseCaptured;
-	};
-
-	struct GameStateComponent
-	{
-		// All the systems that should be running 
-		std::vector<std::string> mainSystems; // Always running
-		std::map<eGameStates, std::vector<std::string>> mapStateSystems;
-
-		eGameStates prevState; // Only state system should modify this
-		eGameStates currState; // Any system can modify this to stop/run simulation
 	};
 
 	// Debug objects

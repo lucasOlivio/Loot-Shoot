@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Base.h"
+#include "Engine/ECS/Base.h"
+#include "Engine/ECS/iComponent.h"
 
 #include "Engine/Graphics/Textures/TextureProperties.h"
 #include "Engine/Graphics/GraphicsProperties.h"
@@ -16,52 +17,12 @@
 
 namespace MyEngine
 {
-	// Core components
-	// ------------------------
 
-	struct TagComponent
-	{
-		std::string name;
-	};
 
-	struct CameraComponent
-	{
-		glm::vec3 upVector;
-
-		float distance;
-		float height;
-		float offsetTarget;
-
-		float fovy;
-		float zNear;
-		float zFar;
-	};
-
-	struct TransformComponent
-	{
-		glm::vec3 position;
-		glm::quat orientation;
-		float scale;
-
-		// Values calculated in relation to parent
-		glm::vec3 worldPosition;
-		glm::quat worldOrientation;
-		float worldScale;
-
-		// Value calculated distance in relation to camera position
-		float distToCamera;
-	};
-
-	struct ParentComponent
-	{
-		Entity parentId;
-	};
-	
-	
 	// Graphics components
 	// ------------------------
 
-	struct TextureComponent
+	struct TextureComponent : public iComponent
 	{
 		std::string fileName;
 		eTextureType textureType;
@@ -70,7 +31,7 @@ namespace MyEngine
 		std::vector<std::string> vecTextures;
 	};
 
-	struct MaterialComponent
+	struct MaterialComponent : public iComponent
 	{
 		std::string name;
 
@@ -108,7 +69,7 @@ namespace MyEngine
 		std::string alphaTexture;
 	};
 
-	struct LightComponent
+	struct LightComponent : public iComponent
 	{
 		// Flickering control
 		glm::vec4 flickerOffset;
@@ -140,7 +101,7 @@ namespace MyEngine
 		GLint status_UL;
 	};
 
-	struct ModelComponent
+	struct ModelComponent : public iComponent
 	{
 		std::vector<std::string> models;
 		std::vector<sMesh*> pMeshes;
@@ -163,13 +124,13 @@ namespace MyEngine
 		bool isActive;
 	};
 
-	struct TilingComponent
+	struct TilingComponent : public iComponent
 	{
 		glm::vec3 axis;
 		glm::vec3 offset;
 	};
 
-	struct TransformAnimationComponent
+	struct TransformAnimationComponent : public iComponent
 	{
 		std::vector<PositionKeyFrame> positionKeyFrames;
 		std::vector<ScaleKeyFrame> scaleKeyFrames;
@@ -188,7 +149,7 @@ namespace MyEngine
 		bool isActive;
 	};
 
-	struct EmitterComponent
+	struct EmitterComponent : public iComponent
 	{
 		EmitterProps properties = EmitterProps();
 
@@ -212,7 +173,7 @@ namespace MyEngine
 	// Physics components
 	// ------------------------
 
-	struct MovementComponent
+	struct MovementComponent : public iComponent
 	{
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
@@ -221,7 +182,7 @@ namespace MyEngine
 		float maxSpeed;
 	};
 
-	struct RotationComponent
+	struct RotationComponent : public iComponent
 	{
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
@@ -230,19 +191,19 @@ namespace MyEngine
 		float maxSpeed;
 	};
 
-	struct RigidBodyComponent
+	struct RigidBodyComponent : public iComponent
 	{
 		eBody bodyType;
 		eShape shapeType;
 	};
 
-	struct MeshColliderComponent
+	struct MeshColliderComponent : public iComponent
 	{
 		std::string name;
 		sMesh* pMesh;
 	};
 
-	struct SphereColliderComponent
+	struct SphereColliderComponent : public iComponent
 	{
 		float radius;
 	};
@@ -250,12 +211,12 @@ namespace MyEngine
 	// TODO: Player Gameplay would be better separated from engine, using scripts instead of components
 	// Gameplay
 	// -------------------------------------------------------------
-	struct PlayerComponent
+	struct PlayerComponent : public iComponent
 	{
 		float speed;
 	};
 
-	struct SteeringBehaviorComponent
+	struct SteeringBehaviorComponent : public iComponent
 	{
 		eSteeringTypes steeringType;
 		Entity targetId;

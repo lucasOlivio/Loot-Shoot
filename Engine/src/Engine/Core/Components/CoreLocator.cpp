@@ -5,6 +5,7 @@
 namespace MyEngine
 {
     std::shared_ptr<ConfigPathComponent> CoreLocator::m_pConfigPath(new ConfigPathComponent());
+    std::shared_ptr<TimerComponent> CoreLocator::m_pTimer(new TimerComponent());
     std::shared_ptr<FrameCounterComponent> CoreLocator::m_pFrameCounter(new FrameCounterComponent());
     std::shared_ptr<KeyInputComponent> CoreLocator::m_pKeyInput(new KeyInputComponent());
     std::shared_ptr<MouseInputComponent> CoreLocator::m_pMouseInput(new MouseInputComponent());
@@ -13,6 +14,11 @@ namespace MyEngine
     std::shared_ptr<ConfigPathComponent> CoreLocator::GetConfigPath()
     {
         return m_pConfigPath;
+    }
+
+    std::shared_ptr<TimerComponent> CoreLocator::GetTimer()
+    {
+        return m_pTimer;
     }
 
     std::shared_ptr<FrameCounterComponent> CoreLocator::GetFrameCounter()
@@ -38,6 +44,11 @@ namespace MyEngine
     void CoreLocator::SetConfigPath(std::shared_ptr<ConfigPathComponent> pConfigPath)
     {
         m_pConfigPath = pConfigPath;
+    }
+
+    void CoreLocator::SetTimer(std::shared_ptr<TimerComponent> pTimer)
+    {
+        m_pTimer = pTimer;
     }
 
     void CoreLocator::SetFrameCounter(std::shared_ptr<FrameCounterComponent> pFrameCounter)

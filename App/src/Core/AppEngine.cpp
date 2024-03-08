@@ -1,6 +1,6 @@
 #include "AppEngine.h"
 
-#include "Engine/ECS/SingletonComponents/CoreLocator.h"
+#include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/ECS/System/SystemBuilder.h"
 
 // Custom app systems

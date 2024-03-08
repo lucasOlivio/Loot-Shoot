@@ -28,7 +28,11 @@ namespace MyEngine
 	private:
 		std::vector<sRenderModelInfo> m_vecRenderInfos;
 
+		// Render all models from list models
 		void m_RenderList(std::shared_ptr<iMaterialManager> pMaterialManager, 
 						  const std::vector<sRenderModelInfo>& renderInfos);
+
+		// Calculate projection and view mats and bind to shader
+		void m_UpdateCamera(std::shared_ptr<Scene> pScene);
 	};
 }

@@ -2,8 +2,9 @@
 
 #include "FlyingCameraSystem.h"
 
-#include "Engine/ECS/Components.h"
-#include "Engine/ECS/SingletonComponents/CoreLocator.h"
+#include "Engine/Core/Components/CoreLocator.h"
+#include "Engine/Core/Components/Components.h"
+
 #include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
 
 #include "Engine/Core/InputProperties.h"

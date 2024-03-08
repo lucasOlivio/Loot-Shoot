@@ -1,8 +1,13 @@
 #pragma once
 
 #include "iSceneSerializer.h"
+
+#include "Engine/Core/Components/Components.h"
+#include "Engine/Core/Components/SingletonComponents.h"
+
 #include "Engine/ECS/Components.h"
 #include "Engine/ECS/SingletonComponents/Components.h"
+
 #include <rapidjson/document.h>
 
 namespace MyEngine

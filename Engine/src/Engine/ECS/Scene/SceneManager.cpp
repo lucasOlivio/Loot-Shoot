@@ -3,7 +3,7 @@
 #include "SceneManager.h"
 
 #include "Engine/ECS/Scene/SceneSerializerFactory.h"
-#include "Engine/ECS/SingletonComponents/CoreLocator.h"
+#include "Engine/Core/Components/CoreLocator.h"
 
 #include "Engine/Events/SceneEvent.h"
 #include "Engine/Events/EventBusLocator.hpp"

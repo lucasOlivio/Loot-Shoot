@@ -21,8 +21,6 @@ namespace MyEngine
         // Create an entity using the EntityManager
         // addDefault = Add default components (Transform) to it
         Entity CreateEntity(bool addDefault = false);
-        // entityId = Entity to duplicate the components from
-        Entity CreateEntity(Entity entityId);
 
         // Flag entity to be deleted later on a safer time
         void RemoveEntity(Entity entityId);

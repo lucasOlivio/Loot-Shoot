@@ -9,7 +9,7 @@
 
 #include "Engine/ECS/Scene/SceneManager.h"
 #include "Engine/ECS/Scene/SceneManagerLocator.h"
-#include "Engine/ECS/SingletonComponents/CoreLocator.h"
+#include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/ECS/SingletonComponents/DebugLocator.h"
 #include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
 #include "Engine/ECS/SingletonComponents/PhysicsLocator.h"

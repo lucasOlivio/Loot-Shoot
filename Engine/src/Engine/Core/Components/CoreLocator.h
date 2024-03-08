@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/ECS/SingletonComponents/Components.h"
+#include "Engine/Core/Components/SingletonComponents.h"
 
 namespace MyEngine
 {
@@ -8,12 +8,14 @@ namespace MyEngine
 	{
 	public:
 		static std::shared_ptr<ConfigPathComponent> GetConfigPath();
+		static std::shared_ptr<TimerComponent> GetTimer();
 		static std::shared_ptr<FrameCounterComponent> GetFrameCounter();
 		static std::shared_ptr<KeyInputComponent> GetKeyInput();
 		static std::shared_ptr<MouseInputComponent> GetMouseInput();
 		static std::shared_ptr<GameStateComponent> GetGameState();
 
 		static void SetConfigPath(std::shared_ptr<ConfigPathComponent> pConfigPath);
+		static void SetTimer(std::shared_ptr<TimerComponent> pTimer);
 		static void SetFrameCounter(std::shared_ptr<FrameCounterComponent> pFrameCounter);
 		static void SetKeyInput(std::shared_ptr<KeyInputComponent> pKeyInput);
 		static void SetMouseInput(std::shared_ptr<MouseInputComponent> pMouseInput);
@@ -21,6 +23,7 @@ namespace MyEngine
 
 	private:
 		static std::shared_ptr<ConfigPathComponent> m_pConfigPath;
+		static std::shared_ptr<TimerComponent> m_pTimer;
 		static std::shared_ptr<FrameCounterComponent> m_pFrameCounter;
 		static std::shared_ptr<KeyInputComponent> m_pKeyInput;
 		static std::shared_ptr<MouseInputComponent> m_pMouseInput;

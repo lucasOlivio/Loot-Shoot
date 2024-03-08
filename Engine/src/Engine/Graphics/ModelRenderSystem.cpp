@@ -2,6 +2,8 @@
 
 #include "ModelRenderSystem.h"
 
+#include "Engine/Core/Components/Components.h"
+
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"

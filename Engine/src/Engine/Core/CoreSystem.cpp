@@ -5,7 +5,7 @@
 #include "Engine/Core/EngineLocator.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/SingletonComponents/CoreLocator.h"
+#include "Engine/Core/Components/CoreLocator.h"
 
 #include "Engine/Events/EventBusLocator.hpp"
 

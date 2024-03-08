@@ -2,8 +2,9 @@
 
 #include "CameraUtils.h"
 
+#include "Engine/Core/Components/SingletonComponents.h"
+
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Utils/TransformUtils.h"
 #include "Engine/Utils/Math.h"

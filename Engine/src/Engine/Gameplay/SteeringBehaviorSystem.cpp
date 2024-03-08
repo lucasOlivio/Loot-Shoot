@@ -2,6 +2,8 @@
 
 #include "SteeringBehaviorSystem.h"
 
+#include "Engine/Core/Components/Components.h"
+
 #include "Engine/Gameplay/GameplayProperties.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"

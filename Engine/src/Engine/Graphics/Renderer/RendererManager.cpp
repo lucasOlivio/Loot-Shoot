@@ -2,6 +2,9 @@
 
 #include "RendererManager.h"
 
+#include "Engine/Core/Components/Components.h"
+#include "Engine/Core/Components/SingletonComponents.h"
+
 #include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
 #include "Engine/ECS/Components.h"
 
@@ -29,21 +32,8 @@ namespace MyEngine
 	{
 		std::shared_ptr<iMaterialManager> pMaterialManager = MaterialManagerLocator::Get();
 
-		// Calculate projection and view mats and bind to shader
-		std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
-		std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
-		CameraComponent& camera = pScene->Get<CameraComponent>(CAMERA_ID);
-		TransformComponent& transformCamera = pScene->Get<TransformComponent>(CAMERA_ID);
+		m_UpdateCamera(pScene);
 
-		glm::mat4 matProjection = CameraUtils::ProjectionMat(camera.fovy, camera.zNear,
-															camera.zFar, pWindow->width, pWindow->height);
-		pShader->SetUniformMatrix4f("matProjection", matProjection);
-
-		glm::mat4 matView = CameraUtils::ViewMat(transformCamera.position, transformCamera.orientation,
-												camera.distance, camera.height, camera.offsetTarget);
-												pShader->SetUniformMatrix4f("matView", matView);
-
-		// Render all models from list models
 		m_RenderList(pMaterialManager, m_vecRenderInfos);
 	}
 
@@ -61,5 +51,22 @@ namespace MyEngine
 
 			GraphicsUtils::DrawModel(renderInfo);
 		}
+	}
+
+	void RendererManager::m_UpdateCamera(std::shared_ptr<Scene> pScene)
+	{
+		std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
+		std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
+
+		CameraComponent& camera = pScene->Get<CameraComponent>(CAMERA_ID);
+		TransformComponent& transformCamera = pScene->Get<TransformComponent>(CAMERA_ID);
+
+		glm::mat4 matProjection = CameraUtils::ProjectionMat(camera.fovy, camera.zNear,
+															 camera.zFar, pWindow->width, pWindow->height);
+		glm::mat4 matView = CameraUtils::ViewMat(transformCamera.position, transformCamera.orientation,
+												 camera.distance, camera.height, camera.offsetTarget);
+
+		pShader->SetUniformMatrix4f("matProjection", matProjection);
+		pShader->SetUniformMatrix4f("matView", matView);
 	}
 }

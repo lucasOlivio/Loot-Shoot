@@ -3,7 +3,7 @@
 #include "CollisionsUtils.h"
 
 #include "Engine/ECS/SingletonComponents/PhysicsLocator.h"
-#include "Engine/ECS/SingletonComponents/CoreLocator.h"
+#include "Engine/Core/Components/CoreLocator.h"
 
 #include "Engine/Utils/TransformUtils.h"
 #include "Engine/Utils/Math.h"

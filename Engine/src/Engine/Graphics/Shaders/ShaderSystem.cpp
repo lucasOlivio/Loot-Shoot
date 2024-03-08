@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "ShaderSystem.h"
-#include "Engine/ECS/SingletonComponents/CoreLocator.h"
+#include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/Graphics/Shaders/ShaderManagerLocator.h"
 #include "Engine/Graphics/Shaders/ShaderManager.h"
 

@@ -2,6 +2,8 @@
 
 #include "AnimationSystem.h"
 
+#include "Engine/Core/Components/Components.h"
+
 #include "Engine/ECS/Scene/SceneView.hpp"
 #include "Engine/ECS/Components.h"
 

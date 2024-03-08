@@ -5,7 +5,7 @@
 #include "Engine/Utils/ParserJSON.h"
 
 #include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
-#include "Engine/ECS/SingletonComponents/CoreLocator.h"
+#include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/ECS/SingletonComponents/PhysicsLocator.h"
 
 #include <rapidjson/filereadstream.h>

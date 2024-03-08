@@ -2,7 +2,7 @@
 
 #include "DebugSystem.h"
 #include "Engine/ECS/SingletonComponents/DebugLocator.h"
-#include "Engine/ECS/SingletonComponents/CoreLocator.h"
+#include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/Graphics/VAO/VAOManagerLocator.h"
 
 namespace MyEngine
