@@ -2,7 +2,7 @@
 
 #include "FPSSystem.h"
 
-#include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
 #include "Engine/Core/Components/CoreLocator.h"
 
 namespace MyEngine

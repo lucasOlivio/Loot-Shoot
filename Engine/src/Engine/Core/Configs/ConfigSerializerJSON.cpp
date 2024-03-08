@@ -3,7 +3,7 @@
 #include "ConfigSerializerJSON.h"
 #include "Engine/Utils/ParserJSON.h"
 #include "Engine/Core/Components/CoreLocator.h"
-#include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
 
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/filewritestream.h>

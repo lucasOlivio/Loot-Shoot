@@ -2,7 +2,7 @@
 
 #include "CameraUtils.h"
 
-#include "Engine/Core/Components/SingletonComponents.h"
+#include "Engine/Graphics/Components/SingletonComponents.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
 

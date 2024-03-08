@@ -5,7 +5,7 @@
 #include "Engine/Core/Components/Components.h"
 #include "Engine/Core/Components/SingletonComponents.h"
 
-#include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
 #include "Engine/ECS/Components.h"
 
 #include "Engine/Graphics/Materials/MaterialManagerLocator.h"

@@ -2,7 +2,7 @@
 
 #include "InputSystem.h"
 
-#include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
 #include "Engine/Core/Components/CoreLocator.h"
 
 #include "Engine/Events/InputEvent.h"

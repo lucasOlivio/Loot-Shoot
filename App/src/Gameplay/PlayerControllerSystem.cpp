@@ -4,8 +4,10 @@
 
 #include "Engine/Core/Components/Components.h"
 #include "Engine/Core/Components/CoreLocator.h"
+#include "Engine/Core/InputProperties.h"
 
-#include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
+
 #include "Engine/ECS/Scene/SceneView.hpp"
 #include "Engine/ECS/Components.h"
 
@@ -13,9 +15,8 @@
 #include "Engine/Events/WindowEvents.h"
 #include "Engine/Events/EventBusLocator.hpp"
 
-#include "Engine/Core/InputProperties.h"
-
 #include "Engine/Utils/InputUtils.h"
+#include "Engine/Utils/TransformUtils.h"
 
 namespace MyEngine
 {

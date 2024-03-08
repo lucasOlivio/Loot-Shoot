@@ -1,8 +1,12 @@
 #include "pch.h"
 
 #include "LightFlickerSystem.h"
+
 #include "Engine/ECS/Scene/SceneView.hpp"
 #include "Engine/ECS/Components.h"
+
+#include "Engine/Graphics/Components/Components.h"
+
 #include "Engine/Utils/Random.h"
 
 namespace MyEngine

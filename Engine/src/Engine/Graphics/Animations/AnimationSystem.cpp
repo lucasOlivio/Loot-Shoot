@@ -4,6 +4,8 @@
 
 #include "Engine/Core/Components/Components.h"
 
+#include "Engine/Graphics/Components/Components.h"
+
 #include "Engine/ECS/Scene/SceneView.hpp"
 #include "Engine/ECS/Components.h"
 

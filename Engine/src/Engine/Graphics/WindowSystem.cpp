@@ -3,7 +3,7 @@
 #include "WindowSystem.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
 
 #include "Engine/Events/EventBusLocator.hpp"
 #include "Engine/Events/WindowEvents.h"

@@ -5,9 +5,9 @@
 #include "Engine/Core/Components/Components.h"
 
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
+#include "Engine/Graphics/Components/Components.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Utils/TransformUtils.h"
 #include "Engine/Utils/GraphicsUtils.h"

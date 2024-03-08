@@ -2,11 +2,13 @@
 
 #include "RenderSystem.h"
 
-#include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
 #include "Engine/Core/Components/CoreLocator.h"
+
+#include "Engine/ECS/Scene/SceneView.hpp"
 #include "Engine/ECS/Components.h"
 
+#include "Engine/Graphics/Components/GraphicsLocator.h"
+#include "Engine/Graphics/Components/Components.h"
 #include "Engine/Graphics/Shaders/ShaderManager.h"
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 #include "Engine/Graphics/Textures/TextureManagerLocator.h"

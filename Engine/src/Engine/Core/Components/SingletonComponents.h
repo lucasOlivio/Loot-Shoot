@@ -11,7 +11,6 @@
 
 namespace MyEngine
 {
-
 	struct ConfigPathComponent : public iComponent
 	{
 		std::string pathModels;
@@ -71,23 +70,5 @@ namespace MyEngine
 
 		eGameStates prevState; // Only state system should modify this
 		eGameStates currState; // Any system can modify this to stop/run simulation
-	};
-
-	struct TagComponent : public iComponent
-	{
-		std::string name;
-	};
-
-	struct CameraComponent : public iComponent
-	{
-		glm::vec3 upVector;
-
-		float distance;
-		float height;
-		float offsetTarget;
-
-		float fovy;
-		float zNear;
-		float zFar;
 	};
 }

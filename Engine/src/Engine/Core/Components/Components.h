@@ -13,6 +13,11 @@
 
 namespace MyEngine
 {
+	struct TagComponent : public iComponent
+	{
+		std::string name;
+	};
+
 	struct TransformComponent : public iComponent
 	{
 		glm::vec3 position;

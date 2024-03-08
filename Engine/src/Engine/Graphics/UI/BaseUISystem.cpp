@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "BaseUISystem.h"
-#include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
 
 namespace MyEngine
 {

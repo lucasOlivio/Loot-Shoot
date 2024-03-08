@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/ECS/SingletonComponents/Components.h"
+#include "Engine/Graphics/Components/SingletonComponents.h"
 
 namespace MyEngine
 {

@@ -4,6 +4,7 @@
 
 #include "Engine/Core/Components/Components.h"
 
+#include "Engine/Graphics/Components/Components.h"
 #include "Engine/Graphics/Particles/ParticleManagerLocator.h"
 #include "Engine/Graphics/VAO/VAOManagerLocator.h"
 

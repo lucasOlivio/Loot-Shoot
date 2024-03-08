@@ -21,26 +21,6 @@
 namespace MyEngine
 {
 	// Singleton components
-	struct WindowComponent
-	{
-		std::string prevName = ""; // Only for window system to change
-		std::string name;
-		int width = 640;
-		int height = 480;
-
-		GLFWwindow* pGLFWWindow;
-	};
-
-	
-
-	struct AnimationControllerComponent
-	{
-		float timeLastKeyFrame = 0.0f;
-		float timeFirstKeyFrame = FLT_MAX;
-
-		float speed = 1.0f;
-		bool reset = false;
-	};
 
 	struct GridBroadphaseComponent
 	{

@@ -3,8 +3,7 @@
 #include "ParticleUpdaterSystem.h"
 
 #include "Engine/Graphics/Particles/ParticleManagerLocator.h"
-
-#include "Engine/ECS/Components.h"
+#include "Engine/Graphics/Components/Components.h"
 
 #include "Engine/Utils/TransformUtils.h"
 

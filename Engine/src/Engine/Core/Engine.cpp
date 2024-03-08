@@ -11,7 +11,7 @@
 #include "Engine/ECS/Scene/SceneManagerLocator.h"
 #include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/ECS/SingletonComponents/DebugLocator.h"
-#include "Engine/ECS/SingletonComponents/GraphicsLocator.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
 #include "Engine/ECS/SingletonComponents/PhysicsLocator.h"
 #include "Engine/ECS/System/SystemBuilder.h"    
 
