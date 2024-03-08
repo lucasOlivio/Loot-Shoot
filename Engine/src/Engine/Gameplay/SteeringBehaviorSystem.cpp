@@ -5,9 +5,9 @@
 #include "Engine/Core/Components/Components.h"
 
 #include "Engine/Gameplay/GameplayProperties.h"
+#include "Engine/Gameplay/Components/Components.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Utils/Math.h"
 #include "Engine/Utils/TransformUtils.h"

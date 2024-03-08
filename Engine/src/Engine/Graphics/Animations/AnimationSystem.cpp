@@ -7,7 +7,6 @@
 #include "Engine/Graphics/Components/Components.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Utils/AnimationUtils.h"
 

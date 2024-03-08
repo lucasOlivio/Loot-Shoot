@@ -4,7 +4,7 @@
 
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 
-#include "Engine/ECS/SingletonComponents/DebugLocator.h"
+#include "Engine/Debug/Components/DebugLocator.h"
 
 #include "Engine/Utils/TransformUtils.h"
 

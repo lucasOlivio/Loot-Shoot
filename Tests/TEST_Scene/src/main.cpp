@@ -2,18 +2,18 @@
 #include <glm/glm.hpp>
 
 #include <Engine/ECS/Scene/Scene.h>
-#include <Engine/ECS/Components.h>
+
+#include <Engine/Core/Components/Components.h>
 
 using namespace MyEngine;
 
 class SceneTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        scene = new Scene();
+        scene = std::shared_ptr<Scene>(new Scene());
     }
 
     void TearDown() override {
-        delete scene;
     }
 
     std::shared_ptr<Scene> scene;
@@ -38,10 +38,10 @@ TEST_F(SceneTest, AddGetComponent) {
     ASSERT_EQ(transformComponent, retrievedComponent);
 
     // Modify the component and check if the changes are reflected
-    retrievedComponent->position = glm::vec3(1.0f, 2.0f, 3.0f);
+    retrievedComponent.position = glm::vec3(1.0f, 2.0f, 3.0f);
 
     TransformComponent& updatedComponent = scene->Get<TransformComponent>(entity);
-    ASSERT_EQ(updatedComponent->position, retrievedComponent->position);
+    ASSERT_EQ(updatedComponent.position, retrievedComponent.position);
 }
 
 int main(int argc, char** argv) {

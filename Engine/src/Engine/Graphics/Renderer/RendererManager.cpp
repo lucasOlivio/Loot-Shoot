@@ -6,7 +6,6 @@
 #include "Engine/Core/Components/SingletonComponents.h"
 
 #include "Engine/Graphics/Components/GraphicsLocator.h"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Graphics/Materials/MaterialManagerLocator.h"
 #include "Engine/Graphics/Shaders/ShaderManager.h"

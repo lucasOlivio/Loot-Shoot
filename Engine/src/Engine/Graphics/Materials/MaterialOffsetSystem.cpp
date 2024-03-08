@@ -6,7 +6,6 @@
 #include "Engine/Graphics/GraphicsProperties.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/Components.h"
 
 namespace MyEngine
 {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/ECS/System/iSystem.h"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Core/StateProperties.h"
 

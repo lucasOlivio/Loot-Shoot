@@ -5,11 +5,10 @@
 #include "Engine/Core/Components/Components.h"
 #include "Engine/Core/Components/SingletonComponents.h"
 
+#include "Engine/Gameplay/Components/Components.h"
+
 #include "Engine/Graphics/Components/Components.h"
 #include "Engine/Graphics/Components/SingletonComponents.h"
-
-#include "Engine/ECS/Components.h"
-#include "Engine/ECS/SingletonComponents/Components.h"
 
 #include "Engine/Physics/Components/Components.h"
 #include "Engine/Physics/Components/SingletonComponents.h"

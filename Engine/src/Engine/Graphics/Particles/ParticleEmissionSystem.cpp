@@ -9,7 +9,6 @@
 #include "Engine/Graphics/VAO/VAOManagerLocator.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Utils/Random.h"
 

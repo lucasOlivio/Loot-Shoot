@@ -6,10 +6,11 @@
 #include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/Core/InputProperties.h"
 
+#include "Engine/Gameplay/Components/Components.h"
+
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Events/InputEvent.h"
 #include "Engine/Events/WindowEvents.h"

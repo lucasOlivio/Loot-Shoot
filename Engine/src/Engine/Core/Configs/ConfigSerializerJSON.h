@@ -7,8 +7,6 @@
 
 #include "Engine/Graphics/Components/SingletonComponents.h"
 
-#include "Engine/ECS/Components.h"
-
 #include <rapidjson/document.h>
 
 namespace MyEngine

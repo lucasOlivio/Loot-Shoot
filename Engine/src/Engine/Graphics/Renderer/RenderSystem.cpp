@@ -5,7 +5,6 @@
 #include "Engine/Core/Components/CoreLocator.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 #include "Engine/Graphics/Components/Components.h"

@@ -8,7 +8,6 @@
 #include "Engine/Graphics/Components/Components.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
-#include "Engine/ECS/Components.h"
 
 #include "Engine/Events/EventBusLocator.hpp"
 #include "Engine/Events/AnimationEvent.h"

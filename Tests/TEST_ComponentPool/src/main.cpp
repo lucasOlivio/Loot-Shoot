@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 
 #include <Engine/ECS/ComponentPool.h>
-#include <Engine/ECS/Components.h>
+#include <Engine/Core/Components/Components.h>
 
 using namespace MyEngine;
 
@@ -28,7 +28,7 @@ TEST_F(ComponentPoolTest, AddAndGet)
 
     // Add a TransformComponent
     void* mem1 = componentPool->Add(index);
-    TransformComponent& transform1 = new (mem1) TransformComponent();
+    TransformComponent* transform1 = new (mem1) TransformComponent();
     transform1->position = glm::vec3(1.0f);
 
     // Ensure the index is correct
@@ -36,7 +36,7 @@ TEST_F(ComponentPoolTest, AddAndGet)
 
     // Add another TransformComponent
     void* mem2 = componentPool->Add(index);
-    TransformComponent& transform2 = new (mem2) TransformComponent();
+    TransformComponent* transform2 = new (mem2) TransformComponent();
     transform2->position = glm::vec3(1.0f);
 
     // Ensure the index is correct
@@ -44,13 +44,13 @@ TEST_F(ComponentPoolTest, AddAndGet)
 
     // Get the first component and verify
     void* getMem1 = componentPool->Get(0);
-    TransformComponent& transform1 = static_cast<TransformComponent&>(getMem1);
+    TransformComponent* transform1 = static_cast<TransformComponent*>(getMem1);
     ASSERT_EQ(mem1, getMem1);
     ASSERT_EQ(transform1->position, transform1->position);
 
     // Get the second component and verify
     void* getMem2 = componentPool->Get(1);
-    TransformComponent& transform2 = static_cast<TransformComponent&>(getMem2);
+    TransformComponent* transform2 = static_cast<TransformComponent*>(getMem2);
     ASSERT_EQ(mem2, getMem2);
     ASSERT_EQ(transform2->position, transform2->position);
 }
@@ -61,12 +61,12 @@ TEST_F(ComponentPoolTest, Remove)
 
     // Add a TransformComponent
     void* mem1 = componentPool->Add(index);
-    TransformComponent& transform1 = new (mem1) TransformComponent();
+    TransformComponent* transform1 = new (mem1) TransformComponent();
     transform1->position = glm::vec3(1.0f);
 
     // Add another TransformComponent
     void* mem2 = componentPool->Add(index);
-    TransformComponent& transform2 = new (mem2) TransformComponent();
+    TransformComponent* transform2 = new (mem2) TransformComponent();
     transform2->position = glm::vec3(1.0f);
 
     ComponentId indexReplaced;
@@ -81,7 +81,7 @@ TEST_F(ComponentPoolTest, Remove)
     ASSERT_EQ(mem1, getMem2);
 
     // Verify moved component is correct
-    TransformComponent& transform2 = static_cast<TransformComponent&>(mem1);
+    TransformComponent* transform2 = static_cast<TransformComponent*>(mem1);
     ASSERT_EQ(transform2->position, transform2->position);
 }
 

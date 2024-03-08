@@ -5,12 +5,13 @@
 #include "Engine/Core/Configs/ConfigSerializerFactory.h"
 #include "Engine/Core/Components/CoreLocator.h"
 
+#include "Engine/Debug/Components/DebugLocator.h"
+
 #include "Engine/Events/EventBus.hpp"
 #include "Engine/Events/EventBusLocator.hpp"
 
 #include "Engine/ECS/Scene/SceneManager.h"
 #include "Engine/ECS/Scene/SceneManagerLocator.h"
-#include "Engine/ECS/SingletonComponents/DebugLocator.h"
 #include "Engine/ECS/System/SystemBuilder.h"    
 
 #include "Engine/Graphics/VAO/VAOManagerLocator.h"

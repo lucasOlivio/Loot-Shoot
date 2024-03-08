@@ -1,8 +1,11 @@
 #include "pch.h"
 
 #include "DebugSystem.h"
-#include "Engine/ECS/SingletonComponents/DebugLocator.h"
+
 #include "Engine/Core/Components/CoreLocator.h"
+
+#include "Engine/Debug/Components/DebugLocator.h"
+
 #include "Engine/Graphics/VAO/VAOManagerLocator.h"
 
 namespace MyEngine
