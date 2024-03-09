@@ -24,7 +24,7 @@ namespace MyEngine
 
     }
 
-    bool cFileLoader::Load3DModelFile(std::string filename, sMesh* drawInfo)
+    bool cFileLoader::Load3DModelFile(std::string filename, std::shared_ptr<sMeshInfo> drawInfo)
     {
         sPostProcessFlags postProcessOptionsDefaults;
         return this->m_pImp->Load3DModelFile(filename, postProcessOptionsDefaults, drawInfo);
@@ -32,7 +32,7 @@ namespace MyEngine
     }
 
 
-    bool cFileLoader::Load3DModelFile(std::string filename, sPostProcessFlags postProcessOptions, sMesh* drawInfo)
+    bool cFileLoader::Load3DModelFile(std::string filename, sPostProcessFlags postProcessOptions, std::shared_ptr<sMeshInfo> drawInfo)
     {
         return this->m_pImp->Load3DModelFile(filename, postProcessOptions, drawInfo);
     }

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Engine/Graphics/GraphicsProperties.h"
+#include "Engine/Core/Resources/Meshes/Mesh.h"
 
 namespace MyEngine
 {
 	struct DebugSquareComponent
 	{
-		sMesh* pMesh;
+		std::shared_ptr<sMeshInfo> pMesh;
 	};
 
 	struct DebugSphereComponent
 	{
-		sMesh* pMesh;
+		std::shared_ptr<sMeshInfo> pMesh;
 	};
 }

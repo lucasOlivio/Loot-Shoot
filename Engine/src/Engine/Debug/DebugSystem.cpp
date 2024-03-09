@@ -3,23 +3,26 @@
 #include "DebugSystem.h"
 
 #include "Engine/Core/Components/CoreLocator.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Resources/Meshes/Mesh.h"
 
 #include "Engine/Debug/Components/DebugLocator.h"
-
-#include "Engine/Graphics/VAO/VAOManagerLocator.h"
 
 namespace MyEngine
 {
     void DebugSystem::Init()
     {
         std::shared_ptr<ConfigPathComponent> pConfigPath = CoreLocator::GetConfigPath();
-        std::shared_ptr<iVAOManager> pVAOManager = VAOManagerLocator::Get();
+        std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MESH);
 
         std::shared_ptr<DebugSquareComponent> pSquare = DebugLocator::GetSquare();
         std::shared_ptr<DebugSphereComponent> pSphere = DebugLocator::GetSphere();
 
-        pSquare->pMesh = pVAOManager->LoadModelIntoVAO(pConfigPath->pathDebugSquare, true);
-        pSphere->pMesh = pVAOManager->LoadModelIntoVAO(pConfigPath->pathDebugSphere, true);
+        size_t indexSquare = pMeshManager->LoadResource(pConfigPath->pathDebugSquare);
+        size_t indexSphere = pMeshManager->LoadResource(pConfigPath->pathDebugSquare);
+
+        pSquare->pMesh = std::static_pointer_cast<sMeshInfo>(pMeshManager->GetResource(indexSquare));
+        pSphere->pMesh = std::static_pointer_cast<sMeshInfo>(pMeshManager->GetResource(indexSphere));
     }
 
     void DebugSystem::Start(std::shared_ptr<Scene> pScene)

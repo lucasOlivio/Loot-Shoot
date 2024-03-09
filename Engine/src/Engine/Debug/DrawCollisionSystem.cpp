@@ -31,7 +31,7 @@ namespace MyEngine
 		std::shared_ptr<iRendererManager> pRendererManager = RendererManagerLocator::Get();
 
 		std::shared_ptr<DebugSphereComponent> sphere = DebugLocator::GetSphere();
-		sMesh* pMesh = sphere->pMesh;
+		std::shared_ptr<sMeshInfo> pMesh = sphere->pMesh;
 
 		const std::set<sCollisionData>& currFrameColls = CollisionsUtils::CurrentFrameCollisions();
 		// Draw a wireframe blue sphere at the contact points

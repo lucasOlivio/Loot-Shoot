@@ -8,8 +8,9 @@ namespace MyEngine
 {
     enum eResourceTypes
     {
-        UNKNOWN = 0,
-        MATERIAL
+        UNKNOWN_RESOURCE = 0,
+        MATERIAL,
+        MESH
     };
 
     struct iResource

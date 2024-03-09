@@ -46,7 +46,7 @@ namespace MyEngine
                                          transform.worldScale,
                                          matTransform);
 
-            sMesh* pMesh = model.pMeshes[model.currMesh];
+            std::shared_ptr<sMeshInfo> pMesh = model.pMeshes[model.currMesh];
             if (!pMesh)
             {
                 continue;

@@ -17,7 +17,7 @@ namespace MyEngine
 		// Just a check if the debug square mesh loaded
 		std::shared_ptr<DebugSquareComponent> pSquare = DebugLocator::GetSquare();
 
-		sMesh* pMesh = pSquare->pMesh;
+		std::shared_ptr<sMeshInfo> pMesh = pSquare->pMesh;
 		if (!pMesh)
 		{
 			LOG_WARNING("Debug Square not loaded!");
@@ -40,7 +40,7 @@ namespace MyEngine
 		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
 		std::shared_ptr<DebugSquareComponent> pSquare = DebugLocator::GetSquare();
 
-		sMesh* pMesh = pSquare->pMesh;
+		std::shared_ptr<sMeshInfo> pMesh = pSquare->pMesh;
 
 		if (!pMesh)
 		{

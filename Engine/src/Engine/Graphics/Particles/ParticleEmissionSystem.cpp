@@ -3,10 +3,10 @@
 #include "ParticleEmissionSystem.h"
 
 #include "Engine/Core/Components/Components.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
 
 #include "Engine/Graphics/Components/Components.h"
 #include "Engine/Graphics/Particles/ParticleManagerLocator.h"
-#include "Engine/Graphics/VAO/VAOManagerLocator.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
 
@@ -21,13 +21,14 @@ namespace MyEngine
     void ParticleEmissionSystem::Start(std::shared_ptr<Scene> pScene)
     {
         // Load all particles models
-        std::shared_ptr<iVAOManager> pVAOManager = VAOManagerLocator::Get();
+        std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MESH);
         for (Entity entityId : SceneView<EmitterComponent>(*pScene))
         {
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
 
-            emitter.pMesh = pVAOManager->LoadModelIntoVAO(emitter.properties.meshName,
-                                                             false);
+            size_t index = pMeshManager->LoadResource(emitter.properties.meshName);
+
+            emitter.pMesh = std::static_pointer_cast<sMeshInfo>(pMeshManager->GetResource(index));
         }
 
         // Kill all particles

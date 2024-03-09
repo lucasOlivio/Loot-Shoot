@@ -13,7 +13,6 @@
 #include "Engine/Graphics/Shaders/ShaderManager.h"
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 #include "Engine/Graphics/Textures/TextureManagerLocator.h"
-#include "Engine/Graphics/VAO/VAOManagerLocator.h"
 #include "Engine/Graphics/GraphicsProperties.h"
 
 #include "Engine/Utils/TransformUtils.h"
@@ -29,7 +28,6 @@ namespace MyEngine
     {
 		std::shared_ptr<ConfigPathComponent> pConfigPath = CoreLocator::GetConfigPath();
 		std::shared_ptr<iTextureManager> pTextureManager = TextureManagerLocator::Get();
-		std::shared_ptr<iVAOManager> pVAOManager = VAOManagerLocator::Get();
 
 		// Load textures
 		pTextureManager->SetBasePath(pConfigPath->pathTextures);
@@ -66,19 +64,16 @@ namespace MyEngine
 		}
 
 		// Load Models
-		pVAOManager->SetBasePath(pConfigPath->pathModels);
+		std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MESH);
+		pMeshManager->SetBasePath(pConfigPath->pathModels);
 		for (Entity entityId : SceneView<ModelComponent>(*pScene))
 		{
 			ModelComponent& model = pScene->Get<ModelComponent>(entityId);
 			model.pMeshes.resize(model.models.size(), nullptr);
 			for (int i = 0; i < model.models.size(); i++)
 			{
-				sMesh* pMesh = pVAOManager->LoadModelIntoVAO(model.models[i], model.isDynamic);
-				if (!pMesh)
-				{
-					continue;
-				}
-				model.pMeshes[i] = pMesh;
+				size_t index = pMeshManager->LoadResource(model.models[i]);
+				model.pMeshes[i] = std::static_pointer_cast<sMeshInfo>(pMeshManager->GetResource(index));
 			}
 		}
 

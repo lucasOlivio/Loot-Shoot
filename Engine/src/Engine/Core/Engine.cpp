@@ -14,8 +14,6 @@
 #include "Engine/ECS/Scene/SceneManagerLocator.h"
 #include "Engine/ECS/System/SystemBuilder.h"    
 
-#include "Engine/Graphics/VAO/VAOManagerLocator.h"
-#include "Engine/Graphics/VAO/VAOManager.h"
 #include "Engine/Graphics/Shaders/ShaderManager.h"
 #include "Engine/Graphics/Shaders/ShaderManagerLocator.h"
 #include "Engine/Graphics/Textures/cBasicTextureManager.h"
@@ -49,7 +47,6 @@ namespace MyEngine
                        m_ebRotKeyFrame(new EventBus<eAnimationEvents, RotationKeyFrameEvent>()),
                        m_ebScaleKeyFrame(new EventBus<eAnimationEvents, ScaleKeyFrameEvent>()),
                        m_sceneManager(new SceneManager()),
-                       m_VAOManager(new VAOManager()),
                        m_shaderManager(new ShaderManager()),
                        m_textureManager(new cBasicTextureManager()),
                        m_rendererManager(new RendererManager()),
@@ -177,7 +174,6 @@ namespace MyEngine
 
         // Setting up resources managers        
         SceneManagerLocator::Set(m_sceneManager);
-        VAOManagerLocator::Set(m_VAOManager);
         ShaderManagerLocator::Set(m_shaderManager);
         TextureManagerLocator::Set(m_textureManager);
         RendererManagerLocator::Set(m_rendererManager);
@@ -191,7 +187,6 @@ namespace MyEngine
         std::shared_ptr<ConfigPathComponent> pConfigPaths = CoreLocator::GetConfigPath();
         m_textureManager->SetBasePath(pConfigPaths->pathTextures);
         m_shaderManager->SetBasePath(pConfigPaths->pathShaders);
-        m_VAOManager->SetBasePath(pConfigPaths->pathModels);
         m_sceneManager->SetBasePath(pConfigPaths->pathScenes);
     }
 

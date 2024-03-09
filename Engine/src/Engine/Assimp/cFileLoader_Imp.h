@@ -11,7 +11,7 @@
 
 #include <string>
 #include "cAssimpHelper.h"
-#include "Engine/Graphics/GraphicsProperties.h"
+#include "Engine/Core/Resources/Meshes/Mesh.h"
 
 struct aiScene; // For scene return pointer after scene loading
 
@@ -23,7 +23,7 @@ namespace MyEngine
 		cFileLoader_Imp();
 		~cFileLoader_Imp();
 
-		bool Load3DModelFile(std::string filename, cFileLoader::sPostProcessFlags postProcessOptions, sMesh* drawInfo);
+		bool Load3DModelFile(std::string filename, cFileLoader::sPostProcessFlags postProcessOptions, std::shared_ptr<sMeshInfo> drawInfo);
 		void SetBasePath(std::string basepath_no_end_slash);
 
 		std::string getLastError(bool bAndClearErrors = true);
@@ -32,7 +32,7 @@ namespace MyEngine
 	private:
 		std::string m_basePath_no_end_slash;
 
-		bool m_ProcessScene(const aiScene* scene, sMesh* drawInfo);
+		bool m_ProcessScene(const aiScene* scene, std::shared_ptr<sMeshInfo> drawInfo);
 		void m_AppendErrorString(std::string errorString);
 		std::string m_LastError;
 

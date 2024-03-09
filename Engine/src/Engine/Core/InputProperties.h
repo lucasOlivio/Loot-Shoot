@@ -53,7 +53,7 @@ namespace MyEngine
 
 	enum eKeyCodes
     {
-        UNKNOWN = -1,
+        UNKNOWN_KEYCODE = -1,
         SPACE = 32,
         APOSTROPHE = 39,     /* ' */
         COMMA = 44,          /* , */

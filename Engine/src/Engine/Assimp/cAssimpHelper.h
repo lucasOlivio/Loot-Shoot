@@ -1,11 +1,12 @@
 #pragma once
 
+#include "Engine/Core/Resources/Meshes/Mesh.h"
+
 #include <string>
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include "Engine/Graphics/GraphicsProperties.h"
 
 namespace MyEngine
 {
@@ -289,8 +290,8 @@ namespace MyEngine
 		~cFileLoader();
 
 		// Uses the default sPostProcessFlags settings
-		bool Load3DModelFile(std::string filename, sMesh* drawInfo);
-		bool Load3DModelFile(std::string filename, sPostProcessFlags postProcessOptions, sMesh* drawInfo);
+		bool Load3DModelFile(std::string filename, std::shared_ptr<sMeshInfo> drawInfo);
+		bool Load3DModelFile(std::string filename, sPostProcessFlags postProcessOptions, std::shared_ptr<sMeshInfo> drawInfo);
 		void SetBasePath(std::string basepath_no_end_slash);
 
 		ass_cString getLastError(bool bAndClearErrors = true);

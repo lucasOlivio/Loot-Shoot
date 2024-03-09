@@ -28,7 +28,7 @@ namespace MyEngine
 
 	}
 
-	bool cFileLoader_Imp::m_ProcessScene(const aiScene* scene, sMesh* drawInfo)
+	bool cFileLoader_Imp::m_ProcessScene(const aiScene* scene, std::shared_ptr<sMeshInfo> drawInfo)
 	{
 		// TODO: Validation of meshes and diferent objects loading
 		for (unsigned int index = 0; index < scene->mNumMeshes; index++)
@@ -162,7 +162,7 @@ namespace MyEngine
 		return true;
 	}
 
-	bool cFileLoader_Imp::Load3DModelFile(std::string filename, cFileLoader::sPostProcessFlags postProcessOptions, sMesh* drawInfo)
+	bool cFileLoader_Imp::Load3DModelFile(std::string filename, cFileLoader::sPostProcessFlags postProcessOptions, std::shared_ptr<sMeshInfo> drawInfo)
 	{
 		std::string filename_and_path = filename;
 

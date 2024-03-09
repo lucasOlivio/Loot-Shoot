@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Engine/Core/Resources/Meshes/Mesh.h"
+
 #include "Engine/ECS/iComponent.h"
 
-#include "Engine/Graphics/GraphicsProperties.h"
 #include "Engine/Graphics/Textures/TextureProperties.h"
 #include "Engine/Graphics/Animations/AnimationProperties.h"
 #include "Engine/Graphics/Particles/ParticlesProperties.h"
@@ -95,7 +96,7 @@ namespace MyEngine
 	struct ModelComponent : public iComponent
 	{
 		std::vector<std::string> models;
-		std::vector<sMesh*> pMeshes;
+		std::vector<std::shared_ptr<sMeshInfo>> pMeshes;
 		std::set<uint> FBOIDs = { 0 };
 
 		std::string material;
@@ -156,7 +157,7 @@ namespace MyEngine
 		// Total number of particles emitted
 		int totalEmitPart = 0;
 
-		sMesh* pMesh;
+		std::shared_ptr<sMeshInfo> pMesh;
 
 		bool isActive = false;
 	};

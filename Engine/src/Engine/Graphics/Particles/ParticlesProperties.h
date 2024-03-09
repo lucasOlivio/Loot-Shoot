@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/GraphicsProperties.h"
+#include "Engine/Core/Resources/Meshes/Mesh.h"
 
 namespace MyEngine
 {
@@ -8,7 +8,7 @@ namespace MyEngine
 	{
 		std::vector<uint> FBOIDs = { 0 };
 
-		sMesh* pMesh;
+		std::shared_ptr<sMeshInfo> pMesh;
 		std::string material;
 
 		glm::vec3 defaultColor;
