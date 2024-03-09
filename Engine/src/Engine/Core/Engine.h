@@ -15,7 +15,6 @@
 #include "Engine/Graphics/Renderer/iRendererManager.h"
 #include "Engine/Graphics/VAO/iVAOManager.h"
 #include "Engine/Graphics/Shaders/iShaderManager.h"
-#include "Engine/Graphics/Materials/iMaterialManager.h"
 #include "Engine/Graphics/Textures/iTextureManager.h"
 #include "Engine/Graphics/Particles/iParticleManager.h"
 
@@ -91,7 +90,6 @@ namespace MyEngine
 		// Resources managers
 		std::shared_ptr<iVAOManager> m_VAOManager;
 		std::shared_ptr<iShaderManager> m_shaderManager;
-		std::shared_ptr<iMaterialManager> m_materialManager;
 		std::shared_ptr<iTextureManager> m_textureManager;
 		std::shared_ptr<iRendererManager> m_rendererManager;
 		std::shared_ptr<iSceneManager> m_sceneManager;

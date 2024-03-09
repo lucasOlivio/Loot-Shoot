@@ -5,9 +5,9 @@
 #include "Engine/Core/Components/Components.h"
 #include "Engine/Core/Components/SingletonComponents.h"
 
-#include "Engine/Graphics/Components/GraphicsLocator.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
 
-#include "Engine/Graphics/Materials/MaterialManagerLocator.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
 #include "Engine/Graphics/Shaders/ShaderManager.h"
 
 #include "Engine/Utils/CameraUtils.h"
@@ -29,11 +29,9 @@ namespace MyEngine
 
 	void RendererManager::RenderAllModels(std::shared_ptr<Scene> pScene)
 	{
-		std::shared_ptr<iMaterialManager> pMaterialManager = MaterialManagerLocator::Get();
-
 		m_UpdateCamera(pScene);
 
-		m_RenderList(pMaterialManager, m_vecRenderInfos);
+		m_RenderList(m_vecRenderInfos);
 	}
 
 	void RendererManager::ClearRender()
@@ -41,12 +39,13 @@ namespace MyEngine
 		m_vecRenderInfos.clear();
 	}
 
-	void RendererManager::m_RenderList(std::shared_ptr<iMaterialManager> pMaterialManager,
-									   const std::vector<sRenderModelInfo>& renderInfos)
+	void RendererManager::m_RenderList(const std::vector<sRenderModelInfo>& renderInfos)
 	{
+		std::shared_ptr<iResourceManager> pMaterialManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MATERIAL);
+		
 		for (const sRenderModelInfo& renderInfo : renderInfos)
 		{
-			pMaterialManager->BindMaterial(renderInfo.materialName);
+			pMaterialManager->ActivateResource(renderInfo.materialName);
 
 			GraphicsUtils::DrawModel(renderInfo);
 		}

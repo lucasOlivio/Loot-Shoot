@@ -2,7 +2,6 @@
 
 #include "Engine/Graphics/Renderer/iRendererManager.h"
 
-#include "Engine/Graphics/Materials/iMaterialManager.h"
 #include "Engine/Graphics/Shaders/iShaderProgram.h"
 
 #include <map>
@@ -29,8 +28,7 @@ namespace MyEngine
 		std::vector<sRenderModelInfo> m_vecRenderInfos;
 
 		// Render all models from list models
-		void m_RenderList(std::shared_ptr<iMaterialManager> pMaterialManager, 
-						  const std::vector<sRenderModelInfo>& renderInfos);
+		void m_RenderList(const std::vector<sRenderModelInfo>& renderInfos);
 
 		// Calculate projection and view mats and bind to shader
 		void m_UpdateCamera(std::shared_ptr<Scene> pScene);

@@ -3,6 +3,8 @@
 #include "RenderSystem.h"
 
 #include "Engine/Core/Components/CoreLocator.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Resources/Materials/Material.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
 
@@ -11,7 +13,6 @@
 #include "Engine/Graphics/Shaders/ShaderManager.h"
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 #include "Engine/Graphics/Textures/TextureManagerLocator.h"
-#include "Engine/Graphics/Materials/MaterialManagerLocator.h"
 #include "Engine/Graphics/VAO/VAOManagerLocator.h"
 #include "Engine/Graphics/GraphicsProperties.h"
 
@@ -28,7 +29,6 @@ namespace MyEngine
     {
 		std::shared_ptr<ConfigPathComponent> pConfigPath = CoreLocator::GetConfigPath();
 		std::shared_ptr<iTextureManager> pTextureManager = TextureManagerLocator::Get();
-		std::shared_ptr<iMaterialManager> pMaterialManager = MaterialManagerLocator::Get();
 		std::shared_ptr<iVAOManager> pVAOManager = VAOManagerLocator::Get();
 
 		// Load textures
@@ -83,35 +83,36 @@ namespace MyEngine
 		}
 
 		// Load Materials
+		std::shared_ptr<iResourceManager> pMaterialManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MATERIAL);
 		for (Entity entityId : SceneView<MaterialComponent>(*pScene))
 		{
 			MaterialComponent& material = pScene->Get<MaterialComponent>(entityId);
 
-			sMaterialInfo materialInfo = sMaterialInfo();
-			materialInfo.name = material.name;
-			materialInfo.alphaTexture = material.alphaTexture;
-			materialInfo.cubeTexture = material.cubeTexture;
-			materialInfo.discardTexture = material.discardTexture;
-			materialInfo.specularTexture = material.specularTexture;
-			materialInfo.normalTexture = material.normalTexture;
-			materialInfo.heightMapTexture = material.heightMapTexture;
-			materialInfo.colorTextures = material.colorTextures;
-			materialInfo.offset = material.offset;
-			materialInfo.currOffset = material.currOffset;
-			materialInfo.offsetMove = material.offsetMove;
-			materialInfo.currOffsetHeightMap = material.currOffsetHeightMap;
-			materialInfo.offsetHeightMap = material.offsetHeightMap;
-			materialInfo.colorTexturesRatios = material.colorTexturesRatios;
-			materialInfo.heightScale = material.heightScale;
-			materialInfo.useHeightMap = material.useHeightMap;
-			materialInfo.useNormalTexture = material.useNormalTexture;
-			materialInfo.useSpecularTexture = material.useSpecularTexture;
-			materialInfo.useDiscardTexture = material.useDiscardTexture;
-			materialInfo.useCubeTexture = material.useCubeTexture;
-			materialInfo.isEmissive = material.isEmissive;
-			materialInfo.useAlphaTexture = material.useAlphaTexture;
+			size_t index = pMaterialManager->LoadResource(material.name);
 
-			pMaterialManager->LoadMaterial(material.name, materialInfo);
+			std::shared_ptr<sMaterialInfo> pMaterial = std::static_pointer_cast<sMaterialInfo>(pMaterialManager->GetResource(material.name));
+			pMaterial->name = material.name;
+			pMaterial->alphaTexture = material.alphaTexture;
+			pMaterial->cubeTexture = material.cubeTexture;
+			pMaterial->discardTexture = material.discardTexture;
+			pMaterial->specularTexture = material.specularTexture;
+			pMaterial->normalTexture = material.normalTexture;
+			pMaterial->heightMapTexture = material.heightMapTexture;
+			pMaterial->colorTextures = material.colorTextures;
+			pMaterial->offset = material.offset;
+			pMaterial->currOffset = material.currOffset;
+			pMaterial->offsetMove = material.offsetMove;
+			pMaterial->currOffsetHeightMap = material.currOffsetHeightMap;
+			pMaterial->offsetHeightMap = material.offsetHeightMap;
+			pMaterial->colorTexturesRatios = material.colorTexturesRatios;
+			pMaterial->heightScale = material.heightScale;
+			pMaterial->useHeightMap = material.useHeightMap;
+			pMaterial->useNormalTexture = material.useNormalTexture;
+			pMaterial->useSpecularTexture = material.useSpecularTexture;
+			pMaterial->useDiscardTexture = material.useDiscardTexture;
+			pMaterial->useCubeTexture = material.useCubeTexture;
+			pMaterial->isEmissive = material.isEmissive;
+			pMaterial->useAlphaTexture = material.useAlphaTexture;
 		}
     }
 

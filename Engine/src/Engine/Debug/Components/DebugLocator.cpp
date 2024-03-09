@@ -1,7 +1,6 @@
 #include "pch.h"
 
 #include "DebugLocator.h"
-#include "Engine/Graphics/VAO/VAOManagerLocator.h"
 
 namespace MyEngine
 {

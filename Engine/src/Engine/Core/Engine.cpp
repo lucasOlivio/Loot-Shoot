@@ -18,8 +18,6 @@
 #include "Engine/Graphics/VAO/VAOManager.h"
 #include "Engine/Graphics/Shaders/ShaderManager.h"
 #include "Engine/Graphics/Shaders/ShaderManagerLocator.h"
-#include "Engine/Graphics/Materials/MaterialManager.h"
-#include "Engine/Graphics/Materials/MaterialManagerLocator.h"
 #include "Engine/Graphics/Textures/cBasicTextureManager.h"
 #include "Engine/Graphics/Textures/TextureManagerLocator.h"
 #include "Engine/Graphics/Renderer/RendererManager.h"
@@ -53,7 +51,6 @@ namespace MyEngine
                        m_sceneManager(new SceneManager()),
                        m_VAOManager(new VAOManager()),
                        m_shaderManager(new ShaderManager()),
-                       m_materialManager(new MaterialManager()),
                        m_textureManager(new cBasicTextureManager()),
                        m_rendererManager(new RendererManager()),
                        m_particleManager(new ParticleManager())
@@ -182,7 +179,6 @@ namespace MyEngine
         SceneManagerLocator::Set(m_sceneManager);
         VAOManagerLocator::Set(m_VAOManager);
         ShaderManagerLocator::Set(m_shaderManager);
-        MaterialManagerLocator::Set(m_materialManager);
         TextureManagerLocator::Set(m_textureManager);
         RendererManagerLocator::Set(m_rendererManager);
         ParticleManagerLocator::Set(m_particleManager);

@@ -2,15 +2,16 @@
 
 #include "MaterialOffsetSystem.h"
 
-#include "Engine/Graphics/Materials/MaterialManagerLocator.h"
+#include "Engine/Core/Resources/iResourceManager.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Resources/Materials/Material.h"
+
 #include "Engine/Graphics/GraphicsProperties.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
 
 namespace MyEngine
 {
-	using itMaterials = std::map<std::string, sMaterialInfo>::iterator;
-
 	void MaterialOffsetSystem::Init()
 	{
 	}
@@ -21,48 +22,48 @@ namespace MyEngine
 
 	void MaterialOffsetSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
-		std::shared_ptr<iMaterialManager> pMaterialManager = MaterialManagerLocator::Get();
-		std::map<std::string, sMaterialInfo>& materials = pMaterialManager->GetMaterials();
+		std::shared_ptr<iResourceManager> pMaterialManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MATERIAL);
+		std::vector<std::shared_ptr<iResource>>& materials = pMaterialManager->GetResources();
 
 		// Increase offset for all materials
-		for (itMaterials it = materials.begin(); it != materials.end(); it++)
+		for (std::shared_ptr<iResource> pResource : materials)
 		{
-			sMaterialInfo& material = it->second;
+			std::shared_ptr<sMaterialInfo> pMaterial = std::static_pointer_cast<sMaterialInfo>(pResource);
 
 			// Position offset
-			material.currOffset += material.offsetMove * deltaTime;
+			pMaterial->currOffset += pMaterial->offsetMove * deltaTime;
 
 			float resetValue = 1.0;
-			if (material.useCubeTexture)
+			if (pMaterial->useCubeTexture)
 			{
 				resetValue = 2.0;
 			}
 			// Clamp offset between 0 and 1
-			if (material.currOffset.x > 1)
+			if (pMaterial->currOffset.x > 1)
 			{
-				material.currOffset.x = 0;
+				pMaterial->currOffset.x = 0;
 			}
-			if (material.currOffset.y > 1)
+			if (pMaterial->currOffset.y > 1)
 			{
-				material.currOffset.y = 0;
+				pMaterial->currOffset.y = 0;
 			}
 
 			// Height map offset
-			if (material.offsetHeightMap == glm::vec3(0))
+			if (pMaterial->offsetHeightMap == glm::vec3(0))
 			{
 				continue;
 			}
 
-			material.currOffsetHeightMap += material.offsetHeightMap * deltaTime;
+			pMaterial->currOffsetHeightMap += pMaterial->offsetHeightMap * deltaTime;
 
 			// Clamp offset between 0 and 1
-			if (material.currOffsetHeightMap.x > 1)
+			if (pMaterial->currOffsetHeightMap.x > 1)
 			{
-				material.currOffsetHeightMap.x = 0;
+				pMaterial->currOffsetHeightMap.x = 0;
 			}
-			if (material.currOffsetHeightMap.y > 1)
+			if (pMaterial->currOffsetHeightMap.y > 1)
 			{
-				material.currOffsetHeightMap.y = 0;
+				pMaterial->currOffsetHeightMap.y = 0;
 			}
 		}
 	}
