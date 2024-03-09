@@ -4,6 +4,7 @@
 
 #include "Engine/Core/Configs/ConfigSerializerFactory.h"
 #include "Engine/Core/Components/CoreLocator.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
 
 #include "Engine/Debug/Components/DebugLocator.h"
 
@@ -14,8 +15,6 @@
 #include "Engine/ECS/Scene/SceneManagerLocator.h"
 #include "Engine/ECS/System/SystemBuilder.h"    
 
-#include "Engine/Graphics/Shaders/ShaderManager.h"
-#include "Engine/Graphics/Shaders/ShaderManagerLocator.h"
 #include "Engine/Graphics/Textures/cBasicTextureManager.h"
 #include "Engine/Graphics/Textures/TextureManagerLocator.h"
 #include "Engine/Graphics/Renderer/RendererManager.h"
@@ -47,7 +46,6 @@ namespace MyEngine
                        m_ebRotKeyFrame(new EventBus<eAnimationEvents, RotationKeyFrameEvent>()),
                        m_ebScaleKeyFrame(new EventBus<eAnimationEvents, ScaleKeyFrameEvent>()),
                        m_sceneManager(new SceneManager()),
-                       m_shaderManager(new ShaderManager()),
                        m_textureManager(new cBasicTextureManager()),
                        m_rendererManager(new RendererManager()),
                        m_particleManager(new ParticleManager())
@@ -174,7 +172,6 @@ namespace MyEngine
 
         // Setting up resources managers        
         SceneManagerLocator::Set(m_sceneManager);
-        ShaderManagerLocator::Set(m_shaderManager);
         TextureManagerLocator::Set(m_textureManager);
         RendererManagerLocator::Set(m_rendererManager);
         ParticleManagerLocator::Set(m_particleManager);
@@ -185,8 +182,12 @@ namespace MyEngine
 
         // Load resources
         std::shared_ptr<ConfigPathComponent> pConfigPaths = CoreLocator::GetConfigPath();
+        std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MESH);
+        std::shared_ptr<iResourceManager> pShaderManager = ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER);
+
+        pMeshManager->SetBasePath(pConfigPaths->pathModels);
         m_textureManager->SetBasePath(pConfigPaths->pathTextures);
-        m_shaderManager->SetBasePath(pConfigPaths->pathShaders);
+        pShaderManager->SetBasePath(pConfigPaths->pathShaders);
         m_sceneManager->SetBasePath(pConfigPaths->pathScenes);
     }
 

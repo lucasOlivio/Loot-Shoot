@@ -2,7 +2,8 @@
 
 #include "GraphicsUtils.h"
 
-#include "Engine/Graphics/Shaders/ShaderManager.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Resources/Shaders/ShaderManager.h"
 
 #include "Engine/Utils/Math.h"
 
@@ -10,9 +11,9 @@ namespace MyEngine
 {
 	void GraphicsUtils::DrawModel(const sRenderModelInfo& renderInfo)
 	{
-		std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
+		std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
 
-		pShader->IsWireframe(renderInfo.isWireFrame);
+		pShader->SetWireframe(renderInfo.isWireFrame);
 		pShader->SetUniformFloat("doNotLight", renderInfo.doNotLight);
 		pShader->SetUniformFloat("bUseColorTexture", renderInfo.useColorTexture);
 

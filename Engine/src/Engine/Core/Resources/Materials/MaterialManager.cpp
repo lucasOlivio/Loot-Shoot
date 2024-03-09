@@ -3,8 +3,9 @@
 #include "MaterialManager.h"
 
 #include "Engine/Core/Resources/Materials/Material.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Resources/Shaders/ShaderManager.h"
 
-#include "Engine/Graphics/Shaders/ShaderManager.h"
 #include "Engine/Graphics/Textures/TextureManagerLocator.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
@@ -83,7 +84,7 @@ namespace MyEngine
 		}
 		DeactivateResource();
 
-		std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
+		std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
 		std::shared_ptr<iTextureManager> pTextureManager = TextureManagerLocator::Get();
 
 		// Update offset, alpha and if is emissive material
@@ -158,7 +159,7 @@ namespace MyEngine
 
 	void MaterialManager::DeactivateResource()
 	{
-		std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
+		std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
 		std::shared_ptr<iTextureManager> pTextureManager = TextureManagerLocator::Get();
 
 		pTextureManager->ResetSamplers();

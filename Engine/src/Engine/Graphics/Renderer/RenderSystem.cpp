@@ -10,7 +10,6 @@
 
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 #include "Engine/Graphics/Components/Components.h"
-#include "Engine/Graphics/Shaders/ShaderManager.h"
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 #include "Engine/Graphics/Textures/TextureManagerLocator.h"
 #include "Engine/Graphics/GraphicsProperties.h"
@@ -65,7 +64,6 @@ namespace MyEngine
 
 		// Load Models
 		std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MESH);
-		pMeshManager->SetBasePath(pConfigPath->pathModels);
 		for (Entity entityId : SceneView<ModelComponent>(*pScene))
 		{
 			ModelComponent& model = pScene->Get<ModelComponent>(entityId);
@@ -118,7 +116,6 @@ namespace MyEngine
     void RenderSystem::Render(std::shared_ptr<Scene> pScene)
     {
 		std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
-		std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
 		std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
 
 		pRenderer->RenderAllModels(pScene);

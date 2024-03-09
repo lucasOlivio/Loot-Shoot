@@ -3,10 +3,11 @@
 #include "MeshManager.h"
 
 #include "Engine/Core/Resources/Meshes/Mesh.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Resources/Shaders/ShaderManager.h"
 
 #include "Engine/Assimp/cAssimpHelper.h"
 
-#include "Engine/Graphics/Shaders/ShaderManager.h"
 #include "Engine/Graphics/opengl.h"
 
 namespace MyEngine
@@ -172,7 +173,7 @@ namespace MyEngine
             (GLvoid*)pMesh->pIndices,
             GL_STATIC_DRAW);
 
-        std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
+        std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
 
         // Set the vertex attributes.
         GLint vpos_location = pShader->GetAL("vPos");

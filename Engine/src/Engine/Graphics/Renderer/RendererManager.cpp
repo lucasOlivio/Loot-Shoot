@@ -4,11 +4,12 @@
 
 #include "Engine/Core/Components/Components.h"
 #include "Engine/Core/Components/SingletonComponents.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Resources/Shaders/ShaderManager.h"
 
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
 
 #include "Engine/Graphics/Components/GraphicsLocator.h"
-#include "Engine/Graphics/Shaders/ShaderManager.h"
 
 #include "Engine/Utils/CameraUtils.h"
 #include "Engine/Utils/GraphicsUtils.h"
@@ -54,7 +55,7 @@ namespace MyEngine
 	void RendererManager::m_UpdateCamera(std::shared_ptr<Scene> pScene)
 	{
 		std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
-		std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
+		std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
 
 		CameraComponent& camera = pScene->Get<CameraComponent>(CAMERA_ID);
 		TransformComponent& transformCamera = pScene->Get<TransformComponent>(CAMERA_ID);

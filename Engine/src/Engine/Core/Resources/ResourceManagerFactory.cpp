@@ -4,6 +4,7 @@
 
 #include "Engine/Core/Resources/Materials/MaterialManager.h"
 #include "Engine/Core/Resources/Meshes/MeshManager.h"
+#include "Engine/Core/Resources/Shaders/ShaderManager.h"
 
 namespace MyEngine
 {
@@ -15,6 +16,8 @@ namespace MyEngine
             return MaterialManager::GetInstance();
         case eResourceTypes::MESH:
             return MeshManager::GetInstance();
+        case eResourceTypes::SHADER:
+            return ShaderManager::GetInstance();
         default:
             LOG_ERROR("No manager for resource type: " + std::to_string(resType));
             break;

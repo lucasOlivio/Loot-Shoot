@@ -2,8 +2,6 @@
 
 #include "Engine/Graphics/Renderer/iRendererManager.h"
 
-#include "Engine/Graphics/Shaders/iShaderProgram.h"
-
 #include <map>
 #include <vector>
 

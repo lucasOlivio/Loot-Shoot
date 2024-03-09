@@ -1,22 +1,21 @@
 #include "pch.h"
 
 #include "ShaderSystem.h"
+
 #include "Engine/Core/Components/CoreLocator.h"
-#include "Engine/Graphics/Shaders/ShaderManagerLocator.h"
-#include "Engine/Graphics/Shaders/ShaderManager.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
 
 namespace MyEngine
 {
 	void ShaderSystem::Init()
 	{
 		std::shared_ptr<ConfigPathComponent> pConfigPath = CoreLocator::GetConfigPath();
-		std::shared_ptr<iShaderManager> pShaderManager = ShaderManagerLocator::Get();
+		std::shared_ptr<iResourceManager> pShader = ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER);
 
 		// Setup shaders
-		pShaderManager->SetBasePath(pConfigPath->pathShaders);
 		std::string shaderName = "Shader01"; // TODO: This should come from config?
-		pShaderManager->AddShaderProgram(shaderName);
-		pShaderManager->UseShaderProgram(shaderName);
+		size_t index = pShader->LoadResource(shaderName);
+		pShader->ActivateResource(shaderName);
 	}
 
 	void ShaderSystem::Start(std::shared_ptr<Scene> pScene)

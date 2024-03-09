@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Engine/Core/Components/Components.h"
+#include "Engine/Core/Resources/Shaders/ShaderManager.h"
 
 #include "Engine/ECS/System/iSystem.h"
 
-#include "Engine/Graphics/Shaders/ShaderManager.h"
 #include "Engine/Graphics/Components/Components.h"
 
 namespace MyEngine
@@ -35,12 +35,12 @@ namespace MyEngine
 
 		void m_UpdatePositionUL(TransformComponent& transform, 
 								LightComponent& light, 
-								std::shared_ptr<iShaderProgram> pShader);
-		void m_UpdateDirectionUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader);
-		void m_UpdateDiffuseUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader);
-		void m_UpdateSpecularUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader);
-		void m_UpdateAttenUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader);
-		void m_UpdateParamsUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader);
-		void m_UpdateStatusUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader);
+								std::shared_ptr<ShaderManager> pShader);
+		void m_UpdateDirectionUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader);
+		void m_UpdateDiffuseUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader);
+		void m_UpdateSpecularUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader);
+		void m_UpdateAttenUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader);
+		void m_UpdateParamsUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader);
+		void m_UpdateStatusUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader);
 	};
 }

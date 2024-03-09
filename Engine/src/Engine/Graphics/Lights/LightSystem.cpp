@@ -2,6 +2,8 @@
 
 #include "LightSystem.h"
 
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
+
 #include "Engine/ECS/Scene/SceneView.hpp"
 
 namespace MyEngine
@@ -26,7 +28,7 @@ namespace MyEngine
 
     void LightSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
-        std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
+        std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
 
         // Set lights to transform position of entity
         for (Entity entityId : SceneView<TransformComponent, LightComponent>(*pScene))
@@ -63,7 +65,7 @@ namespace MyEngine
                                    LightComponent& light, int lightIndex)
     {
         std::string ulBasePath = "theLights[" + std::to_string(lightIndex) + "].";
-        std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
+        std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
 
         light.ulBasePath = ulBasePath;
 
@@ -79,7 +81,7 @@ namespace MyEngine
 
     void LightSystem::m_UpdatePositionUL(TransformComponent& transform, 
                                          LightComponent& light, 
-                                         std::shared_ptr<iShaderProgram> pShader)
+                                         std::shared_ptr<ShaderManager> pShader)
     {
         glm::vec4 newPosition = glm::vec4(transform.worldPosition, 0) + light.positionOffset +
                                (light.direction * light.directionOffset);
@@ -87,34 +89,34 @@ namespace MyEngine
         pShader->SetUniformVec4((light.ulBasePath + "position").c_str(), newPosition);
     }
 
-    void LightSystem::m_UpdateDirectionUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader)
+    void LightSystem::m_UpdateDirectionUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
         glm::vec4 newDirection = light.direction + light.directionOffset;
         pShader->SetUniformVec4((light.ulBasePath + "direction").c_str(), newDirection);
     }
 
-    void LightSystem::m_UpdateDiffuseUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader)
+    void LightSystem::m_UpdateDiffuseUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
         pShader->SetUniformVec4((light.ulBasePath + "diffuse").c_str(), light.diffuse);
     }
 
-    void LightSystem::m_UpdateSpecularUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader)
+    void LightSystem::m_UpdateSpecularUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
         pShader->SetUniformVec4((light.ulBasePath + "specular").c_str(), light.specular);
     }
 
-    void LightSystem::m_UpdateAttenUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader)
+    void LightSystem::m_UpdateAttenUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
         glm::vec4 newAtten = light.atten * light.flickerOffset;
         pShader->SetUniformVec4((light.ulBasePath + "atten").c_str(), newAtten);
     }
 
-    void LightSystem::m_UpdateParamsUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader)
+    void LightSystem::m_UpdateParamsUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
         pShader->SetUniformVec4((light.ulBasePath + "params").c_str(), light.params);
     }
 
-    void LightSystem::m_UpdateStatusUL(LightComponent& light, std::shared_ptr<iShaderProgram> pShader)
+    void LightSystem::m_UpdateStatusUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
         pShader->SetUniformInt((light.ulBasePath + "status").c_str(), light.status);
     }

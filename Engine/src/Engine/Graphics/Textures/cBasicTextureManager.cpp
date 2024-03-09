@@ -2,8 +2,11 @@
 
 #include "cBasicTextureManager.h"
 #include "TextureProperties.h"
+
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Resources/Shaders/ShaderManager.h"
+
 #include "Engine/Utils/Math.h"
-#include "Engine/Graphics/Shaders/ShaderManager.h"
 
 #include <sstream>
 
@@ -205,7 +208,7 @@ namespace MyEngine
 			return pSamplerInfo;
 		}
 
-		std::shared_ptr<iShaderProgram> pShader = ShaderManager::GetActiveShader();
+		std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
 
 		// Load sampler info and store in cache
 		pSamplerInfo = new sSamplerInfo();

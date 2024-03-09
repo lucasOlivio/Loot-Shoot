@@ -8,8 +8,6 @@
 #include "Engine/Events/EventBusLocator.hpp"
 #include "Engine/Events/WindowEvents.h"
 
-#include "Engine/Graphics/Shaders/ShaderManager.h"
-
 namespace MyEngine
 {
     void WindowSystem::Init()
