@@ -21,7 +21,7 @@ namespace MyEngine
     void ParticleEmissionSystem::Start(std::shared_ptr<Scene> pScene)
     {
         // Load all particles models
-        std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MESH);
+        std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::MESH);
         for (Entity entityId : SceneView<EmitterComponent>(*pScene))
         {
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);

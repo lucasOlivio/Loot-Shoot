@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Engine/Core/Resources/Meshes/Mesh.h"
+#include "Engine/Core/Resources/Textures/Texture.h"
 
 #include "Engine/ECS/iComponent.h"
 
-#include "Engine/Graphics/Textures/TextureProperties.h"
 #include "Engine/Graphics/Animations/AnimationProperties.h"
 #include "Engine/Graphics/Particles/ParticlesProperties.h"
 

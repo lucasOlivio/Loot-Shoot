@@ -44,6 +44,11 @@ namespace MyEngine
             }
 
             transform.position = transform.position + (movement.velocity * deltaTime);
+
+            if (transform.position.y <= 0.0f)
+            {
+                transform.position.y = 0.0f;
+            }
         }
     }
 

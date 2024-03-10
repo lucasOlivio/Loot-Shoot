@@ -13,7 +13,7 @@ namespace MyEngine
     void DebugSystem::Init()
     {
         std::shared_ptr<ConfigPathComponent> pConfigPath = CoreLocator::GetConfigPath();
-        std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MESH);
+        std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::MESH);
 
         std::shared_ptr<DebugSquareComponent> pSquare = DebugLocator::GetSquare();
         std::shared_ptr<DebugSphereComponent> pSphere = DebugLocator::GetSphere();

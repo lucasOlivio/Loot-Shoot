@@ -10,7 +10,7 @@ namespace MyEngine
 	void ShaderSystem::Init()
 	{
 		std::shared_ptr<ConfigPathComponent> pConfigPath = CoreLocator::GetConfigPath();
-		std::shared_ptr<iResourceManager> pShader = ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER);
+		std::shared_ptr<iResourceManager> pShader = ResourceManagerFactory::GetOrCreate(eResourceTypes::SHADER);
 
 		// Setup shaders
 		std::string shaderName = "Shader01"; // TODO: This should come from config?

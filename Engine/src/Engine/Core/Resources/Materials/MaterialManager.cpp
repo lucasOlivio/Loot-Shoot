@@ -5,8 +5,7 @@
 #include "Engine/Core/Resources/Materials/Material.h"
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
 #include "Engine/Core/Resources/Shaders/ShaderManager.h"
-
-#include "Engine/Graphics/Textures/TextureManagerLocator.h"
+#include "Engine/Core/Resources/Textures/TextureManager.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
 
@@ -84,10 +83,9 @@ namespace MyEngine
 		}
 		DeactivateResource();
 
-		std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
-		std::shared_ptr<iTextureManager> pTextureManager = TextureManagerLocator::Get();
+		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
+		std::shared_ptr<TextureManager> pTextureManager = ResourceManagerFactory::GetOrCreate<TextureManager>(eResourceTypes::TEXTURE);
 
-		// Update offset, alpha and if is emissive material
 		// TODO: Regulate the intensity of the emissiviness
 		pShader->SetUniformInt("isEmissive", pMaterial->isEmissive);
 
@@ -99,9 +97,7 @@ namespace MyEngine
 		// Bind color textures
 		for (int i = 0; i < pMaterial->colorTextures.size(); i++)
 		{
-			pTextureManager->BindTexture(pMaterial->colorTextures[i],
-				eTextureType::COLOR,
-				pMaterial->colorTexturesRatios[i]);
+			pTextureManager->ActivateResource(pMaterial->colorTextures[i], pMaterial->colorTexturesRatios[i]);
 		}
 
 		// TODO: Remove repetition, all could be in a vector or map
@@ -109,49 +105,37 @@ namespace MyEngine
 		if (pMaterial->useHeightMap)
 		{
 			// Height scale can be passed as the "ratio parameter", will be placed on the heightscale uniform
-			pTextureManager->BindTexture(pMaterial->heightMapTexture,
-				eTextureType::HEIGHTMAP,
-				pMaterial->heightScale);
+			pTextureManager->ActivateResource(pMaterial->heightMapTexture, pMaterial->heightScale);
 		}
 
 		// Bind normal textures
 		if (pMaterial->useNormalTexture)
 		{
-			pTextureManager->BindTexture(pMaterial->normalTexture,
-				eTextureType::NORMAL,
-				0);
+			pTextureManager->ActivateResource(pMaterial->normalTexture);
 		}
 
 		// Bind specular textures
 		if (pMaterial->useSpecularTexture)
 		{
-			pTextureManager->BindTexture(pMaterial->specularTexture,
-				eTextureType::SPECULAR,
-				0);
+			pTextureManager->ActivateResource(pMaterial->specularTexture);
 		}
 
 		// Bind discard textures
 		if (pMaterial->useDiscardTexture)
 		{
-			pTextureManager->BindTexture(pMaterial->discardTexture,
-				eTextureType::DISCARD,
-				0);
+			pTextureManager->ActivateResource(pMaterial->discardTexture);
 		}
 
 		// Bind alpha textures
 		if (pMaterial->useAlphaTexture)
 		{
-			pTextureManager->BindTexture(pMaterial->alphaTexture,
-				eTextureType::TRANSPARENCY,
-				0);
+			pTextureManager->ActivateResource(pMaterial->alphaTexture);
 		}
 
 		// Bind cube textures
 		if (pMaterial->useCubeTexture)
 		{
-			pTextureManager->BindTexture(pMaterial->cubeTexture,
-				eTextureType::CUBE,
-				0);
+			pTextureManager->ActivateResource(pMaterial->cubeTexture);
 		}
 
 		m_currMaterial = pMaterial->name;
@@ -159,10 +143,10 @@ namespace MyEngine
 
 	void MaterialManager::DeactivateResource()
 	{
-		std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
-		std::shared_ptr<iTextureManager> pTextureManager = TextureManagerLocator::Get();
+		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
+		std::shared_ptr<iResourceManager> pTextureManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::TEXTURE);
 
-		pTextureManager->ResetSamplers();
+		pTextureManager->DeactivateResource();
 		pShader->SetUniformVec2("UVOffset", glm::vec2(0.0, 0.0));
 		pShader->SetUniformVec2("HeightMapOffset", glm::vec2(0.0, 0.0));
 		pShader->SetUniformInt("isEmissive", false);

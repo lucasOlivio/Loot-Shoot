@@ -22,7 +22,7 @@ namespace MyEngine
 
 	void MaterialOffsetSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
-		std::shared_ptr<iResourceManager> pMaterialManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MATERIAL);
+		std::shared_ptr<iResourceManager> pMaterialManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::MATERIAL);
 		std::vector<std::shared_ptr<iResource>>& materials = pMaterialManager->GetResources();
 
 		// Increase offset for all materials

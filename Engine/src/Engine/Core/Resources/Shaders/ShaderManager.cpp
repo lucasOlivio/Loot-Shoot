@@ -23,18 +23,14 @@ namespace MyEngine
 
 	void ShaderManager::DeleteResource(const std::string& name)
 	{
-		assert(m_mapShaders.find(name) != m_mapShaders.end());
-		
-		std::shared_ptr<ShaderProgram> pShader = std::static_pointer_cast<ShaderProgram>(m_mapShaders.at(name));
+		std::shared_ptr<iResource> pShader = GetResource(name);
 		m_mapShaders.erase(name);
 		m_vecShaders.erase(m_vecShaders.begin() + pShader->index);
 	}
 
 	void ShaderManager::DeleteResource(const size_t& index)
 	{
-		assert(index < m_vecShaders.size());
-
-		std::shared_ptr<ShaderProgram> pShader = std::static_pointer_cast<ShaderProgram>(m_vecShaders.at(index));
+		std::shared_ptr<iResource> pShader = GetResource(index);
 		m_mapShaders.erase(pShader->name);
 		m_vecShaders.erase(m_vecShaders.begin() + index);
 	}

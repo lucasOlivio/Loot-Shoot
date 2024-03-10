@@ -32,6 +32,9 @@ namespace MyEngine
 	private:
 		MeshManager() {};
 
+		bool m_LoadMeshData(std::string theFileName, std::shared_ptr<sMeshInfo> pMesh);
+		void m_LoadVAOData(std::shared_ptr<sMeshInfo> pMesh);
+
 		// VAO binded to shader at moment
 		std::string m_currMesh;
 		std::string m_basePath;
@@ -40,8 +43,5 @@ namespace MyEngine
 		std::vector<std::shared_ptr<iResource>> m_vecMeshes;
 
 		std::shared_ptr<iResource> m_defaultMesh;
-
-		bool m_LoadMeshData(std::string theFileName, std::shared_ptr<sMeshInfo> pMesh);
-		void m_LoadVAOData(std::shared_ptr<sMeshInfo> pMesh);
 	};
 }

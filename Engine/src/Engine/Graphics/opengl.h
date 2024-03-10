@@ -16,4 +16,7 @@ namespace MyEngine
                                     const void* userParam);
 
     void GlfwErrorCallback(int error, const char* description);
+
+	// Reutn false if everything is OK
+    bool CheckOpenGLError();
 }

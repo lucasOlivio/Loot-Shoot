@@ -10,6 +10,12 @@ namespace MyEngine
 		ResourceManagerFactory() {};
 		~ResourceManagerFactory() {};
 
-		static std::shared_ptr<iResourceManager> CreateResManager(const eResourceTypes& resType);
+		static std::shared_ptr<iResourceManager> GetOrCreate(const eResourceTypes& resType);
+
+		template<typename T>
+		static std::shared_ptr<T> GetOrCreate(const eResourceTypes& resType)
+		{
+			return std::static_pointer_cast<T>(GetOrCreate(resType));
+		}
 	};
 }

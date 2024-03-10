@@ -173,7 +173,7 @@ namespace MyEngine
             (GLvoid*)pMesh->pIndices,
             GL_STATIC_DRAW);
 
-        std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
+        std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
         // Set the vertex attributes.
         GLint vpos_location = pShader->GetAL("vPos");

@@ -42,7 +42,7 @@ namespace MyEngine
 
 	void RendererManager::m_RenderList(const std::vector<sRenderModelInfo>& renderInfos)
 	{
-		std::shared_ptr<iResourceManager> pMaterialManager = ResourceManagerFactory::CreateResManager(eResourceTypes::MATERIAL);
+		std::shared_ptr<iResourceManager> pMaterialManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::MATERIAL);
 		
 		for (const sRenderModelInfo& renderInfo : renderInfos)
 		{
@@ -55,7 +55,7 @@ namespace MyEngine
 	void RendererManager::m_UpdateCamera(std::shared_ptr<Scene> pScene)
 	{
 		std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
-		std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
+		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
 		CameraComponent& camera = pScene->Get<CameraComponent>(CAMERA_ID);
 		TransformComponent& transformCamera = pScene->Get<TransformComponent>(CAMERA_ID);

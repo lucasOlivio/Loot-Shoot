@@ -11,7 +11,7 @@ namespace MyEngine
 {
 	void GraphicsUtils::DrawModel(const sRenderModelInfo& renderInfo)
 	{
-		std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
+		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
 		pShader->SetWireframe(renderInfo.isWireFrame);
 		pShader->SetUniformFloat("doNotLight", renderInfo.doNotLight);

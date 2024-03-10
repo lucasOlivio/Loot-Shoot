@@ -11,7 +11,8 @@ namespace MyEngine
         UNKNOWN_RESOURCE = 0,
         MATERIAL,
         MESH,
-        SHADER
+        SHADER,
+        TEXTURE
     };
 
     struct iResource

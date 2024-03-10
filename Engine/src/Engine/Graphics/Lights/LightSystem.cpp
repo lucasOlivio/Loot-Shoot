@@ -28,7 +28,7 @@ namespace MyEngine
 
     void LightSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
-        std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
+        std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
         // Set lights to transform position of entity
         for (Entity entityId : SceneView<TransformComponent, LightComponent>(*pScene))
@@ -65,7 +65,7 @@ namespace MyEngine
                                    LightComponent& light, int lightIndex)
     {
         std::string ulBasePath = "theLights[" + std::to_string(lightIndex) + "].";
-        std::shared_ptr<ShaderManager> pShader = std::static_pointer_cast<ShaderManager>(ResourceManagerFactory::CreateResManager(eResourceTypes::SHADER));
+        std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
         light.ulBasePath = ulBasePath;
 
