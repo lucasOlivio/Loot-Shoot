@@ -6,8 +6,6 @@
 
 #include "Engine/Graphics/Components/Components.h"
 
-#include "Engine/ECS/Scene/SceneView.hpp"
-
 #include "Engine/Utils/AnimationUtils.h"
 
 namespace MyEngine
@@ -24,7 +22,9 @@ namespace MyEngine
         {
             TransformAnimationComponent& animation = pScene->Get<TransformAnimationComponent>(entityId);
 
+            animation.LockWrite();
             animation.time = 0.0f;
+            animation.UnlockWrite();
         }
     }
 
@@ -35,6 +35,8 @@ namespace MyEngine
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
             TransformAnimationComponent& animation = pScene->Get<TransformAnimationComponent>(entityId);
 
+            transform.LockWrite();
+            animation.LockRead();
             float currTime = animation.time;
 
             // Position
@@ -48,6 +50,8 @@ namespace MyEngine
             // Scale
             AnimationUtils::InterpolateAndApply<ScaleKeyFrame, float>(animation.scaleKeyFrames, 
                                                       currTime, animation.currStartScaKF, animation.currEndScaKF, transform.scale);
+            animation.LockRead();
+            transform.UnlockWrite();
         }
     }
 

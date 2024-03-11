@@ -16,7 +16,10 @@ namespace MyEngine
         // Dark theme for the window
         ImGui::StyleColorsDark();
 
+        pWindow->LockRead();
         bool response = ImGui_ImplGlfw_InitForOpenGL(pWindow->pGLFWWindow, true);
+        pWindow->UnlockRead();
+
         if (!response)
         {
             LOG_ERROR("Error initializing IMGUI with GLFW!");

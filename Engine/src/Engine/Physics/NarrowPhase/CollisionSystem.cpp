@@ -31,6 +31,7 @@ namespace MyEngine
         std::shared_ptr<NarrowPhaseTestsComponent> pTests = PhysicsLocator::GetNarrowPhaseTests();
 
         // The first layer is the grouping of objects to test
+        pTests->LockRead();
         for (int group = 0; group < pTests->activeEntitiesToTest.size(); group++)
         {
             std::vector<Entity>& activeGroup = pTests->activeEntitiesToTest[group];
@@ -49,6 +50,7 @@ namespace MyEngine
                                         staticGroup);
             }
         }
+        pTests->UnlockRead();
     }
 
     void CollisionSystem::Render(std::shared_ptr<Scene> pScene)
@@ -127,10 +129,19 @@ namespace MyEngine
         bool isCollision = false;
         
         RigidBodyComponent& sphereB = pScene->Get<RigidBodyComponent>(entityIdB);
+
+        sphereA.LockRead();
+        sphereB.LockRead();
+        transformA.LockRead();
+        transformB.LockRead();
         isCollision = CollisionsUtils::SphereSphere_Overlap(sphereA.radius,
-            transformA.worldPosition,
-            sphereB.radius,
-            transformB.worldPosition);
+                                                            transformA.worldPosition,
+                                                            sphereB.radius,
+                                                            transformB.worldPosition);
+        transformB.UnlockRead();
+        transformA.UnlockRead();
+        sphereB.UnlockRead();
+        sphereA.UnlockRead();
 
         if (!isCollision)
         {
@@ -141,15 +152,33 @@ namespace MyEngine
         sCollisionData collData = sCollisionData();
         collData.entityA = entityIdA;
         collData.entityB = entityIdB;
+
+        transformA.LockRead();
+        transformB.LockRead();
         collData.collisionNormalA = CollisionsUtils::SphereSphere_Normal(transformA.worldPosition,
                                                                         transformB.worldPosition);
+        transformB.UnlockRead();
+        transformA.UnlockRead();
+
         collData.collisionNormalB = -collData.collisionNormalA;
+
+        sphereA.LockRead();
+        sphereB.LockRead();
+        transformA.LockRead();
+        transformB.LockRead();
         collData.contactPoint = CollisionsUtils::SphereSphere_CollisionPoint(sphereA.radius,
                                                                             transformA.worldPosition,
                                                                             collData.collisionNormalA,
                                                                             sphereB.radius,
                                                                             transformB.worldPosition);
+        transformB.UnlockRead();
+        transformA.UnlockRead();
+        sphereB.UnlockRead();
+        sphereA.UnlockRead();
+
+        movementA.LockRead();
         collData.velocityAtCollisionA = movementA.velocity;
+        movementA.UnlockRead();
 
         collData.pScene = pScene;
 
@@ -157,7 +186,9 @@ namespace MyEngine
         MovementComponent& movementB = pScene->Get<MovementComponent>(entityIdB, hasMovement);
         if (hasMovement)
         {
+            movementB.LockRead();
             collData.velocityAtCollisionB = movementB.velocity;
+            movementB.UnlockRead();
         }
 
         m_TriggerCollision(collData);

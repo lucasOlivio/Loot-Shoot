@@ -29,6 +29,7 @@ namespace MyEngine
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
             RotationComponent& rotation = pScene->Get<RotationComponent>(entityId);
 
+            rotation.LockWrite();
             glm::vec3 newVelocity = rotation.velocity + (rotation.acceleration * deltaTime);
             glm::vec3 dragForce = newVelocity * -(rotation.drag * deltaTime);
             rotation.velocity = newVelocity + dragForce;
@@ -44,8 +45,11 @@ namespace MyEngine
             }
 
             glm::vec3 deltaRotation = rotation.velocity * deltaTime;
+            rotation.UnlockWrite();
 
+            transform.LockWrite();
             transform.orientation = TransformUtils::AdjustOrientation(transform.orientation, deltaRotation);
+            transform.UnlockWrite();
         }
     }
 

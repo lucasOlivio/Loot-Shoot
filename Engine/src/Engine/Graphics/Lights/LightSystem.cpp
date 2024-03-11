@@ -4,8 +4,6 @@
 
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
 
-#include "Engine/ECS/Scene/SceneView.hpp"
-
 namespace MyEngine
 {
     void LightSystem::Init()
@@ -94,41 +92,57 @@ namespace MyEngine
                                          LightComponent& light, 
                                          std::shared_ptr<ShaderManager> pShader)
     {
+        transform.LockRead();
+        light.LockRead();
         glm::vec4 newPosition = glm::vec4(transform.worldPosition, 0) + light.positionOffset +
                                (light.direction * light.directionOffset);
+        light.UnlockRead();
+        transform.UnlockRead();
 
         pShader->SetUniformVec4((light.ulBasePath + "position").c_str(), newPosition);
     }
 
     void LightSystem::m_UpdateDirectionUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
+        light.LockRead();
         glm::vec4 newDirection = light.direction + light.directionOffset;
         pShader->SetUniformVec4((light.ulBasePath + "direction").c_str(), newDirection);
+        light.UnlockRead();
     }
 
     void LightSystem::m_UpdateDiffuseUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
+        light.LockRead();
         pShader->SetUniformVec4((light.ulBasePath + "diffuse").c_str(), light.diffuse);
+        light.UnlockRead();
     }
 
     void LightSystem::m_UpdateSpecularUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
+        light.LockRead();
         pShader->SetUniformVec4((light.ulBasePath + "specular").c_str(), light.specular);
+        light.UnlockRead();
     }
 
     void LightSystem::m_UpdateAttenUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
+        light.LockRead();
         glm::vec4 newAtten = light.atten * light.flickerOffset;
         pShader->SetUniformVec4((light.ulBasePath + "atten").c_str(), newAtten);
+        light.UnlockRead();
     }
 
     void LightSystem::m_UpdateParamsUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
+        light.LockRead();
         pShader->SetUniformVec4((light.ulBasePath + "params").c_str(), light.params);
+        light.UnlockRead();
     }
 
     void LightSystem::m_UpdateStatusUL(LightComponent& light, std::shared_ptr<ShaderManager> pShader)
     {
+        light.LockRead();
         pShader->SetUniformInt((light.ulBasePath + "status").c_str(), light.status);
+        light.UnlockRead();
     }
 }

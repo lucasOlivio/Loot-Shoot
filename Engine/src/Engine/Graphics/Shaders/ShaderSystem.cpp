@@ -2,14 +2,12 @@
 
 #include "ShaderSystem.h"
 
-#include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
 
 namespace MyEngine
 {
 	void ShaderSystem::Init()
 	{
-		std::shared_ptr<ConfigPathComponent> pConfigPath = CoreLocator::GetConfigPath();
 		std::shared_ptr<iResourceManager> pShader = ResourceManagerFactory::GetOrCreate(eResourceTypes::SHADER);
 
 		// Setup shaders

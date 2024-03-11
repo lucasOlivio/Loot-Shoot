@@ -7,8 +7,6 @@
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 #include "Engine/Graphics/Components/Components.h"
 
-#include "Engine/ECS/Scene/SceneView.hpp"
-
 #include "Engine/Utils/TransformUtils.h"
 #include "Engine/Utils/GraphicsUtils.h"
 
@@ -42,11 +40,14 @@ namespace MyEngine
 
             glm::mat4 matTransform = glm::mat4(1.0);
 
+            transform.LockRead();
             TransformUtils::GetTransform(transform.worldPosition,
                                          transform.worldOrientation,
                                          transform.worldScale,
                                          matTransform);
+            transform.UnlockRead();
 
+            model.LockRead();
             std::shared_ptr<sMeshInfo> pMesh = model.pMesh;
             if (!pMesh)
             {
@@ -65,13 +66,16 @@ namespace MyEngine
             renderInfo.useDefaultColor = model.useDefaultColor;
             renderInfo.useColorTexture = model.useColorTexture;
             renderInfo.useDebugColor = false;
+            model.UnlockRead();
 
             bool hasTiling = false;
             TilingComponent& tiling = pScene->Get<TilingComponent>(entityId, hasTiling);
             if (hasTiling)
             {
+                tiling.LockRead();
                 renderInfo.tileAxis = tiling.axis;
                 renderInfo.tileOffset = tiling.offset;
+                tiling.UnlockRead();
             }
 
             pRendererManager->AddToRender(renderInfo);

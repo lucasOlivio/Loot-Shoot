@@ -2,7 +2,6 @@
 
 #include "WindowSystem.h"
 
-#include "Engine/ECS/Scene/SceneView.hpp"
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 
 #include "Engine/Events/EventsFacade.h"
@@ -25,6 +24,7 @@ namespace MyEngine
         // Set width and height from maximized window
         std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
 
+        pWindow->LockWrite();
         pWindow->pGLFWWindow = glfwCreateWindow(pWindow->width,
                                                 pWindow->height,
                                                 pWindow->name.c_str(), NULL, NULL);
@@ -32,13 +32,16 @@ namespace MyEngine
         {
             LOG_ERROR("Error creating window '" + pWindow->name + "'!\n");
             glfwTerminate();
+
+            pWindow->UnlockWrite();
             return;
         }
 
         // Update width and height for maximized window
         glfwGetFramebufferSize(pWindow->pGLFWWindow, &(pWindow->width), &(pWindow->height));
-
         glfwMakeContextCurrent(pWindow->pGLFWWindow);
+        pWindow->UnlockWrite();
+
         gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         glfwSwapInterval(1);
 

@@ -26,9 +26,10 @@ namespace MyEngine
         {
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
 
+            emitter.LockWrite();
             size_t index = pMeshManager->LoadResource(emitter.properties.meshName);
-
             emitter.pMesh = std::static_pointer_cast<sMeshInfo>(pMeshManager->GetResource(index));
+            emitter.UnlockWrite();
         }
 
         // Kill all particles
@@ -41,7 +42,9 @@ namespace MyEngine
         {
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
 
+            emitter.LockWrite();
             emitter.totalEmitPart = 0;
+            emitter.UnlockWrite();
         }
     }
 
@@ -55,7 +58,8 @@ namespace MyEngine
         {
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
-
+            
+            emitter.LockWrite();
             if (!emitter.isActive)
             {
                 continue;
@@ -88,6 +92,7 @@ namespace MyEngine
 
             // Emit particle with random properties
             EmitterProps emitterProps = emitter.properties;
+            transform.LockRead();
             for (int i = 0; i < particlesToCreate; i++)
             {
                 ParticleProps particle;
@@ -113,9 +118,11 @@ namespace MyEngine
 
                 pParticleManager->EmitParticle(particle);
             }
+            transform.UnlockRead();
 
             emitter.totalEmitPart += particlesToCreate;
             emitter.timeLastEmit = 0.0f;
+            emitter.UnlockWrite();
         }
     }
 

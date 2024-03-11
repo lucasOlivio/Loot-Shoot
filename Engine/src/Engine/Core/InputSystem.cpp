@@ -20,9 +20,11 @@ namespace MyEngine
 			return;
 		}
 
+		pWindow->LockRead();
 		glfwSetKeyCallback(pWindow->pGLFWWindow, InputSystem::KeyCallback);
 		glfwSetMouseButtonCallback(pWindow->pGLFWWindow, InputSystem::MouseButtonCallback);
 		glfwSetCursorPosCallback(pWindow->pGLFWWindow, InputSystem::MousePositionCallback);
+		pWindow->UnlockRead();
 
 		return;
 	}
@@ -56,7 +58,8 @@ namespace MyEngine
 		keyData.key = (eKeyCodes)key;
 		keyData.action = (eInputActions)action;
 		keyData.mod = (eKeyMods)mods;
-		
+
+		pKeyInput->LockWrite();
 		if (keyData.action == eInputActions::KEY_RELEASE)
 		{
 			pKeyInput->key[key] = false;
@@ -65,6 +68,7 @@ namespace MyEngine
 		{
 			pKeyInput->key[key] = true;
 		}
+		pKeyInput->UnlockWrite();
 
 		// Push keyboard event
 		m_TriggerKeyEvent(keyData);
@@ -82,6 +86,7 @@ namespace MyEngine
 		mouseData.action = (eInputActions)action;
 		mouseData.mod = (eKeyMods)mods;
 
+		pMouseInput->LockWrite();
 		if (mouseData.action == eInputActions::KEY_RELEASE)
 		{
 			pMouseInput->button[mouse] = false;
@@ -90,6 +95,7 @@ namespace MyEngine
 		{
 			pMouseInput->button[mouse] = true;
 		}
+		pMouseInput->UnlockWrite();
 
 		// Push mouseboard event
 		m_TriggerMouseEvent(mouseData);
@@ -102,11 +108,13 @@ namespace MyEngine
 		// Update input component to keep track of mouse position
 		std::shared_ptr<MouseInputComponent> pMouseInput = CoreLocator::GetMouseInput();
 
+		pMouseInput->LockWrite();
 		pMouseInput->lastPosX = pMouseInput->posX;
 		pMouseInput->lastPosY = pMouseInput->posY;
 
 		pMouseInput->posX = (float)xpos;
 		pMouseInput->posY = (float)ypos;
+		pMouseInput->UnlockWrite();
 
 		return;
 	}

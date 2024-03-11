@@ -4,8 +4,6 @@
 
 #include "Engine/Core/Components/Components.h"
 
-#include "Engine/ECS/Scene/SceneView.hpp"
-
 #include "Engine/Utils/TransformUtils.h"
 
 namespace MyEngine
@@ -16,12 +14,13 @@ namespace MyEngine
 
     void TransformParentSystem::Start(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::Start(pScene);
     }
 
     void TransformParentSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
         // Update each local to world transforms
-        for (Entity entityId : SceneView<TransformComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
 
@@ -31,24 +30,44 @@ namespace MyEngine
             if (!hasParent)
             {
                 // Entity have no parent so world and local transforms are the same
+                transform.LockWrite();
                 transform.worldPosition = transform.position;
                 transform.worldOrientation = transform.orientation;
                 transform.worldScale = transform.scale;
+                transform.UnlockWrite();
                 
                 continue;
             }
 
-            TransformComponent& transformParent = pScene->Get<TransformComponent>(parent.parentId);
+            parent.LockRead();
+            bool hasTransformParent = false;
+            TransformComponent& transformParent = pScene->Get<TransformComponent>(parent.parentId, hasTransformParent);
+            parent.UnlockRead();
+            if (hasTransformParent)
+            {
+                transformParent.LockRead();
+                glm::mat4 matParent = glm::mat4(1.0f);
+                TransformUtils::GetTransform(transformParent.worldPosition,
+                    transformParent.worldOrientation,
+                    transformParent.worldScale,
+                    matParent);
 
-            glm::mat4 matParent = glm::mat4(1.0f);
-            TransformUtils::GetTransform(transformParent.worldPosition, 
-                                         transformParent.worldOrientation,
-                                         transformParent.worldScale, 
-                                         matParent);
-
-            transform.worldPosition = matParent * glm::vec4(transform.position, 1.0f);
-            transform.worldScale = transform.scale * transformParent.scale;
-            transform.worldOrientation = transform.orientation * transformParent.worldOrientation;
+                transform.LockWrite();
+                transform.worldPosition = matParent * glm::vec4(transform.position, 1.0f);
+                transform.worldScale = transform.scale * transformParent.scale;
+                transform.worldOrientation = transform.orientation * transformParent.worldOrientation;
+                transform.UnlockWrite();
+                transformParent.UnlockRead();
+            }
+            else
+            {
+                // Parents transform was removed
+                transform.LockWrite();
+                transform.worldPosition = transform.position;
+                transform.worldOrientation = transform.orientation;
+                transform.worldScale = transform.scale;
+                transform.UnlockWrite();
+            }
         }
     }
 
@@ -62,5 +81,12 @@ namespace MyEngine
 
     void TransformParentSystem::Shutdown()
     {
+    }
+
+    void TransformParentSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+
+        m_systemMask.set(transformType);
     }
 }

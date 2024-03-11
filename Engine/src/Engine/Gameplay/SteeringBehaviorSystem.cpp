@@ -36,6 +36,10 @@ namespace MyEngine
 
             TransformComponent& transformTarget = pScene->Get<TransformComponent>(steeringBehavior.targetId);
 
+            transformTarget.LockRead();
+            steeringBehavior.LockRead();
+            movement.LockWrite();
+            transform.LockWrite();
             switch (steeringBehavior.steeringType)
             {
             case eSteeringTypes::SEEK:
@@ -55,10 +59,12 @@ namespace MyEngine
                 glm::vec3 targetVelocity = glm::vec3(0.0f);
                 MovementComponent& movementTarget = pScene->Get<MovementComponent>(steeringBehavior.targetId);
 
+                movementTarget.LockRead();
                 m_PursueTarget(transform.worldPosition, transformTarget.worldPosition,
                     transform.orientation, movement.velocity, movementTarget.velocity,
                     steeringBehavior.speed, steeringBehavior.maxDistance,
                     steeringBehavior.futureTime);
+                movementTarget.UnlockRead();
             }
                 break;
             case eSteeringTypes::EVADE:
@@ -66,10 +72,12 @@ namespace MyEngine
                 glm::vec3 targetVelocity = glm::vec3(0.0f);
                 MovementComponent& movementTarget = pScene->Get<MovementComponent>(steeringBehavior.targetId);
 
+                movementTarget.LockRead();
                 m_EvadeTarget(transform.worldPosition, transformTarget.worldPosition,
                     transform.orientation, movement.velocity, movementTarget.velocity,
                     steeringBehavior.speed, steeringBehavior.maxDistance,
                     steeringBehavior.futureTime);
+                movementTarget.UnlockRead();
             }
             break;
             case eSteeringTypes::APPROACH:
@@ -81,6 +89,10 @@ namespace MyEngine
             default:
                 break;
             }
+            transform.UnlockWrite();
+            movement.UnlockWrite();
+            steeringBehavior.UnlockRead();
+            transformTarget.UnlockRead();
         }
     }
 

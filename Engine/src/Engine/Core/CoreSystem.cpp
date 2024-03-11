@@ -4,7 +4,6 @@
 
 #include "Engine/Core/EngineLocator.h"
 
-#include "Engine/ECS/Scene/SceneView.hpp"
 #include "Engine/Core/Components/CoreLocator.h"
 
 #include "Engine/Events/EventsFacade.h"
@@ -22,10 +21,12 @@ namespace MyEngine
         // Main systems must start right away
         std::shared_ptr<Engine> pEngine = EngineLocator::Get();
         std::shared_ptr<GameStateComponent> pState = CoreLocator::GetGameState();
+        pState->LockRead();
         for (std::string systemName : pState->mainSystems)
         {
             pEngine->AddSystem(systemName);
         }
+        pState->UnlockRead();
     }
 
     void CoreSystem::Start(std::shared_ptr<Scene> pScene)
@@ -81,6 +82,7 @@ namespace MyEngine
         std::shared_ptr<GameStateComponent> pState = CoreLocator::GetGameState();
 
         // Remove only systems that are not in the current state
+        pState->LockRead();
         for (std::string systemName : pState->mapStateSystems[prevstate])
         {
             namesIt it = std::find(pState->mapStateSystems[currstate].begin(), pState->mapStateSystems[currstate].end(), systemName);
@@ -96,5 +98,6 @@ namespace MyEngine
         {
             pEngine->AddSystem(systemName, pScene);
         }
+        pState->UnlockRead();
     }
 }

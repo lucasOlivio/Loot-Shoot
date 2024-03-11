@@ -17,7 +17,9 @@ namespace MyEngine
 		// Just a check if the debug square mesh loaded
 		std::shared_ptr<DebugSquareComponent> pSquare = DebugLocator::GetSquare();
 
+		pSquare->LockRead();
 		std::shared_ptr<sMeshInfo> pMesh = pSquare->pMesh;
+		pSquare->UnlockRead();
 		if (!pMesh)
 		{
 			LOG_WARNING("Debug Square not loaded!");
@@ -40,7 +42,9 @@ namespace MyEngine
 		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
 		std::shared_ptr<DebugSquareComponent> pSquare = DebugLocator::GetSquare();
 
+		pSquare->LockRead();
 		std::shared_ptr<sMeshInfo> pMesh = pSquare->pMesh;
+		pSquare->UnlockRead();
 
 		if (!pMesh)
 		{
@@ -48,6 +52,7 @@ namespace MyEngine
 		}
 
 		// Draw a red wireframe square for every AABB in the grid
+		pGrid->LockRead();
 		for (std::pair<uint, GridAABB*> pairAABB : pGrid->mapAABBs)
 		{
 			GridAABB* pAABB = pairAABB.second;
@@ -66,6 +71,7 @@ namespace MyEngine
 
 			pRendererManager->AddToRender(renderInfo);
 		}
+		pGrid->UnlockRead();
 	}
 
 	void DrawGridSystem::End(std::shared_ptr<Scene> pScene)

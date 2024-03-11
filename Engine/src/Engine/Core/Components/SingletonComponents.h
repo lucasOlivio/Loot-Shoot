@@ -46,7 +46,7 @@ namespace MyEngine
 		bool key[350];
 	};
 
-	struct MouseInputComponent
+	struct MouseInputComponent : public BaseComponent
 	{
 		// One for each mouse button code from glfw
 		bool button[7];

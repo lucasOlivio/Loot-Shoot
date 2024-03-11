@@ -36,6 +36,7 @@ namespace MyEngine
 			std::string errorMsg = "";
 			bool isLoaded = true;
 
+			texture.LockRead();
 			if (texture.textureType == eTextureType::CUBE)
 			{
 				isLoaded = pTextureManager->CreateCubeTexture(texture.fileName,
@@ -45,6 +46,7 @@ namespace MyEngine
 															texture.vecTextures[3],
 															texture.vecTextures[4],
 															texture.vecTextures[5]);
+				texture.UnlockRead();
 				continue;
 			}
 			else
@@ -55,8 +57,10 @@ namespace MyEngine
 			if (!isLoaded)
 			{
 				LOG_ERROR("Error loading texture: " + texture.fileName);
+				texture.UnlockRead();
 				continue;
 			}
+			texture.UnlockRead();
 		}
 
 		// Load Models
@@ -65,8 +69,10 @@ namespace MyEngine
 		{
 			ModelComponent& model = pScene->Get<ModelComponent>(entityId);
 			
+			model.LockWrite();
 			size_t index = pMeshManager->LoadResource(model.model);
 			model.pMesh = std::static_pointer_cast<sMeshInfo>(pMeshManager->GetResource(index));
+			model.LockWrite();
 		}
 
 		// Load Materials
@@ -75,6 +81,7 @@ namespace MyEngine
 		{
 			MaterialComponent& material = pScene->Get<MaterialComponent>(entityId);
 
+			material.LockRead();
 			size_t index = pMaterialManager->LoadResource(material.name);
 
 			std::shared_ptr<sMaterialInfo> pMaterial = std::static_pointer_cast<sMaterialInfo>(pMaterialManager->GetResource(material.name));
@@ -100,6 +107,7 @@ namespace MyEngine
 			pMaterial->useCubeTexture = material.useCubeTexture;
 			pMaterial->isEmissive = material.isEmissive;
 			pMaterial->useAlphaTexture = material.useAlphaTexture;
+			material.UnlockRead();
 		}
     }
 
@@ -110,7 +118,6 @@ namespace MyEngine
     void RenderSystem::Render(std::shared_ptr<Scene> pScene)
     {
 		std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
-		std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
 
 		pRenderer->RenderAllModels(pScene);
 		pRenderer->ClearRender();

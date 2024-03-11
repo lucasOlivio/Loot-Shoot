@@ -7,8 +7,6 @@
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 #include "Engine/Graphics/Components/Components.h"
 
-#include "Engine/ECS/Scene/SceneView.hpp"
-
 #include "Engine/Events/EventsFacade.h"
 
 #include "Engine/Utils/AnimationUtils.h"
@@ -30,6 +28,8 @@ namespace MyEngine
         {
             TransformAnimationComponent& animation = pScene->Get<TransformAnimationComponent>(entityId);
 
+            pAnimController->LockWrite();
+            animation.LockRead();
             for (const PositionKeyFrame& keyframe : animation.positionKeyFrames)
             {
                 if (keyframe.time < pAnimController->timeFirstKeyFrame)
@@ -41,7 +41,11 @@ namespace MyEngine
                     pAnimController->timeLastKeyFrame = keyframe.time;
                 }
             }
+            animation.LockRead();
+            pAnimController->UnlockWrite();
 
+            pAnimController->LockWrite();
+            animation.LockRead();
             for (const RotationKeyFrame& keyframe : animation.rotationKeyFrames)
             {
                 if (keyframe.time < pAnimController->timeFirstKeyFrame)
@@ -53,7 +57,11 @@ namespace MyEngine
                     pAnimController->timeLastKeyFrame = keyframe.time;
                 }
             }
+            animation.LockRead();
+            pAnimController->UnlockWrite();
 
+            pAnimController->LockWrite();
+            animation.LockRead();
             for (const ScaleKeyFrame& keyframe : animation.scaleKeyFrames)
             {
                 if (keyframe.time < pAnimController->timeFirstKeyFrame)
@@ -65,6 +73,8 @@ namespace MyEngine
                     pAnimController->timeLastKeyFrame = keyframe.time;
                 }
             }
+            animation.LockRead();
+            pAnimController->UnlockWrite();
         }
     }
 
@@ -73,6 +83,7 @@ namespace MyEngine
         std::shared_ptr<AnimationControllerComponent> pAnimController = GraphicsLocator::GetAnimationController();
 
         // First reset all animations if needed
+        pAnimController->LockWrite();
         if (pAnimController->reset)
         {
             for (Entity entityId : m_vecEntities)
@@ -80,6 +91,7 @@ namespace MyEngine
                 TransformAnimationComponent& animation = pScene->Get<TransformAnimationComponent>(entityId);
                 
                 // If animation in reverse then go to last frame
+                animation.LockWrite();
                 if (pAnimController->speed < 0)
                 {
                     animation.time = pAnimController->timeLastKeyFrame;
@@ -88,15 +100,19 @@ namespace MyEngine
                 {
                     animation.time = pAnimController->timeFirstKeyFrame;
                 }
+                animation.UnlockWrite();
             }
 
             pAnimController->reset = false;
         }
+        pAnimController->UnlockWrite();
 
         // Then update animation timers
         for (Entity entityId : m_vecEntities)
         {
             TransformAnimationComponent& animation = pScene->Get<TransformAnimationComponent>(entityId);
+
+            animation.LockWrite();
             if (!animation.isActive)
             {
                 continue;
@@ -165,6 +181,8 @@ namespace MyEngine
                     m_TriggerRotKeyFrameEvent(entityId, pScene, startRot1, endRot1, endRot2);
                 }
             }
+
+            animation.UnlockWrite();
         }
     }
 

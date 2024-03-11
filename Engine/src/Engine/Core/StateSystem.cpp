@@ -19,13 +19,19 @@ namespace MyEngine
 	void StateSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 		std::shared_ptr<GameStateComponent> pState = CoreLocator::GetGameState();
+		pState->LockRead();
 		if (pState->currState == pState->prevState)
 		{
+			pState->UnlockRead();
 			return;
 		}
+		pState->UnlockRead();
 
 		m_TriggerStateChange(pScene, pState->prevState, pState->currState);
+
+		pState->LockWrite();
 		pState->prevState = pState->currState;
+		pState->UnlockWrite();
 	}
 
 	void StateSystem::Render(std::shared_ptr<Scene> pScene)

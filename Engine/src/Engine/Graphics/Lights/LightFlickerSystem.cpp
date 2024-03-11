@@ -2,8 +2,6 @@
 
 #include "LightFlickerSystem.h"
 
-#include "Engine/ECS/Scene/SceneView.hpp"
-
 #include "Engine/Graphics/Components/Components.h"
 
 #include "Engine/Utils/Random.h"
@@ -26,6 +24,7 @@ namespace MyEngine
         {
             LightComponent& light = pScene->Get<LightComponent>(entityId);
 
+            light.LockWrite();
             if (light.params.w == 1)
             {
                 // Modulate the light attenuation by changing the offset proportion randomly over time
@@ -35,6 +34,7 @@ namespace MyEngine
                 uint32_t seed = (uint32_t)rand();
                 light.flickerOffset = glm::vec4(Random::Vec3(seed, min, max), 0);
             }
+            light.UnlockWrite();
         }
     }
 

@@ -29,6 +29,7 @@ namespace MyEngine
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
             MovementComponent& movement = pScene->Get<MovementComponent>(entityId);
 
+            movement.LockWrite();
             glm::vec3 newVelocity = movement.velocity + (movement.acceleration * deltaTime);
             glm::vec3 dragForce = newVelocity * -(movement.drag * deltaTime);
             movement.velocity = newVelocity + dragForce;
@@ -43,12 +44,15 @@ namespace MyEngine
                 movement.velocity = glm::normalize(movement.velocity) * movement.maxSpeed;
             }
 
+            transform.LockWrite();
             transform.position = transform.position + (movement.velocity * deltaTime);
 
             if (transform.position.y <= 0.0f)
             {
                 transform.position.y = 0.0f;
             }
+            transform.UnlockWrite();
+            movement.UnlockWrite();
         }
     }
 
