@@ -5,12 +5,7 @@
 #include "Engine/ECS/Scene/iSceneManager.h"
 
 #include "Engine/Events/WindowEvents.h"
-#include "Engine/Events/CollisionEvent.h"
-#include "Engine/Events/InputEvent.h"
 #include "Engine/Events/SceneEvent.h"
-#include "Engine/Events/GameStateEvent.h"
-#include "Engine/Events/AnimationEvent.h"
-#include "Engine/Events/iEventBus.h"
 
 #include "Engine/Graphics/Renderer/iRendererManager.h"
 #include "Engine/Graphics/Particles/iParticleManager.h"
@@ -68,21 +63,6 @@ namespace MyEngine
 		std::vector<std::shared_ptr<iSystem>> m_vecSystems;
 
 		std::shared_ptr<Scene> m_currentScene = nullptr;
-
-		// Events
-		std::shared_ptr<iEventBus<eWindowEvents, WindowCloseEvent>> m_ebWindow;
-		std::shared_ptr<iEventBus<eCollisionEvents, RigidBodyCollisionEvent>> m_ebRigidCollision;
-		std::shared_ptr<iEventBus<eCollisionEvents, SoftBodyCollisionEvent>> m_ebSoftCollision;
-		std::shared_ptr<iEventBus<eInputEvents, KeyboardEvent>> m_ebKeyboard;
-		std::shared_ptr<iEventBus<eInputEvents, MouseEvent>> m_ebMouse;
-		std::shared_ptr<iEventBus<eSceneEvents, SceneChangeEvent>> m_ebSceneChange;
-		std::shared_ptr<iEventBus<eGameStateEvents, GameStartedEvent>> m_ebStartedState;
-		std::shared_ptr<iEventBus<eGameStateEvents, GameRunningEvent>> m_ebRunningState;
-		std::shared_ptr<iEventBus<eGameStateEvents, GameStoppedEvent>> m_ebStoppedState;
-		std::shared_ptr<iEventBus<eGameStateEvents, GameOverEvent>> m_ebGameOverState;
-		std::shared_ptr<iEventBus<eAnimationEvents, PositionKeyFrameEvent>> m_ebPosKeyFrame;
-		std::shared_ptr<iEventBus<eAnimationEvents, RotationKeyFrameEvent>> m_ebRotKeyFrame;
-		std::shared_ptr<iEventBus<eAnimationEvents, ScaleKeyFrameEvent>> m_ebScaleKeyFrame;
 
 		// Resources managers
 		std::shared_ptr<iRendererManager> m_rendererManager;

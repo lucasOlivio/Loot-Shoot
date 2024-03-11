@@ -5,8 +5,7 @@
 #include "Engine/ECS/Scene/SceneView.hpp"
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 
-#include "Engine/Events/EventBusLocator.hpp"
-#include "Engine/Events/WindowEvents.h"
+#include "Engine/Events/EventsFacade.h"
 
 namespace MyEngine
 {
@@ -93,9 +92,7 @@ namespace MyEngine
 
     void WindowSystem::m_TriggerWindowClose()
     {
-        std::shared_ptr<iEventBus<eWindowEvents, WindowCloseEvent>> pEventBus = EventBusLocator<eWindowEvents, WindowCloseEvent>::Get();
-
-        WindowCloseEvent collEvent = WindowCloseEvent();
-        pEventBus->Publish(collEvent);
+        WindowCloseEvent windowEvent = WindowCloseEvent();
+        PUBLISH_WINDOW_CLOSE_EVENT(windowEvent);
     }
 }

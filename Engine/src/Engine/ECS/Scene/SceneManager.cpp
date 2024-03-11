@@ -5,8 +5,7 @@
 #include "Engine/ECS/Scene/SceneSerializerFactory.h"
 #include "Engine/Core/Components/CoreLocator.h"
 
-#include "Engine/Events/SceneEvent.h"
-#include "Engine/Events/EventBusLocator.hpp"
+#include "Engine/Events/EventsFacade.h"
 
 namespace MyEngine
 {
@@ -115,12 +114,10 @@ namespace MyEngine
 
 	void SceneManager::m_TriggerSceneChange(std::string newSceneName, std::shared_ptr<Scene> pNewScene)
 	{
-		std::shared_ptr<iEventBus<eSceneEvents, SceneChangeEvent>> pEventBus = EventBusLocator<eSceneEvents, SceneChangeEvent>::Get();
-
 		SceneChangeEvent sceneEvent = SceneChangeEvent();
 		sceneEvent.newSceneName = newSceneName;
 		sceneEvent.pNewScene = pNewScene;
-		pEventBus->Publish(sceneEvent);
+		PUBLISH_SCENE_CHANGE_EVENT(sceneEvent);
 
 		return;
 	}

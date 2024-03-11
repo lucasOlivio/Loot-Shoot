@@ -11,6 +11,7 @@
 namespace MyEngine
 {
     class Engine;
+    class SceneSerializerJSON;
 
     class Scene 
     {
@@ -19,8 +20,20 @@ namespace MyEngine
         ~Scene();
 
         // Create an entity using the EntityManager
-        // addDefault = Add default components (Transform) to it
-        Entity CreateEntity(bool addDefault = false);
+        Entity CreateEntity();
+
+        // Create entity adding all the needed components
+        // Already triggers the entity creation event with the final mask
+        template<typename... ComponentTypes>
+        Entity CreateEntity()
+        {
+            Entity entityId = CreateEntity();
+
+            // Unpack components lists adding each one
+            (AddComponent<ComponentTypes>(entityId), ...);
+
+            m_TriggerEntityCreation(entityId);
+        }
 
         // Flag entity to be deleted later on a safer time
         void RemoveEntity(Entity entityId);
@@ -91,7 +104,6 @@ namespace MyEngine
 
             if (!hasComponent)
             {
-                // Index 0 been a empty component not related to any entity
                 return *(std::shared_ptr<T>(new T()));
             }
 
@@ -158,7 +170,13 @@ namespace MyEngine
         void m_DestroyEntities();
         void m_DestroyComponents();
 
+        void m_TriggerEntityCreation(Entity entityId);
+        void m_TriggerEntityRemoval(Entity entityId);
+
         // Allow engine to call the destroy entities member function when needed
         friend class Engine;
+
+        // Allow serializer to trigger the entity creation event
+        friend class SceneSerializerJSON;
     };
 }

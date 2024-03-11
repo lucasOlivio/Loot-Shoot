@@ -4,8 +4,7 @@
 
 #include "Engine/Core/Components/CoreLocator.h"
 
-#include "Engine/Events/GameStateEvent.h"
-#include "Engine/Events/EventBusLocator.hpp"
+#include "Engine/Events/EventsFacade.h"
 
 namespace MyEngine
 {
@@ -45,45 +44,37 @@ namespace MyEngine
 	{
 		if (newState == eGameStates::STARTED)
 		{
-			std::shared_ptr<iEventBus<eGameStateEvents, GameStartedEvent>> pEventBus = EventBusLocator<eGameStateEvents, GameStartedEvent>::Get();
-
 			GameStartedEvent stateEvent = GameStartedEvent();
 			stateEvent.prevState = oldState;
 			stateEvent.pScene = pScene;
-			pEventBus->Publish(stateEvent);
+			PUBLISH_GAME_STARTED_EVENT(stateEvent);
 
 			return;
 		}
 		else if (newState == eGameStates::STOPPED)
 		{
-			std::shared_ptr<iEventBus<eGameStateEvents, GameStoppedEvent>> pEventBus = EventBusLocator<eGameStateEvents, GameStoppedEvent>::Get();
-
 			GameStoppedEvent stateEvent = GameStoppedEvent();
 			stateEvent.prevState = oldState;
 			stateEvent.pScene = pScene;
-			pEventBus->Publish(stateEvent);
+			PUBLISH_GAME_STOPPED_EVENT(stateEvent);
 
 			return;
 		}
 		else if (newState == eGameStates::RUNNING)
 		{
-			std::shared_ptr<iEventBus<eGameStateEvents, GameRunningEvent>> pEventBus = EventBusLocator<eGameStateEvents, GameRunningEvent>::Get();
-
 			GameRunningEvent stateEvent = GameRunningEvent();
 			stateEvent.prevState = oldState;
 			stateEvent.pScene = pScene;
-			pEventBus->Publish(stateEvent);
+			PUBLISH_GAME_RUNNING_EVENT(stateEvent);
 
 			return;
 		}
 		else if (newState == eGameStates::GAMEOVER)
 		{
-			std::shared_ptr<iEventBus<eGameStateEvents, GameOverEvent>> pEventBus = EventBusLocator<eGameStateEvents, GameOverEvent>::Get();
-
 			GameOverEvent stateEvent = GameOverEvent();
 			stateEvent.prevState = oldState;
 			stateEvent.pScene = pScene;
-			pEventBus->Publish(stateEvent);
+			PUBLISH_GAME_OVER_EVENT(stateEvent);
 
 			return;
 		}

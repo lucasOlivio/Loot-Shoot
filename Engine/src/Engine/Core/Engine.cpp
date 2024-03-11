@@ -6,10 +6,9 @@
 #include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
 
-#include "Engine/Debug/Components/DebugLocator.h"
+#include "Engine/Events/EventsFacade.h"
 
-#include "Engine/Events/EventBus.hpp"
-#include "Engine/Events/EventBusLocator.hpp"
+#include "Engine/Debug/Components/DebugLocator.h"
 
 #include "Engine/ECS/Scene/SceneManager.h"
 #include "Engine/ECS/Scene/SceneManagerLocator.h"
@@ -30,20 +29,7 @@ namespace MyEngine
     using itSystems = std::map<std::string, std::shared_ptr<iSystem>>::iterator;
     using pairSystems = std::pair<std::string, std::shared_ptr<iSystem>>;
 
-    Engine::Engine() : m_ebWindow(new EventBus<eWindowEvents, WindowCloseEvent>()),
-                       m_ebRigidCollision(new EventBus<eCollisionEvents, RigidBodyCollisionEvent>()),
-                       m_ebSoftCollision(new EventBus<eCollisionEvents, SoftBodyCollisionEvent>()),
-                       m_ebKeyboard(new EventBus<eInputEvents, KeyboardEvent>()),
-                       m_ebMouse(new EventBus<eInputEvents, MouseEvent>()),
-                       m_ebSceneChange(new EventBus<eSceneEvents, SceneChangeEvent>()),
-                       m_ebStartedState(new EventBus<eGameStateEvents, GameStartedEvent>()),
-                       m_ebStoppedState(new EventBus<eGameStateEvents, GameStoppedEvent>()),
-                       m_ebRunningState(new EventBus<eGameStateEvents, GameRunningEvent>()),
-                       m_ebGameOverState(new EventBus<eGameStateEvents, GameOverEvent>()),
-                       m_ebPosKeyFrame(new EventBus<eAnimationEvents, PositionKeyFrameEvent>()),
-                       m_ebRotKeyFrame(new EventBus<eAnimationEvents, RotationKeyFrameEvent>()),
-                       m_ebScaleKeyFrame(new EventBus<eAnimationEvents, ScaleKeyFrameEvent>()),
-                       m_sceneManager(new SceneManager()),
+    Engine::Engine() : m_sceneManager(new SceneManager()),
                        m_rendererManager(new RendererManager()),
                        m_particleManager(new ParticleManager())
 
@@ -152,29 +138,14 @@ namespace MyEngine
     {
         LoadConfigurations();
 
-        // Setting up events
-        EventBusLocator<eWindowEvents, WindowCloseEvent>::Set(m_ebWindow);
-        EventBusLocator<eCollisionEvents, RigidBodyCollisionEvent>::Set(m_ebRigidCollision);
-        EventBusLocator<eCollisionEvents, SoftBodyCollisionEvent>::Set(m_ebSoftCollision);
-        EventBusLocator<eInputEvents, KeyboardEvent>::Set(m_ebKeyboard);
-        EventBusLocator<eInputEvents, MouseEvent>::Set(m_ebMouse);
-        EventBusLocator<eSceneEvents, SceneChangeEvent>::Set(m_ebSceneChange);
-        EventBusLocator<eGameStateEvents, GameStartedEvent>::Set(m_ebStartedState);
-        EventBusLocator<eGameStateEvents, GameStoppedEvent>::Set(m_ebStoppedState);
-        EventBusLocator<eGameStateEvents, GameRunningEvent>::Set(m_ebRunningState);
-        EventBusLocator<eGameStateEvents, GameOverEvent>::Set(m_ebGameOverState);
-        EventBusLocator<eAnimationEvents, PositionKeyFrameEvent>::Set(m_ebPosKeyFrame);
-        EventBusLocator<eAnimationEvents, RotationKeyFrameEvent>::Set(m_ebRotKeyFrame);
-        EventBusLocator<eAnimationEvents, ScaleKeyFrameEvent>::Set(m_ebScaleKeyFrame);
-
         // Setting up resources managers        
         SceneManagerLocator::Set(m_sceneManager);
         RendererManagerLocator::Set(m_rendererManager);
         ParticleManagerLocator::Set(m_particleManager);
 
         // Global events of engine interest
-        m_ebSceneChange->Subscribe(eSceneEvents::CHANGE, [this](const SceneChangeEvent& event) { OnSceneChange(event); });
-        m_ebWindow->Subscribe(eWindowEvents::WINDOW_CLOSE, [this](const WindowCloseEvent& event) { OnWindowClose(event); });
+        SUBSCRIBE_SCENE_CHANGE_EVENT([this](const SceneChangeEvent& event) { OnSceneChange(event); });
+        SUBSCRIBE_WINDOW_CLOSE_EVENT([this](const WindowCloseEvent& event) { OnWindowClose(event); });
 
         // Load resources
         std::shared_ptr<ConfigPathComponent> pConfigPaths = CoreLocator::GetConfigPath();

@@ -6,8 +6,7 @@
 
 #include "Engine/Physics/Components/PhysicsLocator.h"
 
-#include "Engine/Events/EventBusLocator.hpp"
-#include "Engine/Events/CollisionEvent.h"
+#include "Engine/Events/EventsFacade.h"
 
 #include "Engine/Utils/TransformUtils.h"
 #include "Engine/Utils/CollisionsUtils.h"
@@ -79,11 +78,9 @@ namespace MyEngine
             return;
         }
 
-        std::shared_ptr<iEventBus<eCollisionEvents, RigidBodyCollisionEvent>> pEventBus = EventBusLocator<eCollisionEvents, RigidBodyCollisionEvent>::Get();
-
         RigidBodyCollisionEvent collEvent = RigidBodyCollisionEvent();
         collEvent.collisionData = collData;
-        pEventBus->Publish(collEvent);
+        PUBLISH_RIGID_COLLISION_EVENT(collEvent);
     }
 
     void CollisionSystem::m_CheckSphereOverlaps(std::shared_ptr<Scene> pScene,

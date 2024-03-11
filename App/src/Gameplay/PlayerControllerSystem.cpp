@@ -14,7 +14,7 @@
 
 #include "Engine/Events/InputEvent.h"
 #include "Engine/Events/WindowEvents.h"
-#include "Engine/Events/EventBusLocator.hpp"
+#include "Engine/Events/EventsFacade.h"
 
 #include "Engine/Utils/InputUtils.h"
 #include "Engine/Utils/TransformUtils.h"
@@ -25,16 +25,14 @@ namespace MyEngine
 {
 	void PlayerControllerSystem::Init()
 	{
-        // Subscribe to keyboard event
-        std::shared_ptr<iEventBus<eInputEvents, KeyboardEvent>> pEventBus = EventBusLocator<eInputEvents, KeyboardEvent>::Get();
-
-        pEventBus->Subscribe(eInputEvents::KEYBOARD, InputTriggered);
-
-        m_InitiateMouseCapture();
 	}
 
 	void PlayerControllerSystem::Start(std::shared_ptr<Scene> pScene)
 	{
+        // Subscribe to keyboard event
+        SUBSCRIBE_KEYBOARD_EVENT(InputTriggered);
+
+        m_InitiateMouseCapture();
 	}
 
 	void PlayerControllerSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
@@ -98,16 +96,14 @@ namespace MyEngine
 
 	void PlayerControllerSystem::End(std::shared_ptr<Scene> pScene)
 	{
+        // Subscribe to keyboard event
+        UNSUBSCRIBE_KEYBOARD_EVENT(InputTriggered);
+
+        m_StopMouseCapture();
 	}
 
 	void PlayerControllerSystem::Shutdown()
 	{
-        // Subscribe to keyboard event
-        std::shared_ptr<iEventBus<eInputEvents, KeyboardEvent>> pEventBus = EventBusLocator<eInputEvents, KeyboardEvent>::Get();
-
-        pEventBus->Unsubscribe(eInputEvents::KEYBOARD, InputTriggered);
-
-        m_StopMouseCapture();
 	}
 
     void PlayerControllerSystem::InputTriggered(const KeyboardEvent& event)
@@ -118,10 +114,8 @@ namespace MyEngine
         }
 
         // Trigger window close event
-        std::shared_ptr<iEventBus<eWindowEvents, WindowCloseEvent>> pEventBus = EventBusLocator<eWindowEvents, WindowCloseEvent>::Get();
-
         WindowCloseEvent collEvent = WindowCloseEvent();
-        pEventBus->Publish(collEvent);
+        PUBLISH_WINDOW_CLOSE_EVENT(collEvent);
     }
 
     void PlayerControllerSystem::m_InitiateMouseCapture()

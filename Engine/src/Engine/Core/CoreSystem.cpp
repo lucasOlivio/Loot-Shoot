@@ -7,22 +7,17 @@
 #include "Engine/ECS/Scene/SceneView.hpp"
 #include "Engine/Core/Components/CoreLocator.h"
 
-#include "Engine/Events/EventBusLocator.hpp"
+#include "Engine/Events/EventsFacade.h"
 
 namespace MyEngine
 {
     void CoreSystem::Init()
     {
-        // Subscribe to enter collision event
-        std::shared_ptr<iEventBus<eGameStateEvents, GameStartedEvent>> pStartedBus = EventBusLocator<eGameStateEvents, GameStartedEvent>::Get();
-        std::shared_ptr<iEventBus<eGameStateEvents, GameRunningEvent>> pRunningBus = EventBusLocator<eGameStateEvents, GameRunningEvent>::Get();
-        std::shared_ptr<iEventBus<eGameStateEvents, GameStoppedEvent>> pStoppedBus = EventBusLocator<eGameStateEvents, GameStoppedEvent>::Get();
-        std::shared_ptr<iEventBus<eGameStateEvents, GameOverEvent>> pGameOverBus = EventBusLocator<eGameStateEvents, GameOverEvent>::Get();
-
-        pStartedBus->Subscribe(eGameStateEvents::GAME_STARTED, OnStart);
-        pRunningBus->Subscribe(eGameStateEvents::GAME_RUNNING, OnRunning);
-        pStoppedBus->Subscribe(eGameStateEvents::GAME_STOPPED, OnStopped);
-        pGameOverBus->Subscribe(eGameStateEvents::GAME_OVER, OnGameOver);
+        // Subscribe to game state events
+        SUBSCRIBE_GAME_STARTED_EVENT(OnStart);
+        SUBSCRIBE_GAME_RUNNING_EVENT(OnRunning);
+        SUBSCRIBE_GAME_STOPPED_EVENT(OnStopped);
+        SUBSCRIBE_GAME_OVER_EVENT(OnGameOver);
 
         // Main systems must start right away
         std::shared_ptr<Engine> pEngine = EngineLocator::Get();
@@ -51,16 +46,11 @@ namespace MyEngine
 
     void CoreSystem::Shutdown()
     {
-        // Subscribe to enter collision event
-        std::shared_ptr<iEventBus<eGameStateEvents, GameStartedEvent>> pStartedBus = EventBusLocator<eGameStateEvents, GameStartedEvent>::Get();
-        std::shared_ptr<iEventBus<eGameStateEvents, GameRunningEvent>> pRunningBus = EventBusLocator<eGameStateEvents, GameRunningEvent>::Get();
-        std::shared_ptr<iEventBus<eGameStateEvents, GameStoppedEvent>> pStoppedBus = EventBusLocator<eGameStateEvents, GameStoppedEvent>::Get();
-        std::shared_ptr<iEventBus<eGameStateEvents, GameOverEvent>> pGameOverBus = EventBusLocator<eGameStateEvents, GameOverEvent>::Get();
-
-        pStartedBus->Unsubscribe(eGameStateEvents::GAME_STARTED, OnStart);
-        pRunningBus->Unsubscribe(eGameStateEvents::GAME_RUNNING, OnRunning);
-        pStoppedBus->Unsubscribe(eGameStateEvents::GAME_STOPPED, OnStopped);
-        pGameOverBus->Unsubscribe(eGameStateEvents::GAME_OVER, OnGameOver);
+        // Unsubscribe from game state events
+        UNSUBSCRIBE_GAME_STARTED_EVENT(OnStart);
+        UNSUBSCRIBE_GAME_RUNNING_EVENT(OnRunning);
+        UNSUBSCRIBE_GAME_STOPPED_EVENT(OnStopped);
+        UNSUBSCRIBE_GAME_OVER_EVENT(OnGameOver);
     }
 
     void CoreSystem::OnStart(const GameStartedEvent& event)

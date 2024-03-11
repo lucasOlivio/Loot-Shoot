@@ -5,8 +5,7 @@
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 #include "Engine/Core/Components/CoreLocator.h"
 
-#include "Engine/Events/InputEvent.h"
-#include "Engine/Events/EventBusLocator.hpp"
+#include "Engine/Events/EventsFacade.h"
 
 namespace MyEngine
 {
@@ -114,22 +113,18 @@ namespace MyEngine
 
 	void InputSystem::m_TriggerKeyEvent(const sKeyData& collData)
 	{
-		std::shared_ptr<iEventBus<eInputEvents, KeyboardEvent>> pEventBus = EventBusLocator<eInputEvents, KeyboardEvent>::Get();
-
 		KeyboardEvent keyEvent = KeyboardEvent();
 		keyEvent.keyData = collData;
-		pEventBus->Publish(keyEvent);
+		PUBLISH_KEYBOARD_EVENT(keyEvent);
 
 		return;
 	}
 
 	void InputSystem::m_TriggerMouseEvent(const sMouseData& collData)
 	{
-		std::shared_ptr<iEventBus<eInputEvents, MouseEvent>> pEventBus = EventBusLocator<eInputEvents, MouseEvent>::Get();
-
 		MouseEvent mouseEvent = MouseEvent();
 		mouseEvent.mouseData = collData;
-		pEventBus->Publish(mouseEvent);
+		PUBLISH_MOUSE_EVENT(mouseEvent);
 
 		return;
 	}

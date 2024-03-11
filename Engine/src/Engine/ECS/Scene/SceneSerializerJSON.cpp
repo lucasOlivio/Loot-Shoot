@@ -791,6 +791,8 @@ namespace MyEngine
                     m_ParseDocToGridBroadphase(componentObject, *pGridBroadphase);
                 }
             }
+
+            sceneOut.m_TriggerEntityCreation(entityId);
         }
 
         return true;

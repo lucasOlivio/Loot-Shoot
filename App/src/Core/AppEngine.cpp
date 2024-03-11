@@ -49,16 +49,14 @@ namespace MyEngine
 		pStates->mapStateSystems[eGameStates::STARTED] = {};
 
 		pStates->mapStateSystems[eGameStates::RUNNING] = {
+			"PlayerControllerSystem",
 			// Graphics
 			"AnimationPlayerSystem",
 			// Physics
 			"MovementSystem",
 			"RotationSystem",
 			"GridBroadPhaseSystem",
-			"CollisionSystem",
-			// Gameplay
-			//"PlayerControllerSystem",
-			"FlyingCameraSystem"
+			"CollisionSystem"
 
 			// Debug
 			,"DebugSystem",

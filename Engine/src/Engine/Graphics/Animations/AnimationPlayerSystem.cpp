@@ -9,8 +9,7 @@
 
 #include "Engine/ECS/Scene/SceneView.hpp"
 
-#include "Engine/Events/EventBusLocator.hpp"
-#include "Engine/Events/AnimationEvent.h"
+#include "Engine/Events/EventsFacade.h"
 
 #include "Engine/Utils/AnimationUtils.h"
 
@@ -183,44 +182,38 @@ namespace MyEngine
         int oldKeyFrame,
         int keyFrame, int nextKeyFrame)
     {
-        std::shared_ptr<iEventBus<eAnimationEvents, PositionKeyFrameEvent>> pEventBus = EventBusLocator<eAnimationEvents, PositionKeyFrameEvent>::Get();
-
         PositionKeyFrameEvent keyEvent = PositionKeyFrameEvent();
         keyEvent.entityId = entityId;
         keyEvent.pScene = pScene;
         keyEvent.oldKeyFrame = oldKeyFrame;
         keyEvent.keyFrame = keyFrame;
         keyEvent.nextKeyFrame = nextKeyFrame;
-        pEventBus->Publish(keyEvent);
+        PUBLISH_POSITION_KEYFRAME_EVENT(keyEvent);
     }
 
     void AnimationPlayerSystem::m_TriggerRotKeyFrameEvent(Entity entityId, std::shared_ptr<Scene> pScene,
         int oldKeyFrame,
         int keyFrame, int nextKeyFrame)
     {
-        std::shared_ptr<iEventBus<eAnimationEvents, RotationKeyFrameEvent>> pEventBus = EventBusLocator<eAnimationEvents, RotationKeyFrameEvent>::Get();
-
         RotationKeyFrameEvent keyEvent = RotationKeyFrameEvent();
         keyEvent.entityId = entityId;
         keyEvent.pScene = pScene;
         keyEvent.oldKeyFrame = oldKeyFrame;
         keyEvent.keyFrame = keyFrame;
         keyEvent.nextKeyFrame = nextKeyFrame;
-        pEventBus->Publish(keyEvent);
+        PUBLISH_ROTATION_KEYFRAME_EVENT(keyEvent);
     }
 
     void AnimationPlayerSystem::m_TriggerScaleKeyFrameEvent(Entity entityId, std::shared_ptr<Scene> pScene,
 										                  int oldKeyFrame, 
 										                  int keyFrame, int nextKeyFrame)
     {
-        std::shared_ptr<iEventBus<eAnimationEvents, ScaleKeyFrameEvent>> pEventBus = EventBusLocator<eAnimationEvents, ScaleKeyFrameEvent>::Get();
-
         ScaleKeyFrameEvent keyEvent = ScaleKeyFrameEvent();
         keyEvent.entityId = entityId;
         keyEvent.pScene = pScene;
         keyEvent.oldKeyFrame = oldKeyFrame;
         keyEvent.keyFrame = keyFrame;
         keyEvent.nextKeyFrame = nextKeyFrame;
-        pEventBus->Publish(keyEvent);
+        PUBLISH_SCALE_KEYFRAME_EVENT(keyEvent);
     }
 }

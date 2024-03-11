@@ -4,6 +4,8 @@
 
 #include "Engine/Core/Components/Components.h"
 
+#include "Engine/Events/EventsFacade.h"
+
 namespace MyEngine
 {
     Scene::Scene() : m_pEntityManager(new EntityManager()), m_componentCounter(0)
@@ -12,14 +14,9 @@ namespace MyEngine
     Scene::~Scene()
     {}
 
-    Entity Scene::CreateEntity(bool addDefault)
+    Entity Scene::CreateEntity()
     {
         Entity entityId = m_pEntityManager->AddEntity(EntityMask());
-
-        if (addDefault)
-        {
-            AddComponent<TransformComponent>(entityId);
-        }
 
         return entityId;
     }
@@ -29,6 +26,8 @@ namespace MyEngine
         // TODO: Critical section for vec componentsToDestroy
         m_entitiesToDestroy.insert(entityId);
         m_pEntityManager->SetMask(entityId, EntityMask()); // Clear mask
+
+        m_TriggerEntityRemoval(entityId);
     }
 
     void Scene::RemoveComponent(Entity entityId, ComponentType componentType)
@@ -87,15 +86,16 @@ namespace MyEngine
     {
         for (Entity entityId : m_entitiesToDestroy)
         {
-            // Go through every component the entity have to remove them
             EntityMask entityMask = m_pEntityManager->GetMask(entityId);
+
+            // Go through every component the entity have to remove them
             for (int componentType = 0; componentType < entityMask.size(); componentType++)
             {
                 RemoveComponent(entityId, componentType);
             }
 
             // Remove entity from entity manager list
-            m_pEntityManager->RemoveEntity(entityId);
+            m_pEntityManager->RemoveEntity(entityId); 
         }
 
         m_entitiesToDestroy.clear();
@@ -139,5 +139,25 @@ namespace MyEngine
         }
 
         m_componentsToDestroy.clear();
+    }
+
+    void Scene::m_TriggerEntityCreation(Entity entityId)
+    {
+        EntityMask entityMask = m_pEntityManager->GetMask(entityId);
+        
+        EntityAddEvent enttEvent = EntityAddEvent();
+        enttEvent.entityId = entityId;
+        enttEvent.mask = entityMask;
+        PUBLISH_ENTITY_ADD_EVENT(enttEvent);
+    }
+    
+    void Scene::m_TriggerEntityRemoval(Entity entityId)
+    {
+        EntityMask entityMask = m_pEntityManager->GetMask(entityId);
+
+        EntityRemoveEvent enttEvent = EntityRemoveEvent();
+        enttEvent.entityId = entityId;
+        enttEvent.mask = entityMask;
+        PUBLISH_ENTITY_REMOVE_EVENT(enttEvent);
     }
 }
