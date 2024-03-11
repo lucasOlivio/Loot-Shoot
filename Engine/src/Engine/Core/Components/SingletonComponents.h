@@ -2,7 +2,7 @@
 
 #include "Engine/Core/StateProperties.h"
 
-#include "Engine/ECS/iComponent.h"
+#include "Engine/ECS/BaseComponent.h"
 
 #include <glm/glm.hpp>
 #include <map>
@@ -11,7 +11,7 @@
 
 namespace MyEngine
 {
-	struct ConfigPathComponent : public iComponent
+	struct ConfigPathComponent : public BaseComponent
 	{
 		std::string pathModels;
 		std::string pathAudio;
@@ -25,7 +25,7 @@ namespace MyEngine
 		std::string pathDebugSphere;
 	};
 
-	struct TimerComponent : public iComponent
+	struct TimerComponent : public BaseComponent
 	{
 		float timeTrack; // counts up to 1 milisecond
 
@@ -33,14 +33,14 @@ namespace MyEngine
 		int seconds;
 	};
 
-	struct FrameCounterComponent : public iComponent
+	struct FrameCounterComponent : public BaseComponent
 	{
 		int frameCount;
 		float fpsTimer;
 		float fps;
 	};
 
-	struct KeyInputComponent : public iComponent
+	struct KeyInputComponent : public BaseComponent
 	{
 		// One for each key code from glfw
 		bool key[350];
@@ -62,7 +62,7 @@ namespace MyEngine
 		bool mouseCaptured;
 	};
 
-	struct GameStateComponent : public iComponent
+	struct GameStateComponent : public BaseComponent
 	{
 		// All the systems that should be running 
 		std::vector<std::string> mainSystems; // Always running

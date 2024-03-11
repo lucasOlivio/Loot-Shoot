@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/ECS/System/iSystem.h"
+#include "Engine/ECS/System/EntitySystem.h"
 
 namespace MyEngine
 {
@@ -9,7 +9,7 @@ namespace MyEngine
 	// 
 	// Handles the time for all animations and key frame events triggering, 
 	// decoupled from animation system to allow more options on how to run the animations
-	class AnimationPlayerSystem : public iSystem
+	class AnimationPlayerSystem : public EntitySystem
 	{
 	public:
 		AnimationPlayerSystem() = default;
@@ -28,6 +28,8 @@ namespace MyEngine
 		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
+
+		virtual void SetSystemMask(std::shared_ptr<Scene> pScene);
 
 	private:
 		void m_TriggerPosKeyFrameEvent(Entity entityId, std::shared_ptr<Scene> pScene,

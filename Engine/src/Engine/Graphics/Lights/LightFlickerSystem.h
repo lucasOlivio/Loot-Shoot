@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Engine/ECS/System/iSystem.h"
+#include "Engine/ECS/System/EntitySystem.h"
 
 namespace MyEngine
 {
-	class LightFlickerSystem : public iSystem
+	class LightFlickerSystem : public EntitySystem
 	{
 	public:
 		LightFlickerSystem() = default;
@@ -23,5 +23,7 @@ namespace MyEngine
 		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
+
+		virtual void SetSystemMask(std::shared_ptr<Scene> pScene);
 	};
 }

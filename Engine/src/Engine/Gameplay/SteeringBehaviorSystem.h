@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Engine/ECS/System/iSystem.h"
+#include "Engine/ECS/System/EntitySystem.h"
 
 namespace MyEngine
 {
-	class SteeringBehaviorSystem : public iSystem
+	class SteeringBehaviorSystem : public EntitySystem
 	{
 	public:
 		SteeringBehaviorSystem() = default;
@@ -23,6 +23,9 @@ namespace MyEngine
 		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
+
+		virtual void SetSystemMask(std::shared_ptr<Scene> pScene);
+
 	private:
 		void m_SeekTarget(const glm::vec3& myPosition, const glm::vec3& targetPosition,
 							glm::quat& myOrientation, glm::vec3& myVelocity,

@@ -465,8 +465,7 @@ namespace MyEngine
         parser.SetMember(jsonObject, "defaultColor", modelIn.defaultColor, allocator);
         parser.SetMember(jsonObject, "useColorTexture", modelIn.useColorTexture, allocator);
         parser.SetMember(jsonObject, "material", modelIn.material, allocator);
-        parser.SetMember(jsonObject, "models", modelIn.models, allocator);
-        parser.SetMember(jsonObject, "FBOIDs", modelIn.FBOIDs, allocator);
+        parser.SetMember(jsonObject, "model", modelIn.model, allocator);
 
         return true;
     }
@@ -944,8 +943,7 @@ namespace MyEngine
         parser.GetValue(jsonObject["useColorTexture"], modelOut.useColorTexture);
         parser.GetValue(jsonObject["useTransparency"], modelOut.useTransparency);
         parser.GetValue(jsonObject["material"], modelOut.material);
-        parser.GetValue(jsonObject["models"], modelOut.models);
-        parser.GetValue(jsonObject["FBOIDs"], modelOut.FBOIDs);
+        parser.GetValue(jsonObject["model"], modelOut.model);
 
         return true;
     }

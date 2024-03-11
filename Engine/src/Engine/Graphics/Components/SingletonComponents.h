@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/ECS/iComponent.h"
+#include "Engine/ECS/BaseComponent.h"
 
 #include "Engine/Graphics/GraphicsProperties.h"
 
@@ -9,7 +9,7 @@
 
 namespace MyEngine
 {
-	struct WindowComponent : public iComponent
+	struct WindowComponent : public BaseComponent
 	{
 		std::string prevName = ""; // Only for window system to change
 		std::string name;
@@ -19,7 +19,7 @@ namespace MyEngine
 		GLFWwindow* pGLFWWindow;
 	};
 
-	struct CameraComponent : public iComponent
+	struct CameraComponent : public BaseComponent
 	{
 		glm::vec3 upVector;
 
@@ -32,7 +32,7 @@ namespace MyEngine
 		float zFar;
 	};
 
-	struct AnimationControllerComponent : public iComponent
+	struct AnimationControllerComponent : public BaseComponent
 	{
 		float timeLastKeyFrame = 0.0f;
 		float timeFirstKeyFrame = FLT_MAX;

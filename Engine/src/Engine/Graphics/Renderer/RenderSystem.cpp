@@ -64,12 +64,9 @@ namespace MyEngine
 		for (Entity entityId : SceneView<ModelComponent>(*pScene))
 		{
 			ModelComponent& model = pScene->Get<ModelComponent>(entityId);
-			model.pMeshes.resize(model.models.size(), nullptr);
-			for (int i = 0; i < model.models.size(); i++)
-			{
-				size_t index = pMeshManager->LoadResource(model.models[i]);
-				model.pMeshes[i] = std::static_pointer_cast<sMeshInfo>(pMeshManager->GetResource(index));
-			}
+			
+			size_t index = pMeshManager->LoadResource(model.model);
+			model.pMesh = std::static_pointer_cast<sMeshInfo>(pMeshManager->GetResource(index));
 		}
 
 		// Load Materials

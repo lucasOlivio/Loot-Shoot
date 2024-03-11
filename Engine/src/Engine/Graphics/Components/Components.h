@@ -3,7 +3,7 @@
 #include "Engine/Core/Resources/Meshes/Mesh.h"
 #include "Engine/Core/Resources/Textures/Texture.h"
 
-#include "Engine/ECS/iComponent.h"
+#include "Engine/ECS/BaseComponent.h"
 
 #include "Engine/Graphics/Animations/AnimationProperties.h"
 #include "Engine/Graphics/Particles/ParticlesProperties.h"
@@ -14,7 +14,7 @@
 
 namespace MyEngine
 {
-	struct TextureComponent : public iComponent
+	struct TextureComponent : public BaseComponent
 	{
 		std::string fileName;
 		eTextureType textureType;
@@ -23,7 +23,7 @@ namespace MyEngine
 		std::vector<std::string> vecTextures;
 	};
 
-	struct MaterialComponent : public iComponent
+	struct MaterialComponent : public BaseComponent
 	{
 		std::string name;
 
@@ -61,7 +61,7 @@ namespace MyEngine
 		std::string alphaTexture;
 	};
 
-	struct LightComponent : public iComponent
+	struct LightComponent : public BaseComponent
 	{
 		// Flickering control
 		glm::vec4 flickerOffset;
@@ -93,20 +93,15 @@ namespace MyEngine
 		GLint status_UL;
 	};
 
-	struct ModelComponent : public iComponent
+	struct ModelComponent : public BaseComponent
 	{
-		std::vector<std::string> models;
-		std::vector<std::shared_ptr<sMeshInfo>> pMeshes;
-		std::set<uint> FBOIDs = { 0 };
+		std::string model;
+		std::shared_ptr<sMeshInfo> pMesh;
 
 		std::string material;
 
-		double elapsedTime;
-		int currMesh;
-
 		glm::vec3 defaultColor;
 
-		bool useSoftBodyVertex; // HACK: Use the softbody copy from VAO instead of original
 		bool useDefaultColor;
 		bool useTransparency;
 		bool isWireframe;
@@ -116,13 +111,13 @@ namespace MyEngine
 		bool isActive;
 	};
 
-	struct TilingComponent : public iComponent
+	struct TilingComponent : public BaseComponent
 	{
 		glm::vec3 axis;
 		glm::vec3 offset;
 	};
 
-	struct TransformAnimationComponent : public iComponent
+	struct TransformAnimationComponent : public BaseComponent
 	{
 		std::vector<PositionKeyFrame> positionKeyFrames;
 		std::vector<ScaleKeyFrame> scaleKeyFrames;
@@ -141,7 +136,7 @@ namespace MyEngine
 		bool isActive;
 	};
 
-	struct EmitterComponent : public iComponent
+	struct EmitterComponent : public BaseComponent
 	{
 		EmitterProps properties = EmitterProps();
 

@@ -96,6 +96,17 @@ namespace MyEngine
     {
     }
 
+    void SteeringBehaviorSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+        ComponentType movementType = pScene->GetComponentType<MovementComponent>();
+        ComponentType behaviorType = pScene->GetComponentType<SteeringBehaviorComponent>();
+
+        m_systemMask.set(transformType);
+        m_systemMask.set(movementType);
+        m_systemMask.set(behaviorType);
+    }
+
     void SteeringBehaviorSystem::m_SeekTarget(const glm::vec3& myPosition, const glm::vec3& targetPosition,
         glm::quat& myOrientation, glm::vec3& myVelocity,
         float speed, float maxDistance, float futureTime)

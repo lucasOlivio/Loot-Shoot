@@ -53,27 +53,22 @@
             "maxSpeed": 500.0,
             "drag": 0.0
         },
-        "model": {
-            "isActive": 1,
-            "doNotLight": 0,
-            "isWireframe": 0,
-            "isDynamic": 0,
-            "useDefaultColor": 1,
-            "useTransparency": 0,
-            "defaultColor": [
-                1.0,
-                0.0,
-                0.0
-            ],
-            "useColorTexture": 0,
-            "material": "",
-            "models": [
-                "sphere.ply"
-            ],
-            "FBOIDs": [
-                0
-            ]
-        },
+      "model": {
+        "isActive": 1,
+        "doNotLight": 0,
+        "isWireframe": 0,
+        "isDynamic": 0,
+        "useDefaultColor": 1,
+        "useTransparency": 0,
+        "defaultColor": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "useColorTexture": 0,
+        "material": "",
+        "model": "sphere.ply"
+      },
         "rigidBody": {
             "bodyType": 1,
             "radius": 1.0
@@ -128,12 +123,7 @@
             ],
             "useColorTexture": 0,
             "material": "",
-            "models": [
-                "cube.ply"
-            ],
-            "FBOIDs": [
-                0
-            ]
+            "model": "cube.ply"
         },
         "softBody": {
             "meshName": "cube.ply",
@@ -289,27 +279,22 @@
             ],
             "scale": 10000.0
         },
-        "model": {
-            "isActive": 1,
-            "doNotLight": 0,
-            "isWireframe": 0,
-            "isDynamic": 0,
-            "useDefaultColor": 0,
-            "useTransparency": 0,
-            "defaultColor": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "useColorTexture": 1,
-            "material": "matcubetext",
-            "models": [
-                "skybox.ply"
-            ],
-            "FBOIDs": [
-                0
-            ]
-        }
+      "model": {
+        "isActive": 1,
+        "doNotLight": 0,
+        "isWireframe": 0,
+        "isDynamic": 0,
+        "useDefaultColor": 0,
+        "useTransparency": 0,
+        "defaultColor": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "useColorTexture": 1,
+        "material": "matcubetext",
+        "model": "skybox.ply"
+      }
     },
     {
         "tag": {
@@ -449,26 +434,21 @@
             "useNormalTexture": 0,
             "useSpecularTexture": 0
         },
-        "model": {
-            "isActive": 1,
-            "doNotLight": 0,
-            "isWireframe": 0,
-            "isDynamic": 0,
-            "useDefaultColor": 0,
-            "useTransparency": 0,
-            "defaultColor": [
-                1.0,
-                0.0,
-                0.0
-            ],
-            "useColorTexture": 1,
-            "material": "matground",
-            "models": [
-                "flat.obj"
-            ],
-            "FBOIDs": [
-                0
-            ]
-        }
+      "model": {
+        "isActive": 1,
+        "doNotLight": 0,
+        "isWireframe": 0,
+        "isDynamic": 0,
+        "useDefaultColor": 0,
+        "useTransparency": 0,
+        "defaultColor": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "useColorTexture": 1,
+        "material": "matground",
+        "model": "flat.obj"
+      }
     }
 ]

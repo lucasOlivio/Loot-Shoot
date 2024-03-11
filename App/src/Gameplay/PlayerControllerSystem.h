@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Engine/ECS/System/iSystem.h"
+#include "Engine/ECS/System/EntitySystem.h"
 
 #include "Engine/Events/InputEvent.h"
 
 namespace MyEngine
 {
 	// All player input handling
-	class PlayerControllerSystem : public iSystem
+	class PlayerControllerSystem : public EntitySystem
 	{
 	public:
 		PlayerControllerSystem() = default;
@@ -26,6 +26,8 @@ namespace MyEngine
 		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
+
+		virtual void SetSystemMask(std::shared_ptr<Scene> pScene);
 
 		static void InputTriggered(const KeyboardEvent& event);
 

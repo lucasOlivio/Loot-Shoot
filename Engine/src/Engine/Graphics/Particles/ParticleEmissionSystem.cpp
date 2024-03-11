@@ -22,7 +22,7 @@ namespace MyEngine
     {
         // Load all particles models
         std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::MESH);
-        for (Entity entityId : SceneView<EmitterComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
 
@@ -37,7 +37,7 @@ namespace MyEngine
         pParticleManager->ResetParticles();
 
         // Reset all emitters count
-        for (Entity entityId : SceneView<EmitterComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
 
@@ -51,7 +51,7 @@ namespace MyEngine
 
         float timeScale = (deltaTime / 60.0f);
 
-        for (Entity entityId : SceneView<TransformComponent, EmitterComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
@@ -133,5 +133,14 @@ namespace MyEngine
 
     void ParticleEmissionSystem::Shutdown()
     {
+    }
+
+    void ParticleEmissionSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+        ComponentType emitterType = pScene->GetComponentType<EmitterComponent>();
+
+        m_systemMask.set(transformType);
+        m_systemMask.set(emitterType);
     }
 }

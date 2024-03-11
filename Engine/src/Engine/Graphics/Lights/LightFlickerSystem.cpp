@@ -16,12 +16,13 @@ namespace MyEngine
 
     void LightFlickerSystem::Start(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::Start(pScene);
     }
 
     void LightFlickerSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
         // Update flickering offset
-        for (Entity entityId : SceneView<LightComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             LightComponent& light = pScene->Get<LightComponent>(entityId);
 
@@ -47,5 +48,12 @@ namespace MyEngine
 
     void LightFlickerSystem::Shutdown()
     {
+    }
+
+    void LightFlickerSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType lightType = pScene->GetComponentType<LightComponent>();
+
+        m_systemMask.set(lightType);
     }
 }

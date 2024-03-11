@@ -29,6 +29,8 @@ namespace MyEngine
 
 	void PlayerControllerSystem::Start(std::shared_ptr<Scene> pScene)
 	{
+        EntitySystem::Start(pScene);
+
         // Subscribe to keyboard event
         SUBSCRIBE_KEYBOARD_EVENT(InputTriggered);
 
@@ -38,7 +40,7 @@ namespace MyEngine
 	void PlayerControllerSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 		std::shared_ptr<KeyInputComponent> pKey = CoreLocator::GetKeyInput();
-        for (Entity playerId : SceneView<PlayerComponent, TransformComponent, MovementComponent>(*pScene))
+        for (Entity playerId : m_vecEntities)
         {
             PlayerComponent& player = pScene->Get<PlayerComponent>(playerId);
             TransformComponent& transform = pScene->Get<TransformComponent>(playerId);
@@ -105,6 +107,17 @@ namespace MyEngine
 	void PlayerControllerSystem::Shutdown()
 	{
 	}
+
+    void PlayerControllerSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType movementType = pScene->GetComponentType<MovementComponent>();
+        ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+        ComponentType playerType = pScene->GetComponentType<PlayerComponent>();
+
+        m_systemMask.set(movementType);
+        m_systemMask.set(transformType);
+        m_systemMask.set(playerType);
+    }
 
     void PlayerControllerSystem::InputTriggered(const KeyboardEvent& event)
     {

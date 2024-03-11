@@ -18,13 +18,13 @@ namespace MyEngine
 
     void MovementSystem::Start(std::shared_ptr<Scene> pScene)
     {
-        return;
+        EntitySystem::Start(pScene);
     }
 
     void MovementSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
         // Update velocity and position
-        for (Entity entityId : SceneView<TransformComponent, MovementComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
             MovementComponent& movement = pScene->Get<MovementComponent>(entityId);
@@ -62,5 +62,14 @@ namespace MyEngine
 
     void MovementSystem::Shutdown()
     {
+    }
+
+    void MovementSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+        ComponentType movementType = pScene->GetComponentType<MovementComponent>();
+
+        m_systemMask.set(transformType);
+        m_systemMask.set(movementType);
     }
 }

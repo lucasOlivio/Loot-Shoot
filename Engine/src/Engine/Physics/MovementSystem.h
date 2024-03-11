@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Engine/ECS/System/iSystem.h"
+#include "Engine/ECS/System/EntitySystem.h"
 
 namespace MyEngine
 {
 	// Should be the only one to change the transform component data
-	class MovementSystem : public iSystem
+	class MovementSystem : public EntitySystem
 	{
 	public:
 		MovementSystem() = default;
@@ -24,5 +24,7 @@ namespace MyEngine
 		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
+
+		virtual void SetSystemMask(std::shared_ptr<Scene> pScene);
 	};
 }

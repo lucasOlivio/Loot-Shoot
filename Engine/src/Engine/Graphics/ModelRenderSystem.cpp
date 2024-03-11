@@ -20,6 +20,7 @@ namespace MyEngine
 
     void ModelRenderSystem::Start(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::Start(pScene);
     }
 
     void ModelRenderSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
@@ -30,7 +31,7 @@ namespace MyEngine
     {
         std::shared_ptr<iRendererManager> pRendererManager = RendererManagerLocator::Get();
 
-        for (Entity entityId : SceneView<TransformComponent, ModelComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
             ModelComponent& model = pScene->Get<ModelComponent>(entityId);
@@ -46,7 +47,7 @@ namespace MyEngine
                                          transform.worldScale,
                                          matTransform);
 
-            std::shared_ptr<sMeshInfo> pMesh = model.pMeshes[model.currMesh];
+            std::shared_ptr<sMeshInfo> pMesh = model.pMesh;
             if (!pMesh)
             {
                 continue;
@@ -83,5 +84,14 @@ namespace MyEngine
 
     void ModelRenderSystem::Shutdown()
     {
+    }
+
+    void ModelRenderSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+        ComponentType modelType = pScene->GetComponentType<ModelComponent>();
+
+        m_systemMask.set(transformType);
+        m_systemMask.set(modelType);
     }
 }

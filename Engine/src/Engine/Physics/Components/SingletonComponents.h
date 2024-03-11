@@ -2,7 +2,7 @@
 
 #include "Engine/Core/Constants.h"
 
-#include "Engine/ECS/iComponent.h"
+#include "Engine/ECS/BaseComponent.h"
 
 #include "Engine/Physics/PhysicsProperties.h"
 #include "Engine/Physics/BroadPhase/GridAABB.h"
@@ -13,7 +13,7 @@
 
 namespace MyEngine
 {
-	struct GridBroadphaseComponent : public iComponent
+	struct GridBroadphaseComponent : public BaseComponent
 	{
 		// Mapping of AABBs to their indices in the grid
 		std::map< uint /*index*/, GridAABB* > mapAABBs;
@@ -23,7 +23,7 @@ namespace MyEngine
 	};
 
 	// Generic grouping for any narrow phase testing 
-	struct NarrowPhaseTestsComponent : public iComponent
+	struct NarrowPhaseTestsComponent : public BaseComponent
 	{
 		// Groups of shapes and entities to test,
 		// the triangles to be tested against the entities will be in the same index
@@ -33,7 +33,7 @@ namespace MyEngine
 	};
 
 	// All collisions that happened in the last <FRAME_RATE> frames
-	struct FrameCollisionComponent : public iComponent
+	struct FrameCollisionComponent : public BaseComponent
 	{
 		std::set<sCollisionData> collisions[FRAME_RATE];
 		std::set<sCollisionParticleData> particleCollisions[FRAME_RATE];

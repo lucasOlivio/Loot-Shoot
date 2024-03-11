@@ -18,7 +18,9 @@ namespace MyEngine
 
     void AnimationSystem::Start(std::shared_ptr<Scene> pScene)
     {
-        for (Entity entityId : SceneView<TransformComponent, TransformAnimationComponent>(*pScene))
+        EntitySystem::Start(pScene);
+
+        for (Entity entityId : m_vecEntities)
         {
             TransformAnimationComponent& animation = pScene->Get<TransformAnimationComponent>(entityId);
 
@@ -28,7 +30,7 @@ namespace MyEngine
 
     void AnimationSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
-        for (Entity entityId : SceneView<TransformComponent, TransformAnimationComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
             TransformAnimationComponent& animation = pScene->Get<TransformAnimationComponent>(entityId);
@@ -59,5 +61,14 @@ namespace MyEngine
 
     void AnimationSystem::Shutdown()
     {
+    }
+
+    void AnimationSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+        ComponentType animationType = pScene->GetComponentType<TransformAnimationComponent>();
+
+        m_systemMask.set(transformType);
+        m_systemMask.set(animationType);
     }
 }

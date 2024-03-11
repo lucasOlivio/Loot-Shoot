@@ -18,12 +18,13 @@ namespace MyEngine
 
     void RotationSystem::Start(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::Start(pScene);
     }
 
     void RotationSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
         // Update velocity and position
-        for (Entity entityId : SceneView<TransformComponent, RotationComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
             RotationComponent& rotation = pScene->Get<RotationComponent>(entityId);
@@ -58,5 +59,14 @@ namespace MyEngine
 
     void RotationSystem::Shutdown()
     {
+    }
+
+    void RotationSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+        ComponentType rotationType = pScene->GetComponentType<RotationComponent>();
+
+        m_systemMask.set(transformType);
+        m_systemMask.set(rotationType);
     }
 }

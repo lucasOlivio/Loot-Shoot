@@ -25,6 +25,8 @@ namespace MyEngine
 
 	void GridBroadPhaseSystem::Start(std::shared_ptr<Scene> pScene)
 	{
+		EntitySystem::Start(pScene);
+
 		m_UpdateRigidBodies(pScene);
 	}
 
@@ -108,6 +110,15 @@ namespace MyEngine
 	{
 	}
 
+	void GridBroadPhaseSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+	{
+		ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+		ComponentType rigidbodyType = pScene->GetComponentType<RigidBodyComponent>();
+
+		m_systemMask.set(transformType);
+		m_systemMask.set(rigidbodyType);
+	}
+
 	GridAABB* GridBroadPhaseSystem::m_GetAABB(uint idxAABB)
 	{
 		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
@@ -155,7 +166,7 @@ namespace MyEngine
 		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
 
 		// Rigidbody entities
-		for (Entity entityId : SceneView<TransformComponent, RigidBodyComponent>(*pScene))
+		for (Entity entityId : m_vecEntities)
 		{
 			TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
 			RigidBodyComponent& rigidBody = pScene->Get<RigidBodyComponent>(entityId);

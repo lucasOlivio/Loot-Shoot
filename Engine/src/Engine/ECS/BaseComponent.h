@@ -2,7 +2,7 @@
 
 namespace MyEngine
 {
-	struct iComponent
+	struct BaseComponent
 	{
 		bool test;
 	};

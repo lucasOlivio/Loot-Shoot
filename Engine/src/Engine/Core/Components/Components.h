@@ -3,7 +3,7 @@
 #include "Engine/Core/StateProperties.h"
 
 #include "Engine/ECS/Base.h"
-#include "Engine/ECS/iComponent.h"
+#include "Engine/ECS/BaseComponent.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -13,12 +13,12 @@
 
 namespace MyEngine
 {
-	struct TagComponent : public iComponent
+	struct TagComponent : public BaseComponent
 	{
 		std::string name;
 	};
 
-	struct TransformComponent : public iComponent
+	struct TransformComponent : public BaseComponent
 	{
 		glm::vec3 position;
 		glm::quat orientation;
@@ -33,7 +33,7 @@ namespace MyEngine
 		float distToCamera;
 	};
 
-	struct ParentComponent : public iComponent
+	struct ParentComponent : public BaseComponent
 	{
 		Entity parentId;
 	};

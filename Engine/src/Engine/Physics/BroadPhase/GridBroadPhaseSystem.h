@@ -4,7 +4,7 @@
 
 
 
-#include "Engine/ECS/System/iSystem.h"
+#include "Engine/ECS/System/EntitySystem.h"
 
 #include "Engine/Core/Shapes.hpp"
 
@@ -15,7 +15,7 @@
 
 namespace MyEngine
 {
-	class GridBroadPhaseSystem : public iSystem
+	class GridBroadPhaseSystem : public EntitySystem
 	{
 	public:
 		GridBroadPhaseSystem() = default;
@@ -34,6 +34,8 @@ namespace MyEngine
 		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
+
+		virtual void SetSystemMask(std::shared_ptr<Scene> pScene);
 
 	protected:
 		GridAABB* m_GetAABB(uint idxAABB);

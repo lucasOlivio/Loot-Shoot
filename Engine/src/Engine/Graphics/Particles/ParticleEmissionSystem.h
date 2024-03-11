@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Engine/ECS/System/iSystem.h"
+#include "Engine/ECS/System/EntitySystem.h"
 
 namespace MyEngine
 {
 	// Deals with the particles setup and creation
-	class ParticleEmissionSystem : public iSystem
+	class ParticleEmissionSystem : public EntitySystem
 	{
 	public:
 		ParticleEmissionSystem() = default;
@@ -24,5 +24,7 @@ namespace MyEngine
 		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
+
+		virtual void SetSystemMask(std::shared_ptr<Scene> pScene);
 	};
 }

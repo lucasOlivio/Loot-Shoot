@@ -21,10 +21,12 @@ namespace MyEngine
 
     void AnimationPlayerSystem::Start(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::Start(pScene);
+
         std::shared_ptr<AnimationControllerComponent> pAnimController = GraphicsLocator::GetAnimationController();
 
         // Get the first and last key frame values and reset animations keyframes
-        for (Entity entityId : SceneView<TransformComponent, TransformAnimationComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             TransformAnimationComponent& animation = pScene->Get<TransformAnimationComponent>(entityId);
 
@@ -73,7 +75,7 @@ namespace MyEngine
         // First reset all animations if needed
         if (pAnimController->reset)
         {
-            for (Entity entityId : SceneView<TransformComponent, TransformAnimationComponent>(*pScene))
+            for (Entity entityId : m_vecEntities)
             {
                 TransformAnimationComponent& animation = pScene->Get<TransformAnimationComponent>(entityId);
                 
@@ -92,7 +94,7 @@ namespace MyEngine
         }
 
         // Then update animation timers
-        for (Entity entityId : SceneView<TransformComponent, TransformAnimationComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             TransformAnimationComponent& animation = pScene->Get<TransformAnimationComponent>(entityId);
             if (!animation.isActive)
@@ -176,6 +178,15 @@ namespace MyEngine
 
     void AnimationPlayerSystem::Shutdown()
     {
+    }
+
+    void AnimationPlayerSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+        ComponentType animationType = pScene->GetComponentType<TransformAnimationComponent>();
+        
+        m_systemMask.set(transformType);
+        m_systemMask.set(animationType);
     }
 
     void AnimationPlayerSystem::m_TriggerPosKeyFrameEvent(Entity entityId, std::shared_ptr<Scene> pScene,

@@ -3,13 +3,13 @@
 #include "Engine/Core/Components/Components.h"
 #include "Engine/Core/Resources/Shaders/ShaderManager.h"
 
-#include "Engine/ECS/System/iSystem.h"
+#include "Engine/ECS/System/EntitySystem.h"
 
 #include "Engine/Graphics/Components/Components.h"
 
 namespace MyEngine
 {
-	class LightSystem : public iSystem
+	class LightSystem : public EntitySystem
 	{
 	public:
 		LightSystem() = default;
@@ -28,6 +28,8 @@ namespace MyEngine
 		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
+
+		virtual void SetSystemMask(std::shared_ptr<Scene> pScene);
 
 	private:
 		// Setup the UL locations and all light configurations

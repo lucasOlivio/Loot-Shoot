@@ -14,9 +14,11 @@ namespace MyEngine
 
     void LightSystem::Start(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::Start(pScene);
+
         // Go over each lights setting the ULs and initializing them
         int lightIndex = 0;
-        for (Entity entityId : SceneView<TransformComponent, LightComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             LightComponent& light = pScene->Get<LightComponent>(entityId);
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
@@ -31,7 +33,7 @@ namespace MyEngine
         std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
         // Set lights to transform position of entity
-        for (Entity entityId : SceneView<TransformComponent, LightComponent>(*pScene))
+        for (Entity entityId : m_vecEntities)
         {
             LightComponent& light = pScene->Get<LightComponent>(entityId);
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
@@ -59,6 +61,15 @@ namespace MyEngine
 
     void LightSystem::Shutdown()
     {
+    }
+
+    void LightSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+    {
+        ComponentType lightType = pScene->GetComponentType<LightComponent>();
+        ComponentType transformType = pScene->GetComponentType<TransformComponent>();
+
+        m_systemMask.set(lightType);
+        m_systemMask.set(transformType);
     }
 
     void LightSystem::m_SetupLight(TransformComponent& transform,
