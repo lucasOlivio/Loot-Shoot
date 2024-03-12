@@ -1,12 +1,15 @@
 #pragma once
 
+#include "Engine/ThreadSafe.h"
+
 #include "Engine/Core/Resources/iResourceManager.h"
 
 #include <glm/glm.hpp>
 
 namespace MyEngine
 {
-	struct sMaterialInfo : public iResource
+	struct sMaterialInfo : public iResource,
+						   public ThreadSafe
 	{
 		std::string alphaTexture = "";
 		std::string cubeTexture = "";

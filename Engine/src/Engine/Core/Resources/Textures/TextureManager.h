@@ -10,7 +10,7 @@
 namespace MyEngine
 {
 	class TextureManager : public Singleton<TextureManager>,
-		public iResourceManager
+							public iResourceManager
 	{
 		friend class Singleton<TextureManager>;
 	public:
@@ -40,7 +40,7 @@ namespace MyEngine
 		std::shared_ptr<sSamplerInfo> GetSampler(const eTextureType& textureType);
 		std::shared_ptr<sSamplerInfo> GetSampler(const std::string& textureName);
 	private:
-		TextureManager() { m_CreateSamplers(); };
+		TextureManager();
 
 		void m_CreateSamplers();
 

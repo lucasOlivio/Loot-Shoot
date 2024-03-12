@@ -11,9 +11,13 @@
 #include "Engine/Graphics/Particles/iParticleManager.h"
 
 #include <map>
+#include <Windows.h>
 
 namespace MyEngine
 {
+	// Threading methods
+
+
 	// App should inherit from this class to setup and run everything needed
 	class Engine
 	{
@@ -37,9 +41,11 @@ namespace MyEngine
 		virtual void Init();
 
 		// Run engine starting simulation state as running or stopped
-		virtual void Run(std::string initialSceneName, bool startSimulation = true);
+		virtual void Run(bool startSimulation = true);
 
 		virtual void Update();
+
+		virtual void UpdateFixed();
 
 		virtual void Render();
 
@@ -55,20 +61,18 @@ namespace MyEngine
 
 		virtual void ShutdownSystems();
 
-		virtual void OnSceneChange(const SceneChangeEvent& event);
-
 		virtual void OnWindowClose(const WindowCloseEvent& event);
 
 	protected:
 		std::vector<std::shared_ptr<iSystem>> m_vecSystems;
 
-		std::shared_ptr<Scene> m_currentScene = nullptr;
+		std::shared_ptr<Scene> m_pScene = nullptr;
 
 		// Resources managers
 		std::shared_ptr<iRendererManager> m_rendererManager;
-		std::shared_ptr<iSceneManager> m_sceneManager;
 		std::shared_ptr<iParticleManager> m_particleManager;
 
+		float m_lastTimeFixed = 0.0f; // For the fixed updates
 		float m_lastTime = 0.0f;
 		std::vector<float> m_frameTimes;
 

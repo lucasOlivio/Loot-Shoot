@@ -74,7 +74,8 @@ namespace MyEngine
 	{
 		if (index < m_vecTextures.size())
 		{
-			return m_vecTextures.at(index);
+			std::shared_ptr<iResource> pResource = m_vecTextures.at(index);
+			return pResource;
 		}
 
 		// Not found
@@ -275,6 +276,11 @@ namespace MyEngine
 		std::shared_ptr<sTextureInfo> pTexture = std::static_pointer_cast<sTextureInfo>(GetResource(textureName));
 
 		return GetSampler(pTexture->type);
+	}
+
+	TextureManager::TextureManager()
+	{
+		m_CreateSamplers();
 	}
 
 	void TextureManager::m_CreateSamplers()

@@ -10,8 +10,6 @@
 
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 
-#include "Engine/ECS/Scene/SceneView.hpp"
-
 #include "Engine/Events/InputEvent.h"
 #include "Engine/Events/WindowEvents.h"
 #include "Engine/Events/EventsFacade.h"

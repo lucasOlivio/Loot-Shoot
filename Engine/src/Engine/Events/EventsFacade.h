@@ -22,7 +22,6 @@ namespace MyEngine
 		EventBus<eCollisionEvents, RigidBodyCollisionEvent> ebRigidCollision;
 		EventBus<eInputEvents, KeyboardEvent> ebKeyboard;
 		EventBus<eInputEvents, MouseEvent> ebMouse;
-		EventBus<eSceneEvents, SceneChangeEvent> ebSceneChange;
 		EventBus<eSceneEvents, EntityAddEvent> ebEntityAdd;
 		EventBus<eSceneEvents, EntityRemoveEvent> ebEntityRemove;
 		EventBus<eGameStateEvents, GameStartedEvent> ebStartedState;
@@ -42,7 +41,6 @@ namespace MyEngine
 #define SUBSCRIBE_SOFT_COLLISION_EVENT(handler) EventFacade::GetInstance()->ebSoftCollision.Subscribe(eCollisionEvents::SOFTBODY, handler);
 #define SUBSCRIBE_KEYBOARD_EVENT(handler) EventFacade::GetInstance()->ebKeyboard.Subscribe(eInputEvents::KEYBOARD, handler);
 #define SUBSCRIBE_MOUSE_EVENT(handler) EventFacade::GetInstance()->ebMouse.Subscribe(eInputEvents::MOUSE, handler);
-#define SUBSCRIBE_SCENE_CHANGE_EVENT(handler) EventFacade::GetInstance()->ebSceneChange.Subscribe(eSceneEvents::SCENE_CHANGE, handler);
 #define SUBSCRIBE_ENTITY_ADD_EVENT(handler) EventFacade::GetInstance()->ebEntityAdd.Subscribe(eSceneEvents::ENTITY_ADD, handler);
 #define SUBSCRIBE_ENTITY_REMOVE_EVENT(handler) EventFacade::GetInstance()->ebEntityRemove.Subscribe(eSceneEvents::ENTITY_REMOVE, handler);
 #define SUBSCRIBE_GAME_STARTED_EVENT(handler) EventFacade::GetInstance()->ebStartedState.Subscribe(eGameStateEvents::GAME_STARTED, handler);
@@ -60,7 +58,6 @@ namespace MyEngine
 #define UNSUBSCRIBE_MOUSE_EVENT(handler) EventFacade::GetInstance()->ebMouse.Unsubscribe(eInputEvents::MOUSE, handler);
 #define UNSUBSCRIBE_ENTITY_ADD_EVENT(handler) EventFacade::GetInstance()->ebEntityAdd.Unsubscribe(eSceneEvents::ENTITY_ADD, handler);
 #define UNSUBSCRIBE_ENTITY_REMOVE_EVENT(handler) EventFacade::GetInstance()->ebEntityRemove.Unsubscribe(eSceneEvents::ENTITY_REMOVE, handler);
-#define UNSUBSCRIBE_SCENE_CHANGE_EVENT(handler) EventFacade::GetInstance()->ebSceneChange.Unsubscribe(eSceneEvents::SCENE_CHANGE, handler);
 #define UNSUBSCRIBE_GAME_STARTED_EVENT(handler) EventFacade::GetInstance()->ebStartedState.Unsubscribe(eGameStateEvents::GAME_STARTED, handler);
 #define UNSUBSCRIBE_GAME_RUNNING_EVENT(handler) EventFacade::GetInstance()->ebRunningState.Unsubscribe(eGameStateEvents::GAME_RUNNING, handler);
 #define UNSUBSCRIBE_GAME_STOPPED_EVENT(handler) EventFacade::GetInstance()->ebStoppedState.Unsubscribe(eGameStateEvents::GAME_STOPPED, handler);
@@ -74,7 +71,6 @@ namespace MyEngine
 #define PUBLISH_SOFT_COLLISION_EVENT(event) EventFacade::GetInstance()->ebSoftCollision.Publish(event)
 #define PUBLISH_KEYBOARD_EVENT(event) EventFacade::GetInstance()->ebKeyboard.Publish(event)
 #define PUBLISH_MOUSE_EVENT(event) EventFacade::GetInstance()->ebMouse.Publish(event)
-#define PUBLISH_SCENE_CHANGE_EVENT(event) EventFacade::GetInstance()->ebSceneChange.Publish(event)
 #define PUBLISH_ENTITY_ADD_EVENT(event) EventFacade::GetInstance()->ebEntityAdd.Publish(event)
 #define PUBLISH_ENTITY_REMOVE_EVENT(event) EventFacade::GetInstance()->ebEntityRemove.Publish(event)
 #define PUBLISH_GAME_STARTED_EVENT(event) EventFacade::GetInstance()->ebStartedState.Publish(event)

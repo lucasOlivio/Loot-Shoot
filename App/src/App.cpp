@@ -6,13 +6,10 @@ int main()
 {
 	using namespace MyEngine;
 
-	Application* pApp = new Application();
-	EngineLocator::Set(std::shared_ptr<Engine>(pApp));
+	std::shared_ptr<Engine> pApp = std::shared_ptr<Engine>(new Application());
+	EngineLocator::Set(pApp);
 
-	// TODO: This would be better comming from command args?
-	const std::string INITIAL_SCENE = "scene01.json";
-
-	pApp->Run(INITIAL_SCENE, true);
+	pApp->Run(true);
 
 	pApp->Shutdown();
 }

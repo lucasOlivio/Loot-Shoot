@@ -10,9 +10,8 @@
 
 #include "Engine/Debug/Components/DebugLocator.h"
 
-#include "Engine/ECS/Scene/SceneManager.h"
-#include "Engine/ECS/Scene/SceneManagerLocator.h"
 #include "Engine/ECS/System/SystemBuilder.h"    
+#include "Engine/ECS/Scene/SceneSerializerFactory.h"
 
 #include "Engine/Graphics/Renderer/RendererManager.h"
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
@@ -29,9 +28,9 @@ namespace MyEngine
     using itSystems = std::map<std::string, std::shared_ptr<iSystem>>::iterator;
     using pairSystems = std::pair<std::string, std::shared_ptr<iSystem>>;
 
-    Engine::Engine() : m_sceneManager(new SceneManager()),
-                       m_rendererManager(new RendererManager()),
-                       m_particleManager(new ParticleManager())
+    Engine::Engine() : m_rendererManager(new RendererManager()),
+                       m_particleManager(new ParticleManager()),
+                       m_pScene(new Scene())
 
     {
     }
@@ -94,6 +93,13 @@ namespace MyEngine
 
     void Engine::AddSystem(std::string systemName, std::shared_ptr<Scene> pScene)
     {
+        std::shared_ptr<iSystem> system = GetSystem(systemName);
+        if (system)
+        {
+            // System already added
+            return;
+        }
+
         AddSystem(systemName);
         GetSystem(systemName)->Start(pScene);
     }
@@ -139,12 +145,10 @@ namespace MyEngine
         LoadConfigurations();
 
         // Setting up resources managers        
-        SceneManagerLocator::Set(m_sceneManager);
         RendererManagerLocator::Set(m_rendererManager);
         ParticleManagerLocator::Set(m_particleManager);
 
         // Global events of engine interest
-        SUBSCRIBE_SCENE_CHANGE_EVENT([this](const SceneChangeEvent& event) { OnSceneChange(event); });
         SUBSCRIBE_WINDOW_CLOSE_EVENT([this](const WindowCloseEvent& event) { OnWindowClose(event); });
 
         // Load resources
@@ -156,21 +160,11 @@ namespace MyEngine
         pMeshManager->SetBasePath(pConfigPaths->pathModels);
         pTextureManager->SetBasePath(pConfigPaths->pathTextures);
         pShaderManager->SetBasePath(pConfigPaths->pathShaders);
-        m_sceneManager->SetBasePath(pConfigPaths->pathScenes);
     }
 
-    void Engine::Run(std::string initialSceneName, bool startSimulation)
+    void Engine::Run(bool startSimulation)
     {
-        // HACK: State system must be first of all systems to trigger the appropiate system changes before other systems
-        // make irreversible changes to the scene
         std::shared_ptr<GameStateComponent> pState = CoreLocator::GetGameState();
-        pState->mainSystems.insert(pState->mainSystems.begin(), "StateSystem");
-        AddSystem("CoreSystem");
-
-        // TODO: Now each resource is been loaded by the systems, 
-        // but they should be loaded all here and have separate files
-        m_sceneManager->ChangeScene(initialSceneName);
-
         // Just need to set current state and the update will trigger the event change
         pState->currState = eGameStates::STARTED;
         if (startSimulation)
@@ -178,7 +172,14 @@ namespace MyEngine
             pState->currState = eGameStates::RUNNING;
         }
 
+        // HACK: State system must be first of all systems to trigger the appropiate system changes before other systems
+        // make irreversible changes to the scene
+        pState->mainSystems.insert(pState->mainSystems.begin(), "StateSystem");
+        AddSystem("CoreSystem");
+
         m_isRunning = true;
+
+        StartSystems(m_pScene);
 
         while (m_isRunning)
         {
@@ -194,10 +195,14 @@ namespace MyEngine
 
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
-            m_vecSystems[i]->Update(m_currentScene, deltaTime);
+            m_vecSystems[i]->Update(m_pScene, deltaTime);
         }
 
         m_ClearFrame();
+    }
+
+    void Engine::UpdateFixed()
+    {
     }
 
     void Engine::Render()
@@ -206,7 +211,7 @@ namespace MyEngine
 
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
-            m_vecSystems[i]->Render(m_currentScene);
+            m_vecSystems[i]->Render(m_pScene);
         }
 
         m_EndFrame();
@@ -217,7 +222,7 @@ namespace MyEngine
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
             std::shared_ptr<iSystem> pSystem = m_vecSystems[i];
-            pSystem->End(m_currentScene);
+            pSystem->End(m_pScene);
 
             pSystem->Shutdown();
         }
@@ -231,6 +236,13 @@ namespace MyEngine
         std::shared_ptr<ConfigPathComponent> pConfigPath = CoreLocator::GetConfigPath();
 
         pConfigSerializer->DeserializeConfig(DEFAULT_CONFIG);
+        delete pConfigSerializer;
+
+
+        iSceneSerializer* pSceneSerializer = SceneSerializerFactory::CreateSceneSerializer(DEFAULT_SCENE);
+
+        pSceneSerializer->DeserializeScene(pConfigPath->pathScenes + DEFAULT_SCENE, *(m_pScene));
+        delete pSceneSerializer;
     }
 
     void Engine::StartSystems(std::shared_ptr<Scene> pScene)
@@ -260,19 +272,6 @@ namespace MyEngine
         }
     }
 
-    void Engine::OnSceneChange(const SceneChangeEvent& event)
-    {
-        // End old scene
-        if (m_currentScene)
-        {
-            EndSystems(m_currentScene);
-        }
-
-        // Start new scene
-        m_currentScene = event.pNewScene;
-        StartSystems(m_currentScene);
-    }
-
     void Engine::OnWindowClose(const WindowCloseEvent& event)
     {
         m_isRunning = false;
@@ -280,9 +279,8 @@ namespace MyEngine
 
     void Engine::m_ClearFrame()
     {
-        std::shared_ptr<iSceneManager> pSceneManager = SceneManagerLocator::Get();
-        m_currentScene->m_DestroyEntities();
-        m_currentScene->m_DestroyComponents();
+        m_pScene->m_DestroyEntities();
+        m_pScene->m_DestroyComponents();
     }
 
     void Engine::m_BeginFrame()

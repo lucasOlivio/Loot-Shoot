@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/ThreadSafe.h"
+
 #include "Engine/Core/Resources/iResourceManager.h"
 
 #include "Engine/Singleton.hpp"
@@ -9,7 +11,8 @@
 namespace MyEngine
 {
 	class MaterialManager : public Singleton<MaterialManager>,
-							public iResourceManager
+							public iResourceManager,
+							public ThreadSafe
 	{
 		friend class Singleton<MaterialManager>;
 	public:

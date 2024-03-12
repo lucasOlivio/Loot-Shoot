@@ -24,6 +24,7 @@ namespace MyEngine
 #define DEFAULT_MOUSE_SENSITIVITY 0.001f
 
 	const std::string DEFAULT_CONFIG = "config.json";
+	const std::string DEFAULT_SCENE = "scene.json";
 
 	const glm::vec3 X_VECTOR = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	const glm::vec3 Y_VECTOR = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);

@@ -26,6 +26,12 @@ namespace MyEngine
         {
             pEngine->AddSystem(systemName);
         }
+
+        for (std::string systemName : pState->mapStateSystems[pState->currState])
+        {
+            pEngine->AddSystem(systemName);
+        }
+
         pState->UnlockRead();
     }
 

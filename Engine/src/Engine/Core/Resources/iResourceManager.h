@@ -21,7 +21,7 @@ namespace MyEngine
         std::string name = "";
     };
 
-    class iResourceManager 
+    class iResourceManager
     {
     public:
         virtual void SetBasePath(const std::string& basePath) = 0;
@@ -33,6 +33,7 @@ namespace MyEngine
 
         virtual std::shared_ptr<iResource> GetResource(size_t index) = 0;
         virtual std::shared_ptr<iResource> GetResource(const std::string& name) = 0;
+
         virtual std::vector<std::shared_ptr<iResource>>& GetResources() = 0;
 
         virtual void ActivateResource(const std::string& name) = 0;

@@ -10,7 +10,7 @@
 namespace MyEngine
 {
 	class MeshManager : public Singleton<MeshManager>,
-		public iResourceManager
+						public iResourceManager
 	{
 		friend class Singleton<MeshManager>;
 	public:

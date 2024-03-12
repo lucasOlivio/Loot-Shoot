@@ -75,6 +75,8 @@ namespace MyEngine
 														std::string negZ_fileName, bool bIsSeamless, 
 														std::shared_ptr<sTextureInfo> pTextureOut)
 	{
+		GLenum discardError = glGetError();
+
 		// Pick a texture number...
 		glGenTextures(1, &(pTextureOut->textNumber));
 		// Worked?

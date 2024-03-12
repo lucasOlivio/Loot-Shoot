@@ -14,7 +14,7 @@ namespace MyEngine
 		UNKNOWN
 	};
 
-	class Shader 
+	class Shader
 	{
 	public:
 		Shader() {};
