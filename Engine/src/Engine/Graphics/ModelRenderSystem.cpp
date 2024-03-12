@@ -41,9 +41,9 @@ namespace MyEngine
             glm::mat4 matTransform = glm::mat4(1.0);
 
             transform.LockRead();
-            TransformUtils::GetTransform(transform.worldPosition,
-                                         transform.worldOrientation,
-                                         transform.worldScale,
+            TransformUtils::GetTransform(transform.position,
+                                         transform.orientation,
+                                         transform.scale,
                                          matTransform);
             transform.UnlockRead();
 
@@ -84,6 +84,7 @@ namespace MyEngine
 
     void ModelRenderSystem::End(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::End(pScene);
     }
 
     void ModelRenderSystem::Shutdown()

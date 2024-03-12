@@ -25,21 +25,21 @@ namespace MyEngine
 {
 	void PlayerControllerSystem::Init()
 	{
-	}
-
-	void PlayerControllerSystem::Start(std::shared_ptr<Scene> pScene)
-	{
-        EntitySystem::Start(pScene);
-
         // Subscribe to keyboard event
         SUBSCRIBE_KEYBOARD_EVENT(InputTriggered);
 
         m_InitiateMouseCapture();
 	}
 
+	void PlayerControllerSystem::Start(std::shared_ptr<Scene> pScene)
+	{
+        EntitySystem::Start(pScene);
+	}
+
 	void PlayerControllerSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 		std::shared_ptr<KeyInputComponent> pKey = CoreLocator::GetKeyInput();
+
         for (Entity playerId : m_vecEntities)
         {
             PlayerComponent& player = pScene->Get<PlayerComponent>(playerId);
@@ -98,14 +98,14 @@ namespace MyEngine
 
 	void PlayerControllerSystem::End(std::shared_ptr<Scene> pScene)
 	{
-        // Subscribe to keyboard event
-        UNSUBSCRIBE_KEYBOARD_EVENT(InputTriggered);
-
-        m_StopMouseCapture();
 	}
 
 	void PlayerControllerSystem::Shutdown()
 	{
+        // Subscribe to keyboard event
+        UNSUBSCRIBE_KEYBOARD_EVENT(InputTriggered);
+
+        m_StopMouseCapture();
 	}
 
     void PlayerControllerSystem::SetSystemMask(std::shared_ptr<Scene> pScene)

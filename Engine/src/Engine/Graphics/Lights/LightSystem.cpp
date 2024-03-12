@@ -48,6 +48,8 @@ namespace MyEngine
 
     void LightSystem::End(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::End(pScene);
+
         // Reset all lights in shader with new empty components
         LightComponent light = LightComponent();
         TransformComponent transform = TransformComponent();
@@ -94,7 +96,7 @@ namespace MyEngine
     {
         transform.LockRead();
         light.LockRead();
-        glm::vec4 newPosition = glm::vec4(transform.worldPosition, 0) + light.positionOffset +
+        glm::vec4 newPosition = glm::vec4(transform.position, 0) + light.positionOffset +
                                (light.direction * light.directionOffset);
         light.UnlockRead();
         transform.UnlockRead();

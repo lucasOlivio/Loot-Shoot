@@ -4,17 +4,17 @@
 
 namespace MyEngine
 {
-    // Thread safe component, allow multiple readers but only one writer at a time
-    struct BaseComponent
+    // Thread safe component to allow multiple readers but only one writer at a time
+    struct ThreadSafe
     {
     public:
-        BaseComponent() 
+        ThreadSafe()
         {
             InitializeCriticalSection(&m_csWriter);
             m_readers = 0;
         }
 
-        ~BaseComponent() 
+        ~ThreadSafe()
         {
             DeleteCriticalSection(&m_csWriter);
         }

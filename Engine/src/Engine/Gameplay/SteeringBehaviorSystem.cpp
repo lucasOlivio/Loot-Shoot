@@ -43,13 +43,13 @@ namespace MyEngine
             switch (steeringBehavior.steeringType)
             {
             case eSteeringTypes::SEEK:
-                m_SeekTarget(transform.worldPosition, transformTarget.worldPosition,
+                m_SeekTarget(transform.position, transformTarget.position,
 							    transform.orientation, movement.velocity,
                                 steeringBehavior.speed, steeringBehavior.maxDistance, 
                                 steeringBehavior.futureTime);
                 break;
             case eSteeringTypes::FLEE:
-                m_FleeFromTarget(transform.worldPosition, transformTarget.worldPosition,
+                m_FleeFromTarget(transform.position, transformTarget.position,
 							    transform.orientation, movement.velocity,
                                 steeringBehavior.speed, steeringBehavior.maxDistance, 
                                 steeringBehavior.futureTime);
@@ -60,7 +60,7 @@ namespace MyEngine
                 MovementComponent& movementTarget = pScene->Get<MovementComponent>(steeringBehavior.targetId);
 
                 movementTarget.LockRead();
-                m_PursueTarget(transform.worldPosition, transformTarget.worldPosition,
+                m_PursueTarget(transform.position, transformTarget.position,
                     transform.orientation, movement.velocity, movementTarget.velocity,
                     steeringBehavior.speed, steeringBehavior.maxDistance,
                     steeringBehavior.futureTime);
@@ -73,7 +73,7 @@ namespace MyEngine
                 MovementComponent& movementTarget = pScene->Get<MovementComponent>(steeringBehavior.targetId);
 
                 movementTarget.LockRead();
-                m_EvadeTarget(transform.worldPosition, transformTarget.worldPosition,
+                m_EvadeTarget(transform.position, transformTarget.position,
                     transform.orientation, movement.velocity, movementTarget.velocity,
                     steeringBehavior.speed, steeringBehavior.maxDistance,
                     steeringBehavior.futureTime);
@@ -81,7 +81,7 @@ namespace MyEngine
             }
             break;
             case eSteeringTypes::APPROACH:
-                m_ApproachTarget(transform.worldPosition, transformTarget.worldPosition,
+                m_ApproachTarget(transform.position, transformTarget.position,
                     transform.orientation, movement.velocity,
                     steeringBehavior.speed, steeringBehavior.maxDistance,
                     steeringBehavior.futureTime);
@@ -102,6 +102,7 @@ namespace MyEngine
 
     void SteeringBehaviorSystem::End(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::End(pScene);
     }
 
     void SteeringBehaviorSystem::Shutdown()

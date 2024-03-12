@@ -135,9 +135,9 @@ namespace MyEngine
         transformA.LockRead();
         transformB.LockRead();
         isCollision = CollisionsUtils::SphereSphere_Overlap(sphereA.radius,
-                                                            transformA.worldPosition,
+                                                            transformA.position,
                                                             sphereB.radius,
-                                                            transformB.worldPosition);
+                                                            transformB.position);
         transformB.UnlockRead();
         transformA.UnlockRead();
         sphereB.UnlockRead();
@@ -155,8 +155,8 @@ namespace MyEngine
 
         transformA.LockRead();
         transformB.LockRead();
-        collData.collisionNormalA = CollisionsUtils::SphereSphere_Normal(transformA.worldPosition,
-                                                                        transformB.worldPosition);
+        collData.collisionNormalA = CollisionsUtils::SphereSphere_Normal(transformA.position,
+                                                                        transformB.position);
         transformB.UnlockRead();
         transformA.UnlockRead();
 
@@ -167,10 +167,10 @@ namespace MyEngine
         transformA.LockRead();
         transformB.LockRead();
         collData.contactPoint = CollisionsUtils::SphereSphere_CollisionPoint(sphereA.radius,
-                                                                            transformA.worldPosition,
+                                                                            transformA.position,
                                                                             collData.collisionNormalA,
                                                                             sphereB.radius,
-                                                                            transformB.worldPosition);
+                                                                            transformB.position);
         transformB.UnlockRead();
         transformA.UnlockRead();
         sphereB.UnlockRead();

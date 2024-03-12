@@ -1,18 +1,18 @@
 #pragma once
 
 #include "Engine/ECS/Base.h"
-#include "Engine/ECS/BaseComponent.h"
+#include "Engine/ThreadSafe.h"
 
 #include "Engine/Gameplay/GameplayProperties.h"
 
 namespace MyEngine
 {
-	struct PlayerComponent : public BaseComponent
+	struct PlayerComponent : public ThreadSafe
 	{
 		float speed;
 	};
 
-	struct SteeringBehaviorComponent : public BaseComponent
+	struct SteeringBehaviorComponent : public ThreadSafe
 	{
 		eSteeringTypes steeringType;
 		Entity targetId;

@@ -15,7 +15,7 @@ namespace MyEngine
 #define CAMERA_ID 1
 
 // This should match with the number in the shaders
-#define MAX_LIGHTS 40
+#define MAX_LIGHTS 3
 
 #define TEXT_FONT_SIZE 1.2f
 

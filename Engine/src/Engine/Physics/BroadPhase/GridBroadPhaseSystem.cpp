@@ -111,6 +111,8 @@ namespace MyEngine
 
 	void GridBroadPhaseSystem::End(std::shared_ptr<Scene> pScene)
 	{
+		EntitySystem::End(pScene);
+
 		m_ClearAABBs();
 	}
 
@@ -194,7 +196,7 @@ namespace MyEngine
 
 			pGrid->LockRead();
 			transform.LockRead();
-			uint idxpos = GridUtils::LocatePoint(transform.worldPosition, pGrid->lengthPerBox);
+			uint idxpos = GridUtils::LocatePoint(transform.position, pGrid->lengthPerBox);
 			pGrid->UnlockRead();
 
 			m_InsertEntity(entityId, idxpos, rigidBody.bodyType);

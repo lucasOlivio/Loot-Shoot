@@ -59,6 +59,7 @@ namespace MyEngine
 
     void RotationSystem::End(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::End(pScene);
     }
 
     void RotationSystem::Shutdown()

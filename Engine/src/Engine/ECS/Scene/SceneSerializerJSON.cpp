@@ -819,11 +819,6 @@ namespace MyEngine
         parser.GetValue(jsonObject["orientation"], transformOut.orientation);
         parser.GetValue(jsonObject["scale"], transformOut.scale);
 
-        // TODO: This should be separated from here, maybe a system to handle this hierachy
-        transformOut.worldPosition = transformOut.position;
-        transformOut.worldOrientation = transformOut.orientation;
-        transformOut.worldScale = transformOut.scale;
-
         return true;
     }
 

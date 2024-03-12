@@ -61,6 +61,7 @@ namespace MyEngine
 
     void AnimationSystem::End(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::End(pScene);
     }
 
     void AnimationSystem::Shutdown()

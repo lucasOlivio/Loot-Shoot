@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/ECS/BaseComponent.h"
+#include "Engine/ThreadSafe.h"
 
 #include "Engine/Physics/PhysicsProperties.h"
 
@@ -8,7 +8,7 @@
 
 namespace MyEngine
 {
-	struct MovementComponent : public BaseComponent
+	struct MovementComponent : public ThreadSafe
 	{
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
@@ -17,7 +17,7 @@ namespace MyEngine
 		float maxSpeed;
 	};
 
-	struct RotationComponent : public BaseComponent
+	struct RotationComponent : public ThreadSafe
 	{
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
@@ -26,7 +26,7 @@ namespace MyEngine
 		float maxSpeed;
 	};
 
-	struct RigidBodyComponent : public BaseComponent
+	struct RigidBodyComponent : public ThreadSafe
 	{
 		eBody bodyType;
 

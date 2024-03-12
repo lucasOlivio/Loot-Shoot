@@ -3,7 +3,7 @@
 #include "Engine/Core/StateProperties.h"
 
 #include "Engine/ECS/Base.h"
-#include "Engine/ECS/BaseComponent.h"
+#include "Engine/ThreadSafe.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -13,27 +13,19 @@
 
 namespace MyEngine
 {
-	struct TagComponent : public BaseComponent
+	struct TagComponent : public ThreadSafe
 	{
 		std::string name;
 	};
 
-	struct TransformComponent : public BaseComponent
+	struct TransformComponent : public ThreadSafe
 	{
 		glm::vec3 position;
 		glm::quat orientation;
 		float scale;
-
-		// Values calculated in relation to parent
-		glm::vec3 worldPosition;
-		glm::quat worldOrientation;
-		float worldScale;
-
-		// Value calculated distance in relation to camera position
-		float distToCamera;
 	};
 
-	struct ParentComponent : public BaseComponent
+	struct ParentComponent : public ThreadSafe
 	{
 		Entity parentId;
 	};

@@ -132,6 +132,8 @@ namespace MyEngine
 
     void ParticleEmissionSystem::End(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::End(pScene);
+
         // Kill all particles
         std::shared_ptr<iParticleManager> pParticleManager = ParticleManagerLocator::Get();
 

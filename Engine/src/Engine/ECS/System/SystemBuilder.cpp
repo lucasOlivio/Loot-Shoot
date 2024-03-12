@@ -4,7 +4,6 @@
 
 #include "Engine/Core/CoreSystem.h"
 #include "Engine/Core/FPSSystem.h"
-#include "Engine/Core/TransformParentSystem.h"
 #include "Engine/Core/InputSystem.h"
 #include "Engine/Core/StateSystem.h"
 
@@ -14,8 +13,6 @@
 #include "Engine/Graphics/Animations/AnimationSystem.h"
 #include "Engine/Graphics/Animations/AnimationPlayerSystem.h"
 #include "Engine/Graphics/Lights/LightSystem.h"
-#include "Engine/Graphics/Lights/LightFlickerSystem.h"
-#include "Engine/Graphics/Materials/MaterialOffsetSystem.h"
 #include "Engine/Graphics/Shaders/ShaderSystem.h"
 #include "Engine/Graphics/Particles/ParticleEmissionSystem.h"
 #include "Engine/Graphics/Particles/ParticleUpdaterSystem.h"
@@ -28,7 +25,6 @@
 #include "Engine/Physics/NarrowPhase/CollisionSystem.h"
 
 #include "Engine/Gameplay/SteeringBehaviorSystem.h"
-#include "Engine/Gameplay/FlyingCameraSystem.h"
 
 #include "Engine/Debug/DebugSystem.h"
 #include "Engine/Debug/DrawGridSystem.h"
@@ -43,7 +39,6 @@ namespace MyEngine
         // Core Systems
         {"CoreSystem", []() { return new CoreSystem(); }},
         {"FPSSystem", []() { return new FPSSystem(); }},
-        {"TransformParentSystem", []() { return new TransformParentSystem(); }},
         {"InputSystem", []() { return new InputSystem(); }},
         {"StateSystem", []() { return new StateSystem(); }},
         // Graphics systems
@@ -53,8 +48,6 @@ namespace MyEngine
         {"ModelRenderSystem", []() { return new ModelRenderSystem(); }},
         {"RenderSystem", []() { return new RenderSystem(); }},
         {"LightSystem", []() { return new LightSystem(); }},
-        {"LightFlickerSystem", []() { return new LightFlickerSystem(); }},
-        {"MaterialOffsetSystem", []() { return new MaterialOffsetSystem(); }},
         {"AnimationSystem", []() { return new AnimationSystem(); }},
         {"AnimationPlayerSystem", []() { return new AnimationPlayerSystem(); }},
         {"ParticleEmissionSystem", []() { return new ParticleEmissionSystem(); }},
@@ -67,7 +60,6 @@ namespace MyEngine
         {"CollisionSystem", []() { return new CollisionSystem(); }},
         // Gameplay
         {"SteeringBehaviorSystem", []() { return new SteeringBehaviorSystem(); }},
-        {"FlyingCameraSystem", []() { return new FlyingCameraSystem(); }},
         // Debug Systems
         {"DebugSystem", []() { return new DebugSystem(); }},
         {"DrawGridSystem", []() { return new DrawGridSystem(); }},

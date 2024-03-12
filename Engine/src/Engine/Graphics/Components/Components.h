@@ -3,7 +3,7 @@
 #include "Engine/Core/Resources/Meshes/Mesh.h"
 #include "Engine/Core/Resources/Textures/Texture.h"
 
-#include "Engine/ECS/BaseComponent.h"
+#include "Engine/ThreadSafe.h"
 
 #include "Engine/Graphics/Animations/AnimationProperties.h"
 #include "Engine/Graphics/Particles/ParticlesProperties.h"
@@ -14,7 +14,7 @@
 
 namespace MyEngine
 {
-	struct TextureComponent : public BaseComponent
+	struct TextureComponent : public ThreadSafe
 	{
 		std::string fileName;
 		eTextureType textureType;
@@ -23,7 +23,7 @@ namespace MyEngine
 		std::vector<std::string> vecTextures;
 	};
 
-	struct MaterialComponent : public BaseComponent
+	struct MaterialComponent : public ThreadSafe
 	{
 		std::string name;
 
@@ -61,7 +61,7 @@ namespace MyEngine
 		std::string alphaTexture;
 	};
 
-	struct LightComponent : public BaseComponent
+	struct LightComponent : public ThreadSafe
 	{
 		// Flickering control
 		glm::vec4 flickerOffset;
@@ -93,7 +93,7 @@ namespace MyEngine
 		GLint status_UL;
 	};
 
-	struct ModelComponent : public BaseComponent
+	struct ModelComponent : public ThreadSafe
 	{
 		std::string model;
 		std::shared_ptr<sMeshInfo> pMesh;
@@ -111,13 +111,13 @@ namespace MyEngine
 		bool isActive;
 	};
 
-	struct TilingComponent : public BaseComponent
+	struct TilingComponent : public ThreadSafe
 	{
 		glm::vec3 axis;
 		glm::vec3 offset;
 	};
 
-	struct TransformAnimationComponent : public BaseComponent
+	struct TransformAnimationComponent : public ThreadSafe
 	{
 		std::vector<PositionKeyFrame> positionKeyFrames;
 		std::vector<ScaleKeyFrame> scaleKeyFrames;
@@ -136,7 +136,7 @@ namespace MyEngine
 		bool isActive;
 	};
 
-	struct EmitterComponent : public BaseComponent
+	struct EmitterComponent : public ThreadSafe
 	{
 		EmitterProps properties = EmitterProps();
 
