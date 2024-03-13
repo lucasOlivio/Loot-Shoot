@@ -15,8 +15,10 @@ namespace MyEngine
 		std::shared_ptr<FrameCounterComponent> pFrame = CoreLocator::GetFrameCounter();
 
 		pFrame->LockWrite();
-		pFrame->frameCount = 0;
-		pFrame->fpsTimer = 0;
+		pFrame->frameCountUpdate = 0;
+		pFrame->fpsTimerUpdate = 0;
+		pFrame->frameCountRender = 0;
+		pFrame->fpsTimerRender = 0;
 		pFrame->UnlockWrite();
 	}
 
@@ -25,21 +27,37 @@ namespace MyEngine
 		std::shared_ptr<FrameCounterComponent> pFrame = CoreLocator::GetFrameCounter();
 
 		pFrame->LockWrite();
-		pFrame->frameCount++;
-		pFrame->fpsTimer += deltaTime;
+		pFrame->frameCountUpdate++;
+		pFrame->fpsTimerUpdate += deltaTime;
 
 		// Update Frame every second in the title
-		if (pFrame->fpsTimer >= 1.0f)
+		if (pFrame->fpsTimerUpdate >= 1.0f)
 		{
-			pFrame->fps = (float)(pFrame->frameCount) / pFrame->fpsTimer;
-			pFrame->frameCount = 0;
-			pFrame->fpsTimer = 0.0f;
+			pFrame->fpsUpdate = (float)(pFrame->frameCountUpdate) / pFrame->fpsTimerUpdate;
+			pFrame->frameCountUpdate = 0;
+			pFrame->fpsTimerUpdate = 0.0f;
 		}
 		pFrame->UnlockWrite();
 	}
 
 	void FPSSystem::Render(std::shared_ptr<Scene> pScene)
 	{
+		std::shared_ptr<FrameCounterComponent> pFrame = CoreLocator::GetFrameCounter();
+
+		float currentTime = static_cast<float>(glfwGetTime());
+		pFrame->LockWrite();
+		pFrame->fpsTimerRender += currentTime - pFrame->lastTimeRender;
+		pFrame->lastTimeRender = currentTime;
+		pFrame->frameCountRender++;
+
+		// Render Frame every second in the title
+		if (pFrame->fpsTimerRender >= 1.0f)
+		{
+			pFrame->fpsRender = (float)(pFrame->frameCountRender) / pFrame->fpsTimerRender;
+			pFrame->frameCountRender = 0;
+			pFrame->fpsTimerRender = 0.0f;
+		}
+		pFrame->UnlockWrite();
 	}
 
 	void FPSSystem::End(std::shared_ptr<Scene> pScene)

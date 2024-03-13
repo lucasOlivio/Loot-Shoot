@@ -52,26 +52,26 @@ namespace MyEngine
 		}
 
 		// Draw a red wireframe square for every AABB in the grid
-		pGrid->LockRead();
-		for (std::pair<uint, GridAABB*> pairAABB : pGrid->mapAABBs)
-		{
-			GridAABB* pAABB = pairAABB.second;
+		//pGrid->LockRead();
+		//for (std::pair<uint, GridAABB*> pairAABB : pGrid->mapAABBs)
+		//{
+		//	GridAABB* pAABB = pairAABB.second;
 
-			glm::mat4 matTransf = glm::mat4(1.0f);
-			TransformUtils::GetTransform(pAABB->minXYZ, pGrid->lengthPerBox.x, matTransf);
+		//	glm::mat4 matTransf = glm::mat4(1.0f);
+		//	TransformUtils::GetTransform(pAABB->minXYZ, pGrid->lengthPerBox.x, matTransf);
 
-			sRenderModelInfo renderInfo = sRenderModelInfo();
-			renderInfo.matModel = matTransf;
-			renderInfo.VAO_ID = pMesh->VAO_ID;
-			renderInfo.numberOfIndices = pMesh->numberOfIndices;
-			renderInfo.isWireFrame = true;
-			renderInfo.doNotLight = true;
-			renderInfo.useDebugColor = true;
-			renderInfo.debugColor = RED;
+		//	sRenderModelInfo renderInfo = sRenderModelInfo();
+		//	renderInfo.matModel = matTransf;
+		//	renderInfo.VAO_ID = pMesh->VAO_ID;
+		//	renderInfo.numberOfIndices = pMesh->numberOfIndices;
+		//	renderInfo.isWireFrame = true;
+		//	renderInfo.doNotLight = true;
+		//	renderInfo.useDebugColor = true;
+		//	renderInfo.debugColor = RED;
 
-			pRendererManager->AddToRender(renderInfo);
-		}
-		pGrid->UnlockRead();
+		//	pRendererManager->AddToRender(renderInfo);
+		//}
+		//pGrid->UnlockRead();
 	}
 
 	void DrawGridSystem::End(std::shared_ptr<Scene> pScene)

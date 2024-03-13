@@ -23,6 +23,9 @@
 
 #include "Engine/Physics/Components/PhysicsLocator.h"
 
+#include <chrono>
+#include <thread>
+
 namespace MyEngine
 {
     using itSystems = std::map<std::string, std::shared_ptr<iSystem>>::iterator;
@@ -37,39 +40,6 @@ namespace MyEngine
 
     Engine::~Engine()
     {
-    }
-
-    float Engine::GetDeltaTime()
-    {
-        float currentTime = (float)glfwGetTime();
-        float deltaTime = currentTime - m_lastTime;
-        m_lastTime = currentTime;
-
-        // Clamp delta time to the maximum frame time
-        if (deltaTime > FRAME_DURATION)
-        {
-            deltaTime = FRAME_DURATION;
-        }
-
-        // Add the frame time to the list
-        m_frameTimes.push_back(deltaTime);
-
-        // Limit the number of frames
-        const size_t maxFrameCount = FRAME_RATE; // Store frame times for a second
-        if (m_frameTimes.size() > maxFrameCount)
-        {
-            m_frameTimes.erase(m_frameTimes.begin());
-        }
-
-        // Calculate the average frame time
-        float averageFrameTime = 0;
-        for (float time : m_frameTimes)
-        {
-            averageFrameTime += time;
-        }
-        averageFrameTime /= m_frameTimes.size();
-
-        return averageFrameTime;
     }
 
     void Engine::AddSystem(std::string systemName)
@@ -181,28 +151,54 @@ namespace MyEngine
 
         StartSystems(m_pScene);
 
+        // Initialize Update thread
+        HANDLE updateHandle = CreateThread(NULL, 0, Engine::m_Update, this, 0, NULL);
+
         while (m_isRunning)
         {
-            Update();
-
             Render();
         }
+
+        // Wait for the threads to finish
+        DWORD dwWaitResult = WaitForSingleObject(updateHandle, INFINITE);
+        if (dwWaitResult != WAIT_OBJECT_0)
+        {
+            LOG_ERROR("Wait failed or thread exited unexpectedly!");
+        }
+
+        // Close the threads
+        CloseHandle(updateHandle);
     }
 
     void Engine::Update()
     {
-        float deltaTime = GetDeltaTime();
-
-        for (int i = 0; i < m_vecSystems.size(); i++)
+        while (m_isRunning)
         {
-            m_vecSystems[i]->Update(m_pScene, deltaTime);
+            float deltaTime = m_GetDeltaTime();
+
+            for (int i = 0; i < m_vecSystems.size(); i++)
+            {
+                m_vecSystems[i]->Update(m_pScene, deltaTime);
+            }
+
+            m_ClearFrame();
+
+            // Calculate the time taken to process the frame
+            float endTime = static_cast<float>(glfwGetTime());
+            float frameTime = endTime - m_lastTime;
+
+            // If the frame was processed faster than the max frame time, wait for the remaining time
+            if (frameTime < FRAME_DURATION)
+            {
+                float diff = FRAME_DURATION - frameTime;
+                DWORD sleepTime = static_cast<DWORD>(diff * 1000.0f);
+                Sleep(sleepTime);
+            }
+            else
+            {
+                Sleep(0);
+            }
         }
-
-        m_ClearFrame();
-    }
-
-    void Engine::UpdateFixed()
-    {
     }
 
     void Engine::Render()
@@ -275,6 +271,39 @@ namespace MyEngine
     void Engine::OnWindowClose(const WindowCloseEvent& event)
     {
         m_isRunning = false;
+    }
+
+    float Engine::m_GetDeltaTime()
+    {
+        float currentTime = static_cast<float>(glfwGetTime());
+        float deltaTime = currentTime - m_lastTime;
+        m_lastTime = currentTime;
+
+        // Clamp delta time to the maximum frame time
+        if (deltaTime > FRAME_DURATION)
+        {
+            deltaTime = FRAME_DURATION;
+        }
+
+        // Add the frame time to the list
+        m_frameTimes.push_back(deltaTime);
+
+        // Limit the number of frames
+        const size_t maxFrameCount = FRAME_RATE; // Store frame times for a second
+        if (m_frameTimes.size() > maxFrameCount)
+        {
+            m_frameTimes.erase(m_frameTimes.begin());
+        }
+
+        // Calculate the average frame time
+        float averageFrameTime = 0;
+        for (float time : m_frameTimes)
+        {
+            averageFrameTime += time;
+        }
+        averageFrameTime /= m_frameTimes.size();
+
+        return averageFrameTime;
     }
 
     void Engine::m_ClearFrame()
@@ -351,5 +380,18 @@ namespace MyEngine
         // GLFW endframe
         glfwSwapBuffers(pWindow->pGLFWWindow);
         glfwPollEvents();
+    }
+
+    DWORD __stdcall Engine::m_Update(LPVOID lpParam)
+    {
+        Engine* pEngine = static_cast<Engine*>(lpParam);
+        pEngine->Update();
+
+        return 0;
+    }
+    
+    DWORD __stdcall Engine::m_UpdateFixed(LPVOID lpParam)
+    {
+        return 0;
     }
 }

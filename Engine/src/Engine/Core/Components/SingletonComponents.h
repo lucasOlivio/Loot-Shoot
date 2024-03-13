@@ -35,9 +35,15 @@ namespace MyEngine
 
 	struct FrameCounterComponent : public ThreadSafe
 	{
-		int frameCount;
-		float fpsTimer;
-		float fps;
+		int frameCountUpdate;
+		int frameCountRender;
+
+		float fpsTimerUpdate;
+		float fpsTimerRender;
+		float lastTimeRender;
+
+		float fpsUpdate;
+		float fpsRender;
 	};
 
 	struct KeyInputComponent : public ThreadSafe

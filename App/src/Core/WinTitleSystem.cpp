@@ -22,10 +22,15 @@ namespace MyEngine
         std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
 
         pFPS->LockRead();
-        int fps = static_cast<int>(pFPS->fps);
+        int fpsUpdate = static_cast<int>(pFPS->fpsUpdate);
+        int fpsRender = static_cast<int>(pFPS->fpsRender);
         pFPS->UnlockRead();
 
-        pWindow->name = "UPDATE FPS: " + std::to_string(fps);
+        std::string newTitle = "UPDATE FPS: " + std::to_string(fpsUpdate) + " | RENDER FPS: " + std::to_string(fpsRender);
+
+        pWindow->LockWrite();
+        pWindow->name = newTitle;
+        pWindow->UnlockWrite();
     }
 
     void WinTitleSystem::Render(std::shared_ptr<Scene> pScene)

@@ -15,17 +15,12 @@
 
 namespace MyEngine
 {
-	// Threading methods
-
-
 	// App should inherit from this class to setup and run everything needed
 	class Engine
 	{
 	public:
 		Engine();
 		virtual ~Engine();
-
-		float GetDeltaTime();
 
 		// Systems that will manipulate components and handle the scene in some way,
 		// the system is added and initialized
@@ -44,8 +39,6 @@ namespace MyEngine
 		virtual void Run(bool startSimulation = true);
 
 		virtual void Update();
-
-		virtual void UpdateFixed();
 
 		virtual void Render();
 
@@ -86,5 +79,14 @@ namespace MyEngine
 
 		// Operations to execute after rendering
 		virtual void m_EndFrame();
+
+		// Updates the timer
+		float m_GetDeltaTime();
+
+		// Update that will run at max speed
+		static DWORD WINAPI m_Update(LPVOID lpParam);
+
+		// Update that will run at fixed FRAME_RATE
+		static DWORD WINAPI m_UpdateFixed(LPVOID lpParam);
 	};
 }

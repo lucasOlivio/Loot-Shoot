@@ -172,7 +172,7 @@ namespace MyEngine
 		pAABB->maxXYZ = pAABB->minXYZ + pGrid->lengthPerBox;
 
 		pGrid->mapAABBs[idxAABB] = pAABB;
-		pGrid->LockRead();
+		pGrid->UnlockWrite();
 
 		return pAABB;
 	}

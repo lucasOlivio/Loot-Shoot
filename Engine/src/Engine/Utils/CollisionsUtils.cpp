@@ -226,7 +226,7 @@ namespace MyEngine
 		std::shared_ptr<FrameCounterComponent> pFrames = CoreLocator::GetFrameCounter();
 
 		// Module to make sure we stay in FRAME_RATE size
-		int currFrame = pFrames->frameCount % FRAME_RATE;
+		int currFrame = pFrames->frameCountUpdate % FRAME_RATE;
 		return pFrameColl->collisions[currFrame];
 	}
 
@@ -236,7 +236,7 @@ namespace MyEngine
 		std::shared_ptr<FrameCounterComponent> pFrames = CoreLocator::GetFrameCounter();
 
 		// Module to make sure we stay in FRAME_RATE size
-		int currFrame = pFrames->frameCount % FRAME_RATE;
+		int currFrame = pFrames->frameCountUpdate % FRAME_RATE;
 		return pFrameColl->particleCollisions[currFrame];
 	}
 }

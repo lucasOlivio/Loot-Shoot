@@ -12,4 +12,6 @@ int main()
 	pApp->Run(true);
 
 	pApp->Shutdown();
+
+	return 0;
 }

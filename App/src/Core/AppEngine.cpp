@@ -55,15 +55,12 @@ namespace MyEngine
 			"AnimationPlayerSystem",
 			// Physics
 			"MovementSystem",
-			"RotationSystem",
-			"GridBroadPhaseSystem",
-			"CollisionSystem"
+			"RotationSystem"
 
 			// Debug
-			,"DebugSystem",
-			"DrawGridSystem",
-			"DrawCollisionSystem"
-
+			#ifdef DEBUG
+			,"DebugSystem"
+			#endif
 		};
 
 		pStates->mapStateSystems[eGameStates::STOPPED] = {
