@@ -42,9 +42,9 @@ namespace MyEngine
                 WHITE = 15
             };
 
-            static void SetConsoleColor(ConsoleColor color);
+            static void m_SetConsoleColor(ConsoleColor color);
 
-            static void ResetConsoleColor();
+            static void m_ResetConsoleColor();
     };
 }
 

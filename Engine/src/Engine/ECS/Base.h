@@ -14,7 +14,7 @@ namespace MyEngine
 
 	// Used to define the size of arrays
 	const ComponentType MAX_COMPONENTS = 32;
-	const Entity MAX_ENTITIES = 3000;
+	const Entity MAX_ENTITIES = 10000;
 
 	// Defines an entity's component composition
 	using EntityMask = std::bitset<MAX_COMPONENTS>;

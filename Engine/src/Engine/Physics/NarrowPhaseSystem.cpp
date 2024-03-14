@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "CollisionSystem.h"
+#include "NarrowPhaseSystem.h"
 
 #include "Engine/Core/Components/CoreLocator.h"
 
@@ -11,68 +11,69 @@
 #include "Engine/Utils/TransformUtils.h"
 #include "Engine/Utils/CollisionsUtils.h"
 #include "Engine/Utils/Math.h"
+#include "Engine/Utils/Random.h"
 
 namespace MyEngine
 {
-    void CollisionSystem::Init()
+    void NarrowPhaseSystem::Init()
     {
     }
 
-    void CollisionSystem::Start(std::shared_ptr<Scene> pScene)
+    void NarrowPhaseSystem::Start(std::shared_ptr<Scene> pScene)
     {
     }
 
-    void CollisionSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
+    void NarrowPhaseSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
-        // Clear frame collisions
-        CollisionsUtils::CurrentFrameCollisions().clear();
-        CollisionsUtils::CurrentFrameParticleCollisions().clear();
+        //// Clear frame collisions
+        //CollisionsUtils::CurrentFrameCollisions().clear();
+        //CollisionsUtils::CurrentFrameParticleCollisions().clear();
 
-        std::shared_ptr<NarrowPhaseTestsComponent> pTests = PhysicsLocator::GetNarrowPhaseTests();
+        //std::shared_ptr<NarrowPhaseTestsComponent> pTests = PhysicsLocator::GetNarrowPhaseTests();
 
-        // The first layer is the grouping of objects to test
-        pTests->LockRead();
-        for (int group = 0; group < pTests->activeEntitiesToTest.size(); group++)
-        {
-            std::vector<Entity>& activeGroup = pTests->activeEntitiesToTest[group];
-            std::vector<Entity>& passiveGroup = pTests->passiveEntitiesToTest[group];
-            std::vector<Entity>& staticGroup = pTests->staticEntitiesToTest[group];
+        //// The first layer is the grouping of objects to test
+        //pTests->LockRead();
+        //for (int group = 0; group < pTests->activeEntitiesToTest.size(); group++)
+        //{
+        //    std::vector<Entity>& activeGroup = pTests->activeEntitiesToTest[group];
+        //    std::vector<Entity>& passiveGroup = pTests->passiveEntitiesToTest[group];
+        //    std::vector<Entity>& staticGroup = pTests->staticEntitiesToTest[group];
 
-            for (int i = 0; i < activeGroup.size(); i++)
-            {
-                Entity entityId = activeGroup[i];
-                TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
-                RigidBodyComponent& rigidBody = pScene->Get<RigidBodyComponent>(entityId);
+        //    for (int i = 0; i < activeGroup.size(); i++)
+        //    {
+        //        Entity entityId = activeGroup[i];
+        //        TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
+        //        RigidBodyComponent& rigidBody = pScene->Get<RigidBodyComponent>(entityId);
 
-                m_CheckSphereOverlaps(pScene, entityId, transform, rigidBody, i,
-                                        activeGroup,
-                                        passiveGroup,
-                                        staticGroup);
-            }
-        }
-        pTests->UnlockRead();
+        //        m_CheckSphereOverlaps(pScene, entityId, transform, rigidBody, i,
+        //            activeGroup,
+        //            passiveGroup,
+        //            staticGroup);
+        //    }
+        //}
+        //pTests->UnlockRead();
     }
 
-    void CollisionSystem::Render(std::shared_ptr<Scene> pScene)
-    {
-    }
-
-    void CollisionSystem::End(std::shared_ptr<Scene> pScene)
+    void NarrowPhaseSystem::Render(std::shared_ptr<Scene> pScene)
     {
     }
 
-    void CollisionSystem::Shutdown()
+    void NarrowPhaseSystem::End(std::shared_ptr<Scene> pScene)
     {
     }
 
-    bool CollisionSystem::m_RegisterFrameCollision(const sCollisionData& collData)
+    void NarrowPhaseSystem::Shutdown()
+    {
+    }
+
+    bool NarrowPhaseSystem::m_RegisterFrameCollision(const sCollisionData& collData)
     {
         bool isNewCollision = CollisionsUtils::CurrentFrameCollisions().insert(collData).second;
 
         return isNewCollision;
     }
 
-    void CollisionSystem::m_TriggerCollision(const sCollisionData& collData)
+    void NarrowPhaseSystem::m_TriggerCollision(const sCollisionData& collData)
     {
         bool isNewCollision = m_RegisterFrameCollision(collData);
         if (!isNewCollision)
@@ -85,7 +86,7 @@ namespace MyEngine
         PUBLISH_RIGID_COLLISION_EVENT(collEvent);
     }
 
-    void CollisionSystem::m_CheckSphereOverlaps(std::shared_ptr<Scene> pScene,
+    void NarrowPhaseSystem::m_CheckSphereOverlaps(std::shared_ptr<Scene> pScene,
         Entity entityIdA,
         TransformComponent& transformA,
         RigidBodyComponent& sphereA,
@@ -114,7 +115,7 @@ namespace MyEngine
         }
     }
 
-    bool CollisionSystem::m_CheckSphereEntityOverlap(std::shared_ptr<Scene> pScene,
+    bool NarrowPhaseSystem::m_CheckSphereEntityOverlap(std::shared_ptr<Scene> pScene,
                                                     Entity entityIdA,
                                                     TransformComponent& transformA,
                                                     RigidBodyComponent& sphereA,

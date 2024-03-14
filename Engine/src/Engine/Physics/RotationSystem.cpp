@@ -9,6 +9,7 @@
 #include "Engine/ECS/Scene/SceneView.hpp"
 
 #include "Engine/Utils/TransformUtils.h"
+#include "Engine/Utils/Random.h"
 
 namespace MyEngine
 {

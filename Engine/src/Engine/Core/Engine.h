@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Core/Threads/iThreadPool.h"
+
 #include "Engine/ECS/Scene/Scene.h"
 #include "Engine/ECS/System/iSystem.h"
 #include "Engine/ECS/Scene/iSceneManager.h"
@@ -38,6 +40,8 @@ namespace MyEngine
 		// Run engine starting simulation state as running or stopped
 		virtual void Run(bool startSimulation = true);
 
+		virtual bool IsRunning();
+
 		virtual void Update();
 
 		virtual void Render();
@@ -65,7 +69,6 @@ namespace MyEngine
 		std::shared_ptr<iRendererManager> m_rendererManager;
 		std::shared_ptr<iParticleManager> m_particleManager;
 
-		float m_lastTimeFixed = 0.0f; // For the fixed updates
 		float m_lastTime = 0.0f;
 		std::vector<float> m_frameTimes;
 
@@ -83,10 +86,10 @@ namespace MyEngine
 		// Updates the timer
 		float m_GetDeltaTime();
 
-		// Update that will run at max speed
-		static DWORD WINAPI m_Update(LPVOID lpParam);
+		// Thread pool main service
+		std::shared_ptr<iThreadPool> m_threadPool;
 
-		// Update that will run at fixed FRAME_RATE
-		static DWORD WINAPI m_UpdateFixed(LPVOID lpParam);
+		// All systems update. Runs one thread per-system them wait for them all to finish
+		static DWORD WINAPI m_Update(LPVOID lpParam);
 	};
 }

@@ -21,8 +21,8 @@
 
 #include "Engine/Physics/MovementSystem.h"
 #include "Engine/Physics/RotationSystem.h"
-#include "Engine/Physics/BroadPhase/GridBroadPhaseSystem.h"
-#include "Engine/Physics/NarrowPhase/CollisionSystem.h"
+#include "Engine/Physics/BroadPhaseSystem.h"
+#include "Engine/Physics/NarrowPhaseSystem.h"
 
 #include "Engine/Gameplay/SteeringBehaviorSystem.h"
 
@@ -56,8 +56,8 @@ namespace MyEngine
         // Physics systems
         {"MovementSystem", []() { return new MovementSystem(); }},
         {"RotationSystem", []() { return new RotationSystem(); }},
-        {"GridBroadPhaseSystem", []() { return new GridBroadPhaseSystem(); }},
-        {"CollisionSystem", []() { return new CollisionSystem(); }},
+        {"BroadPhaseSystem", []() { return new BroadPhaseSystem(); }},
+        {"NarrowPhaseSystem", []() { return new NarrowPhaseSystem(); }},
         // Gameplay
         {"SteeringBehaviorSystem", []() { return new SteeringBehaviorSystem(); }},
         // Debug Systems

@@ -22,31 +22,9 @@ namespace MyEngine
         // Create an entity using the EntityManager
         Entity CreateEntity();
 
-        // Create entity adding all the needed components
-        // Already triggers the entity creation event with the final mask
-        template<typename... ComponentTypes>
-        Entity CreateEntity()
-        {
-            Entity entityId = CreateEntity();
-
-            // Unpack components lists adding each one
-            (AddComponent<ComponentTypes>(entityId), ...);
-
-            m_TriggerEntityCreation(entityId);
-        }
-
-        // Flag entity to be deleted later on a safer time
-        void RemoveEntity(Entity entityId);
-
-        // Unique ID for each component type
-        template <class T>
-        ComponentType GetComponentType()
-        {
-            static int componentType = m_componentCounter++;
-            return componentType;
-        }
-
         // Add new component to entity and return the instance
+        // WARNING: Just adding this component wont trigger the necessary event for the systems to add the entity,
+        // for triggering the event use the CreateEntityWithComponents
         template <typename T>
         T& AddComponent(Entity entityId)
         {
@@ -80,6 +58,42 @@ namespace MyEngine
             m_pEntityManager->SetComponent(entityId, componentType);
 
             return newComponent;
+        }
+
+        template<typename... ComponentTypes>
+        void AddComponents(Entity entityId) { }
+
+        template <typename ComponentType, typename... ComponentTypes>
+        void AddComponents(Entity entityId)
+        {
+            AddComponent<ComponentType>(entityId);
+            AddComponents<ComponentTypes...>(entityId);
+        }
+
+        // Create entity adding all the needed components
+        // Already triggers the entity creation event with the final mask
+        template<typename... ComponentTypes>
+        Entity CreateEntityWithComponents()
+        {
+            Entity entityId = CreateEntity();
+
+            // Unpack components lists adding each one
+            int dummy[] = { 0, ((void)AddComponent<ComponentTypes>(entityId), 0)... };
+
+            m_TriggerEntityCreation(entityId);
+
+            return entityId;
+        }
+
+        // Flag entity to be deleted later on a safer time
+        void RemoveEntity(Entity entityId);
+
+        // Unique ID for each component type
+        template <class T>
+        ComponentType GetComponentType()
+        {
+            static int componentType = m_componentCounter++;
+            return componentType;
         }
 
         // Get an entity component using the BiMap and ComponentPool

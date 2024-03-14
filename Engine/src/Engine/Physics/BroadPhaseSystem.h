@@ -2,11 +2,7 @@
 
 #include "GridAABB.h"
 
-
-
 #include "Engine/ECS/System/EntitySystem.h"
-
-#include "Engine/Core/Shapes.hpp"
 
 #include "Engine/Physics/PhysicsProperties.h"
 #include "Engine/Physics/Components/SingletonComponents.h"
@@ -15,13 +11,13 @@
 
 namespace MyEngine
 {
-	class GridBroadPhaseSystem : public EntitySystem
+	class BroadPhaseSystem : public EntitySystem
 	{
 	public:
-		GridBroadPhaseSystem() = default;
-		virtual ~GridBroadPhaseSystem() {};
+		BroadPhaseSystem() = default;
+		virtual ~BroadPhaseSystem() {};
 
-		virtual std::string SystemName() { return "GridBroadPhaseSystem"; };
+		virtual std::string SystemName() { return "BroadPhaseSystem"; };
 
 		virtual void Init();
 

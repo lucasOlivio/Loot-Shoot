@@ -9,21 +9,21 @@ namespace MyEngine
         switch (level)
         {
         case LogLevel::LEVEL_INFO:
-            SetConsoleColor(ConsoleColor::WHITE);
+            m_SetConsoleColor(ConsoleColor::WHITE);
             std::cout << "[INFO] ";
             break;
         case LogLevel::LEVEL_WARNING:
-            SetConsoleColor(ConsoleColor::YELLOW);
+            m_SetConsoleColor(ConsoleColor::YELLOW);
             std::cout << "[WARNING] ";
             break;
         case LogLevel::LEVEL_ERROR:
-            SetConsoleColor(ConsoleColor::RED);
+            m_SetConsoleColor(ConsoleColor::RED);
             std::cerr << "[ERROR] ";
             break;
         // Only prints debug msg on debug run
 #ifdef _DEBUG
         case LogLevel::LEVEL_DEBUG:
-            SetConsoleColor(ConsoleColor::CYAN);
+            m_SetConsoleColor(ConsoleColor::CYAN);
             std::cout << "[DEBUG] ";
             break;
 #endif
@@ -32,13 +32,13 @@ namespace MyEngine
         }
 
         // Reset color after printing the level
-        ResetConsoleColor();
+        m_ResetConsoleColor();
 
         // Print the actual message
         std::cout << message << std::endl;
     }
 
-    void Log::SetConsoleColor(ConsoleColor color)
+    void Log::m_SetConsoleColor(ConsoleColor color)
     {
 #if defined(_WIN32)
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -77,8 +77,8 @@ namespace MyEngine
 #endif
     }
 
-    void Log::ResetConsoleColor()
+    void Log::m_ResetConsoleColor()
     {
-        SetConsoleColor(ConsoleColor::WHITE);
+        m_SetConsoleColor(ConsoleColor::WHITE);
     }
 }

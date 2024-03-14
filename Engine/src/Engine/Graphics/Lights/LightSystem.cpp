@@ -28,6 +28,10 @@ namespace MyEngine
 
     void LightSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
+    }
+
+    void LightSystem::Render(std::shared_ptr<Scene> pScene)
+    {
         std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
         // Set lights to transform position of entity

@@ -35,7 +35,10 @@ namespace MyEngine
 	const glm::vec4 UP_VECTOR = glm::vec4(0, 1, 0, 1);
 	const glm::vec4 FORWARD_VECTOR = glm::vec4(0, 0, -1, 1);
 
-	const int   FRAME_RATE = 256;  // Fixed frames per second
+	const int   MAX_FRAME_RATE     = 200'000;
+	const float MIN_FRAME_DURATION = 1.0f / static_cast<float>(MAX_FRAME_RATE);
+
+	const int   FRAME_RATE = 60;  // Fixed frames per second
 	const float FRAME_DURATION = 1.0f / static_cast<float>(FRAME_RATE);
 
 	const glm::vec4 WHITE = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);

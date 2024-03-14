@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "GridBroadPhaseSystem.h"
+#include "BroadPhaseSystem.h"
 
 #include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/Core/Components/Components.h"
@@ -9,6 +9,7 @@
 
 #include "Engine/Utils/GridUtils.h"
 #include "Engine/Utils/TransformUtils.h"
+#include "Engine/Utils/Random.h"
 
 #include "Engine/Physics/Components/Components.h"
 #include "Engine/Physics/Components/PhysicsLocator.h"
@@ -19,108 +20,108 @@ namespace MyEngine
 	typedef std::map< uint /*index*/, GridAABB* >::iterator itIdxAABB;
 	typedef std::pair< uint /*index*/, GridAABB* > pairIdxAABB;
 
-	void GridBroadPhaseSystem::Init()
+	void BroadPhaseSystem::Init()
 	{
 	}
 
-	void GridBroadPhaseSystem::Start(std::shared_ptr<Scene> pScene)
+	void BroadPhaseSystem::Start(std::shared_ptr<Scene> pScene)
 	{
 		EntitySystem::Start(pScene);
 
-		m_UpdateRigidBodies(pScene);
+		//m_UpdateRigidBodies(pScene);
 	}
 
-	void GridBroadPhaseSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
+	void BroadPhaseSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
-		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
-		std::shared_ptr<NarrowPhaseTestsComponent> pNarrowTests = PhysicsLocator::GetNarrowPhaseTests();
+		//std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
+		//std::shared_ptr<NarrowPhaseTestsComponent> pNarrowTests = PhysicsLocator::GetNarrowPhaseTests();
 
-		// Clear active entities first
-		pGrid->LockWrite();
-		for (itIdxAABB it = pGrid->mapAABBs.begin(); it != pGrid->mapAABBs.end(); ++it)
-		{
-			int key = it->first;
-			GridAABB* pAABB = it->second;
+		//// Clear active entities first
+		//pGrid->LockWrite();
+		//for (itIdxAABB it = pGrid->mapAABBs.begin(); it != pGrid->mapAABBs.end(); ++it)
+		//{
+		//	int key = it->first;
+		//	GridAABB* pAABB = it->second;
 
-			pAABB->vecActiveEntities.clear();
-			pAABB->vecPassiveEntities.clear();
-		}
-		pGrid->UnlockWrite();
+		//	pAABB->vecActiveEntities.clear();
+		//	pAABB->vecPassiveEntities.clear();
+		//}
+		//pGrid->UnlockWrite();
 
-		// Clear all test groups
-		pNarrowTests->LockWrite();
-		pNarrowTests->staticEntitiesToTest.clear();
-		pNarrowTests->passiveEntitiesToTest.clear();
-		pNarrowTests->activeEntitiesToTest.clear();
-		pNarrowTests->UnlockWrite();
+		//// Clear all test groups
+		//pNarrowTests->LockWrite();
+		//pNarrowTests->staticEntitiesToTest.clear();
+		//pNarrowTests->passiveEntitiesToTest.clear();
+		//pNarrowTests->activeEntitiesToTest.clear();
+		//pNarrowTests->UnlockWrite();
 
-		// Update aabbs active and passive entities positions
-		m_UpdateRigidBodies(pScene, true);
+		//// Update aabbs active and passive entities positions
+		//m_UpdateRigidBodies(pScene, true);
 
-		// Update testing groups for narrow phase
-		int i = -1;
-		pGrid->LockWrite();
-		pNarrowTests->LockWrite();
-		for (itIdxAABB it = pGrid->mapAABBs.begin(); it != pGrid->mapAABBs.end();)
-		{
-			GridAABB* pAABB = it->second;
+		//// Update testing groups for narrow phase
+		//int i = -1;
+		//pGrid->LockWrite();
+		//pNarrowTests->LockWrite();
+		//for (itIdxAABB it = pGrid->mapAABBs.begin(); it != pGrid->mapAABBs.end();)
+		//{
+		//	GridAABB* pAABB = it->second;
 
-			// Only add to narrow phase testing groups if we have active entity on aabb
-			if (pAABB->vecActiveEntities.size() > 0)
-			{
-				pNarrowTests->staticEntitiesToTest.push_back({});
-				pNarrowTests->passiveEntitiesToTest.push_back({});
-				pNarrowTests->activeEntitiesToTest.push_back({});
+		//	// Only add to narrow phase testing groups if we have active entity on aabb
+		//	if (pAABB->vecActiveEntities.size() > 0)
+		//	{
+		//		pNarrowTests->staticEntitiesToTest.push_back({});
+		//		pNarrowTests->passiveEntitiesToTest.push_back({});
+		//		pNarrowTests->activeEntitiesToTest.push_back({});
 
-				i++;
+		//		i++;
 
-				for (Entity entityId : pAABB->vecActiveEntities)
-				{
-					pNarrowTests->activeEntitiesToTest[i].push_back(entityId);
-				}
+		//		for (Entity entityId : pAABB->vecActiveEntities)
+		//		{
+		//			pNarrowTests->activeEntitiesToTest[i].push_back(entityId);
+		//		}
 
-				for (Entity entityId : pAABB->vecStaticEntities)
-				{
-					pNarrowTests->staticEntitiesToTest[i].push_back(entityId);
-				}
+		//		for (Entity entityId : pAABB->vecStaticEntities)
+		//		{
+		//			pNarrowTests->staticEntitiesToTest[i].push_back(entityId);
+		//		}
 
-				for (Entity entityId : pAABB->vecPassiveEntities)
-				{
-					pNarrowTests->passiveEntitiesToTest[i].push_back(entityId);
-				}
-			}
+		//		for (Entity entityId : pAABB->vecPassiveEntities)
+		//		{
+		//			pNarrowTests->passiveEntitiesToTest[i].push_back(entityId);
+		//		}
+		//	}
 
-			// Check if aabb is empty to remove from mapping
-			if (pAABB->Total() == 0)
-			{
-				delete pAABB;
-				it = pGrid->mapAABBs.erase(it);
-			}
-			else
-			{
-				++it;
-			}
-		}
-		pNarrowTests->UnlockWrite();
-		pGrid->UnlockWrite();
+		//	// Check if aabb is empty to remove from mapping
+		//	if (pAABB->Total() == 0)
+		//	{
+		//		delete pAABB;
+		//		it = pGrid->mapAABBs.erase(it);
+		//	}
+		//	else
+		//	{
+		//		++it;
+		//	}
+		//}
+		//pNarrowTests->UnlockWrite();
+		//pGrid->UnlockWrite();
 	}
 
-	void GridBroadPhaseSystem::Render(std::shared_ptr<Scene> pScene)
+	void BroadPhaseSystem::Render(std::shared_ptr<Scene> pScene)
 	{
 	}
 
-	void GridBroadPhaseSystem::End(std::shared_ptr<Scene> pScene)
+	void BroadPhaseSystem::End(std::shared_ptr<Scene> pScene)
 	{
 		EntitySystem::End(pScene);
 
-		m_ClearAABBs();
+		//m_ClearAABBs();
 	}
 
-	void GridBroadPhaseSystem::Shutdown()
+	void BroadPhaseSystem::Shutdown()
 	{
 	}
 
-	void GridBroadPhaseSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
+	void BroadPhaseSystem::SetSystemMask(std::shared_ptr<Scene> pScene)
 	{
 		ComponentType transformType = pScene->GetComponentType<TransformComponent>();
 		ComponentType rigidbodyType = pScene->GetComponentType<RigidBodyComponent>();
@@ -129,7 +130,7 @@ namespace MyEngine
 		m_systemMask.set(rigidbodyType);
 	}
 
-	GridAABB* GridBroadPhaseSystem::m_GetAABB(uint idxAABB)
+	GridAABB* BroadPhaseSystem::m_GetAABB(uint idxAABB)
 	{
 		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
 
@@ -145,7 +146,7 @@ namespace MyEngine
 		return itAABB->second;
 	}
 
-	GridAABB* GridBroadPhaseSystem::m_GetAABB(const glm::vec3& point)
+	GridAABB* BroadPhaseSystem::m_GetAABB(const glm::vec3& point)
 	{
 		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
 
@@ -156,7 +157,7 @@ namespace MyEngine
 		return m_GetAABB(idxAABB);
 	}
 
-	GridAABB* GridBroadPhaseSystem::m_GetOrCreateAABB(uint idxAABB)
+	GridAABB* BroadPhaseSystem::m_GetOrCreateAABB(uint idxAABB)
 	{
 		GridAABB* pAABB = m_GetAABB(idxAABB);
 		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
@@ -177,7 +178,7 @@ namespace MyEngine
 		return pAABB;
 	}
 
-	void GridBroadPhaseSystem::m_UpdateRigidBodies(std::shared_ptr<Scene> pScene, bool updatePassive)
+	void BroadPhaseSystem::m_UpdateRigidBodies(std::shared_ptr<Scene> pScene, bool updatePassive)
 	{
 		// Creating AABBs grid
 		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
@@ -202,16 +203,16 @@ namespace MyEngine
 			m_InsertEntity(entityId, idxpos, rigidBody.bodyType);
 
 			m_InsertSphere(entityId, idxpos, transform.position,
-						   rigidBody.radius, rigidBody.bodyType, pGrid);
+				rigidBody.radius, rigidBody.bodyType, pGrid);
 			transform.UnlockRead();
 			rigidBody.UnlockRead();
 		}
 	}
 
-	void GridBroadPhaseSystem::m_InsertSphere(Entity entityID, uint originIndex,
-											  const glm::vec3& position, float radius, 
-											  const eBody& bodyType,
-											  std::shared_ptr<GridBroadphaseComponent> pGrid)
+	void BroadPhaseSystem::m_InsertSphere(Entity entityID, uint originIndex,
+		const glm::vec3& position, float radius,
+		const eBody& bodyType,
+		std::shared_ptr<GridBroadphaseComponent> pGrid)
 	{
 		// Check collisions in the neighboring cells
 		for (int i = -1; i <= 1; ++i)
@@ -249,7 +250,7 @@ namespace MyEngine
 		}
 	}
 
-	void GridBroadPhaseSystem::m_InsertEntity(Entity entityID, uint index, const eBody& bodyType)
+	void BroadPhaseSystem::m_InsertEntity(Entity entityID, uint index, const eBody& bodyType)
 	{
 		GridAABB* pAABB = m_GetOrCreateAABB(index);
 
@@ -269,7 +270,7 @@ namespace MyEngine
 		return;
 	}
 
-	void GridBroadPhaseSystem::m_ClearAABBs()
+	void BroadPhaseSystem::m_ClearAABBs()
 	{
 		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();
 
@@ -283,7 +284,7 @@ namespace MyEngine
 		pGrid->UnlockWrite();
 	}
 
-	size_t GridBroadPhaseSystem::m_RemoveAABB(uint idxAABB)
+	size_t BroadPhaseSystem::m_RemoveAABB(uint idxAABB)
 	{
 		GridAABB* pAABB = m_GetAABB(idxAABB);
 		std::shared_ptr<GridBroadphaseComponent> pGrid = PhysicsLocator::GetGridBroadphase();

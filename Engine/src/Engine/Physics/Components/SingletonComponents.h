@@ -5,7 +5,7 @@
 #include "Engine/ThreadSafe.h"
 
 #include "Engine/Physics/PhysicsProperties.h"
-#include "Engine/Physics/BroadPhase/GridAABB.h"
+#include "Engine/Physics/GridAABB.h"
 
 #include <map>
 #include <vector>

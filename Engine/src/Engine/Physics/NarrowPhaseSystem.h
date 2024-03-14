@@ -8,13 +8,13 @@
 
 namespace MyEngine
 {
-	class CollisionSystem : public iSystem
+	class NarrowPhaseSystem : public iSystem
 	{
 	public:
-		CollisionSystem() = default;
-		virtual ~CollisionSystem() { };
+		NarrowPhaseSystem() = default;
+		virtual ~NarrowPhaseSystem() { };
 
-		virtual std::string SystemName() { return "CollisionSystem"; };
+		virtual std::string SystemName() { return "NarrowPhaseSystem"; };
 
 		virtual void Init();
 

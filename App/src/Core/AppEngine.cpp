@@ -55,7 +55,9 @@ namespace MyEngine
 			"AnimationPlayerSystem",
 			// Physics
 			"MovementSystem",
-			"RotationSystem"
+			"RotationSystem",
+			"BroadPhaseSystem",
+			"NarrowPhaseSystem"
 
 			// Debug
 			#ifdef DEBUG

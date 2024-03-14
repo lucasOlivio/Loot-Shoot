@@ -5,6 +5,8 @@
 #include "Engine/Core/Configs/ConfigSerializerFactory.h"
 #include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Threads/ThreadPool.h"
+#include "Engine/Core/Threads/ThreadPoolLocator.h"
 
 #include "Engine/Events/EventsFacade.h"
 
@@ -20,6 +22,8 @@
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 
 #include "Engine/Utils/InputUtils.h"
+#include "Engine/Utils/GameplayUtils.h"
+#include "Engine/Utils/Random.h"
 
 #include "Engine/Physics/Components/PhysicsLocator.h"
 
@@ -33,6 +37,7 @@ namespace MyEngine
 
     Engine::Engine() : m_rendererManager(new RendererManager()),
                        m_particleManager(new ParticleManager()),
+                       m_threadPool(new ThreadPool()),
                        m_pScene(new Scene())
 
     {
@@ -114,9 +119,12 @@ namespace MyEngine
     {
         LoadConfigurations();
 
-        // Setting up resources managers        
+        // Setting up services
         RendererManagerLocator::Set(m_rendererManager);
         ParticleManagerLocator::Set(m_particleManager);
+        ThreadPoolLocator::Set(m_threadPool);
+
+        m_threadPool->CreateWorkers();
 
         // Global events of engine interest
         SUBSCRIBE_WINDOW_CLOSE_EVENT([this](const WindowCloseEvent& event) { OnWindowClose(event); });
@@ -151,7 +159,7 @@ namespace MyEngine
 
         StartSystems(m_pScene);
 
-        // Initialize Update thread
+        // Run update thread separated from render thread
         HANDLE updateHandle = CreateThread(NULL, 0, Engine::m_Update, this, 0, NULL);
 
         while (m_isRunning)
@@ -170,6 +178,11 @@ namespace MyEngine
         CloseHandle(updateHandle);
     }
 
+    bool Engine::IsRunning()
+    {
+        return m_isRunning;
+    }
+
     void Engine::Update()
     {
         while (m_isRunning)
@@ -178,7 +191,16 @@ namespace MyEngine
 
             for (int i = 0; i < m_vecSystems.size(); i++)
             {
-                m_vecSystems[i]->Update(m_pScene, deltaTime);
+                m_threadPool->EnqueueTask([this, i, deltaTime]()
+                                            {
+                                                m_vecSystems[i]->Update(m_pScene, deltaTime);
+                                            });
+                //m_vecSystems[i]->Update(m_pScene, deltaTime);
+            }
+
+            while (m_threadPool->RunningTasks() > 0)
+            {
+                Sleep(0);
             }
 
             m_ClearFrame();
@@ -187,10 +209,10 @@ namespace MyEngine
             float endTime = static_cast<float>(glfwGetTime());
             float frameTime = endTime - m_lastTime;
 
-            // If the frame was processed faster than the max frame time, wait for the remaining time
-            if (frameTime < FRAME_DURATION)
+            // If the frame was processed faster than the min frame time, wait for the remaining time
+            if (frameTime < MIN_FRAME_DURATION)
             {
-                float diff = FRAME_DURATION - frameTime;
+                float diff = MIN_FRAME_DURATION - frameTime;
                 DWORD sleepTime = static_cast<DWORD>(diff * 1000.0f);
                 Sleep(sleepTime);
             }
@@ -199,6 +221,8 @@ namespace MyEngine
                 Sleep(0);
             }
         }
+
+        m_threadPool->CloseThreads();
     }
 
     void Engine::Render()
@@ -387,11 +411,6 @@ namespace MyEngine
         Engine* pEngine = static_cast<Engine*>(lpParam);
         pEngine->Update();
 
-        return 0;
-    }
-    
-    DWORD __stdcall Engine::m_UpdateFixed(LPVOID lpParam)
-    {
         return 0;
     }
 }
