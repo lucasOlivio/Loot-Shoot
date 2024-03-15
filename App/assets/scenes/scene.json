@@ -471,5 +471,13 @@
       "material": "matground",
       "model": "flat.obj"
     }
+  },
+  {
+
+    "texture": {
+      "fileName": "smoke.png",
+      "textureType": 0,
+      "vecTextures": []
+    }
   }
 ]

@@ -44,7 +44,7 @@ namespace MyEngine
 			ClearBMP();
 		}
 
-		void* pPixels;
+		const void* pPixels;
 		GLuint textNumber;
 		eTextureType type;
 

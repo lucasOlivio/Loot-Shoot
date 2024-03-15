@@ -6,6 +6,7 @@
 #include "Files.h"
 
 #include <png++/png.hpp>
+#include <png++/solid_pixel_buffer.hpp>
 
 namespace MyEngine
 {
@@ -18,7 +19,7 @@ namespace MyEngine
 
 		if (ext == "png") {
 			LoadFunction = LoadPNG;
-			//format = GL_ABGR_EXT;
+			format = GL_ABGR_EXT;
 		}
 		else if (ext == "bmp") {
 			LoadFunction = LoadBMP;
@@ -70,7 +71,10 @@ namespace MyEngine
 		// Put the pixel store aligment back to what it was
 		glPixelStorei(GL_UNPACK_ALIGNMENT, GL_UNPACK_ALIGNMENT_old);
 
-		pTextureOut->ClearBMP();
+		// PNG library handles the png buffer
+		if (ext == "bmp") {
+			pTextureOut->ClearBMP();
+		}
 
 		if (bGenerateMIPMap)
 		{
@@ -159,7 +163,10 @@ namespace MyEngine
 			format,
 			GL_UNSIGNED_BYTE,
 			pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		// PNG library handles the png buffer
+		if (ext == "bmp") {
+			pTextureOut->ClearBMP();
+		}
 		if (CheckOpenGLError()) { return false; }
 
 
@@ -167,35 +174,50 @@ namespace MyEngine
 		isLoaded = LoadFunction(negX_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		// PNG library handles the png buffer
+		if (ext == "bmp") {
+			pTextureOut->ClearBMP();
+		}
 		if (CheckOpenGLError()) { return false; }
 
 		// Positive Y image...
 		isLoaded = LoadFunction(posY_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		// PNG library handles the png buffer
+		if (ext == "bmp") {
+			pTextureOut->ClearBMP();
+		}
 		if (CheckOpenGLError()) { return false; }
 
 		// Negative Y image...
 		isLoaded = LoadFunction(negY_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		// PNG library handles the png buffer
+		if (ext == "bmp") {
+			pTextureOut->ClearBMP();
+		}
 		if (CheckOpenGLError()) { return false; }
 
 		// Positive Z image...
 		isLoaded = LoadFunction(posZ_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		// PNG library handles the png buffer
+		if (ext == "bmp") {
+			pTextureOut->ClearBMP();
+		}
 		if (CheckOpenGLError()) { return false; }
 
 		// Negative Z image...
 		isLoaded = LoadFunction(negZ_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		// PNG library handles the png buffer
+		if (ext == "bmp") {
+			pTextureOut->ClearBMP();
+		}
 		if (CheckOpenGLError()) { return false; }
 
 		pTextureOut->name = cubeMapName;
@@ -302,7 +324,7 @@ namespace MyEngine
 			}
 		}
 
-		pTextureOut->pPixels = static_cast<void*>(pPixels);
+		pTextureOut->pPixels = static_cast<const void*>(pPixels);
 
 		delete pRawData;
 
@@ -311,9 +333,9 @@ namespace MyEngine
 
 	bool TextureUtils::LoadPNG(const std::string& fileName, std::shared_ptr<sTextureInfo> pTextureOut)
 	{
-		png::image< png::rgba_pixel > image(fileName);
+		png::image<png::rgba_pixel, png::solid_pixel_buffer< png::rgba_pixel>> image(fileName);
 
-		void* buffer = image.get_pixbuf().get_row(0).data();
+		const void* buffer = static_cast<const void*>(image.get_pixbuf().fetch_bytes().data());
 
 		pTextureOut->numCols = static_cast<ulong>(image.get_width());
 		pTextureOut->numRows = static_cast<ulong>(image.get_height());
