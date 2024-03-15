@@ -9,27 +9,6 @@
     }
   },
   {
-    "tag": {
-      "name": "imposter"
-    },
-    "model": {
-      "isActive": 1,
-      "doNotLight": 0,
-      "isWireframe": 0,
-      "isDynamic": 0,
-      "useDefaultColor": 0,
-      "useTransparency": 0,
-      "defaultColor": [
-        1.0,
-        0.0,
-        0.0
-      ],
-      "useColorTexture": 1,
-      "material": "",
-      "model": "imposter.ply"
-    }
-  },
-  {
     "camera": {
       "upVector": [
         0.0,
@@ -96,6 +75,27 @@
     },
     "player": {
       "speed": 50.0
+    }
+  },
+  {
+    "tag": {
+      "name": "imposter"
+    },
+    "model": {
+      "isActive": 1,
+      "doNotLight": 0,
+      "isWireframe": 0,
+      "isDynamic": 0,
+      "useDefaultColor": 0,
+      "useTransparency": 0,
+      "defaultColor": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "useColorTexture": 1,
+      "material": "",
+      "model": "imposter.ply"
     }
   },
   {

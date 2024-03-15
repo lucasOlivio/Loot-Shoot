@@ -20,7 +20,7 @@ namespace MyEngine
 #define TEXT_FONT_SIZE 1.2f
 
 #define MAX_PARTICLES 10
-#define IMPOSTOR_VAO_ID 0
+#define IMPOSTOR_VAO_ID 3
 #define IMPOSTOR_NUM_INDICES 12
 
 #define DEFAULT_MOUSE_SENSITIVITY 0.001f

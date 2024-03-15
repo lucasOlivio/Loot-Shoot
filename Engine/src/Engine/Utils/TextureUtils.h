@@ -12,16 +12,18 @@ namespace MyEngine
 	{
 	public:
 		// Returns true if able to load texture and store it
-		// Updated: December 2010 for ATI cards, too!
-		static bool CreateTextureFromBMPFile(std::string textureName, std::string fileNameFullPath, 
+		static bool CreateTextureFromFile(const std::string& textureName, const std::string& fileNameFullPath, 
 												bool bGenerateMIPMap, std::shared_ptr<sTextureInfo> pTextureOut);
 
-		static bool CreateCubeTextureFromBMPFiles(std::string cubeMapName,
-												std::string posX_fileName, std::string negX_fileName,
-												std::string posY_fileName, std::string negY_fileName,
-												std::string posZ_fileName, std::string negZ_fileName,
+		// NOTE: All files must have same extension
+		static bool CreateCubeTextureFromFiles(const std::string& cubeMapName,
+												const std::string& posX_fileName, const std::string& negX_fileName,
+												const std::string& posY_fileName, const std::string& negY_fileName,
+												const std::string& posZ_fileName, const std::string& negZ_fileName,
 												bool bIsSeamless, std::shared_ptr<sTextureInfo> pTextureOut);
 
-		static bool LoadBMP(std::string fileName, std::shared_ptr<sTextureInfo> pTextureOut);		// Faster loader
+		static bool LoadBMP(const std::string& fileName, std::shared_ptr<sTextureInfo> pTextureOut);
+
+		static bool LoadPNG(const std::string& fileName, std::shared_ptr<sTextureInfo> pTextureOut);
 	};
 }

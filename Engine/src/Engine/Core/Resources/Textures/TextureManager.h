@@ -54,7 +54,7 @@ namespace MyEngine
 								std::shared_ptr<sSamplerInfo> pSampler,
 								int unitId);
 		
-		void m_BindSampler(std::shared_ptr<sSamplerInfo> pSampler);
+		void m_BindSampler(std::shared_ptr<sSamplerInfo> pSampler, const float& ratio);
 
 		std::map<GLuint /* Sampler ID from OpenGL*/, std::shared_ptr<sSamplerInfo>> m_mapIdSampler;
 

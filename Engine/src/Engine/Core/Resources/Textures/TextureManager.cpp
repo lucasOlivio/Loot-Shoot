@@ -100,11 +100,7 @@ namespace MyEngine
 	
 	void TextureManager::ActivateResource(const size_t& index)
 	{
-	}
-
-	void TextureManager::ActivateResource(const std::string& name)
-	{
-		std::shared_ptr<sTextureInfo> pTexture = std::static_pointer_cast<sTextureInfo>(GetResource(name));
+		std::shared_ptr<sTextureInfo> pTexture = std::static_pointer_cast<sTextureInfo>(GetResource(index));
 		std::shared_ptr<sSamplerInfo> pSampler = GetSampler(pTexture->type);
 		int unitId = GL_TEXTURE0;
 
@@ -112,7 +108,14 @@ namespace MyEngine
 
 		m_BindTexture(pTexture, pSampler, unitId);
 
+		m_BindSampler(pSampler, 0.0f);
+
 		m_currTexture = "";
+	}
+
+	void TextureManager::ActivateResource(const std::string& name)
+	{
+		ActivateResource(name, 0.0f);
 	}
 
 	void TextureManager::ActivateResource(const std::string& name, const float& ratio)
@@ -132,7 +135,7 @@ namespace MyEngine
 			m_BindTexture(pTexture, pSampler, unitId);
 		}
 
-		m_BindSampler(pSampler);
+		m_BindSampler(pSampler, ratio);
 
 		m_currTexture = name;
 	}
@@ -176,7 +179,7 @@ namespace MyEngine
 			pTexture = std::static_pointer_cast<sTextureInfo>(pResource);
 		}
 
-		bool isTextCreated = TextureUtils::CreateTextureFromBMPFile(name, fileToLoadFullPath, true, pTexture);
+		bool isTextCreated = TextureUtils::CreateTextureFromFile(name, fileToLoadFullPath, true, pTexture);
 		if (!isTextCreated)
 		{
 			return false;
@@ -218,7 +221,7 @@ namespace MyEngine
 		std::string posZ_fileName_FullPath = m_basePath + "/" + posZ_fileName;
 		std::string negZ_fileName_FullPath = m_basePath + "/" + negZ_fileName;
 
-		bool cubeCreated = TextureUtils::CreateCubeTextureFromBMPFiles(cubeMapName,
+		bool cubeCreated = TextureUtils::CreateCubeTextureFromFiles(cubeMapName,
 													posX_fileName_FullPath, negX_fileName_FullPath,
 													posY_fileName_FullPath, negY_fileName_FullPath,
 													posZ_fileName_FullPath, negZ_fileName_FullPath, 
@@ -341,11 +344,12 @@ namespace MyEngine
 		glBindTexture(GL_TEXTURE_CUBE_MAP, pTexture->textNumber);
 	}
 
-	void TextureManager::m_BindSampler(std::shared_ptr<sSamplerInfo> pSampler)
+	void TextureManager::m_BindSampler(std::shared_ptr<sSamplerInfo> pSampler, const float& ratio)
 	{
 		// Bind sampler with uniforms names
 		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 		pShader->SetUniformInt(pSampler->toggle.c_str(), true);
 		pShader->SetUniformInt(pSampler->name.c_str(), pSampler->samplerId);
+		pShader->SetUniformFloat(pSampler->ratio.c_str(), ratio);
 	}
 }

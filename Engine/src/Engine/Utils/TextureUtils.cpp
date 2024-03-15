@@ -3,13 +3,31 @@
 #include "TextureUtils.h"
 
 #include "BitOperations.h"
+#include "Files.h"
 
 #include <png++/png.hpp>
 
 namespace MyEngine
 {
-	bool TextureUtils::CreateTextureFromBMPFile(std::string textureName, std::string fileNameFullPath, bool bGenerateMIPMap, std::shared_ptr<sTextureInfo> pTextureOut)
+	std::function<bool(const std::string& fileName, std::shared_ptr<sTextureInfo> pTextureOut)> LoadFunction;
+
+	bool TextureUtils::CreateTextureFromFile(const std::string& textureName, const std::string& fileNameFullPath, bool bGenerateMIPMap, std::shared_ptr<sTextureInfo> pTextureOut)
 	{
+		const std::string& ext = GetFileExtension(textureName);
+		int format = GL_RGB;
+
+		if (ext == "png") {
+			LoadFunction = LoadPNG;
+			//format = GL_ABGR_EXT;
+		}
+		else if (ext == "bmp") {
+			LoadFunction = LoadBMP;
+		}
+		else {
+			LOG_ERROR("Loader for file '" + textureName + "' not found!");
+			return false;
+		}
+
 		// Clear any old openGL errors
 		int clear = glGetError();
 
@@ -22,7 +40,7 @@ namespace MyEngine
 			return false;
 		}
 
-		if (!LoadBMP(fileNameFullPath, pTextureOut))
+		if (!LoadFunction(fileNameFullPath, pTextureOut))
 		{
 			return false;
 		}
@@ -43,7 +61,7 @@ namespace MyEngine
 			pTextureOut->numCols,	 // width (pixels)	
 			pTextureOut->numRows,    // height (pixels)	
 			0,					     // border (0 or 1)
-			GL_RGB,			         // format of pixel data
+			format,			         // format of pixel data
 			GL_UNSIGNED_BYTE,	     // type of pixel data
 			pTextureOut->pPixels);  // pointer to data in memory
 
@@ -71,12 +89,27 @@ namespace MyEngine
 		return true;
 	}
 
-	bool TextureUtils::CreateCubeTextureFromBMPFiles(std::string cubeMapName, std::string posX_fileName,
-														std::string negX_fileName, std::string posY_fileName, 
-														std::string negY_fileName, std::string posZ_fileName,	
-														std::string negZ_fileName, bool bIsSeamless, 
+	bool TextureUtils::CreateCubeTextureFromFiles(const std::string& cubeMapName, const std::string& posX_fileName,
+														const std::string& negX_fileName, const std::string& posY_fileName, 
+														const std::string& negY_fileName, const std::string& posZ_fileName,	
+														const std::string& negZ_fileName, bool bIsSeamless, 
 														std::shared_ptr<sTextureInfo> pTextureOut)
 	{
+		const std::string& ext = GetFileExtension(posX_fileName);
+		int format = GL_RGB;
+
+		if (ext == "png") {
+			LoadFunction = LoadPNG;
+			//format = GL_ABGR_EXT;
+		}
+		else if (ext == "bmp") {
+			LoadFunction = LoadBMP;
+		}
+		else {
+			LOG_ERROR("Loader for file '" + posX_fileName + "' not found!");
+			return false;
+		}
+
 		GLenum discardError = glGetError();
 
 		// Pick a texture number...
@@ -107,61 +140,61 @@ namespace MyEngine
 
 		// Positive X image...
 		// Assume all the images are the same size. If not, then it will screw up
-		bool isLoaded = LoadBMP(posX_fileName, pTextureOut);
+		bool isLoaded = LoadFunction(posX_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexStorage2D(GL_TEXTURE_CUBE_MAP,
-						10,                    // Mipmap levels
-						GL_RGBA8,	           // Internal format
-						pTextureOut->numCols,  // width (pixels)
-						pTextureOut->numRows); // height (pixels)
+			10,                    // Mipmap levels
+			GL_RGBA8,	           // Internal format
+			pTextureOut->numCols,  // width (pixels)
+			pTextureOut->numRows); // height (pixels)
 
 		if (CheckOpenGLError()) { return false; }
 
 		// Positive X image...
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X,
-						0,                    // Level
-						0, 0,                 // Offset
-						pTextureOut->numCols, // width
-						pTextureOut->numRows, // height
-						GL_RGB,
-						GL_UNSIGNED_BYTE,
-						pTextureOut->pPixels);
+			0,                    // Level
+			0, 0,                 // Offset
+			pTextureOut->numCols, // width
+			pTextureOut->numRows, // height
+			format,
+			GL_UNSIGNED_BYTE,
+			pTextureOut->pPixels);
 		pTextureOut->ClearBMP();
 		if (CheckOpenGLError()) { return false; }
 
 
 		// Negative X image...
-		isLoaded = LoadBMP(negX_fileName, pTextureOut);
+		isLoaded = LoadFunction(negX_fileName, pTextureOut);
 		assert(isLoaded);
-		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, GL_RGB, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
+		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
 		pTextureOut->ClearBMP();
 		if (CheckOpenGLError()) { return false; }
 
 		// Positive Y image...
-		isLoaded = LoadBMP(posY_fileName, pTextureOut);
+		isLoaded = LoadFunction(posY_fileName, pTextureOut);
 		assert(isLoaded);
-		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, GL_RGB, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
+		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
 		pTextureOut->ClearBMP();
 		if (CheckOpenGLError()) { return false; }
 
 		// Negative Y image...
-		isLoaded = LoadBMP(negY_fileName, pTextureOut);
+		isLoaded = LoadFunction(negY_fileName, pTextureOut);
 		assert(isLoaded);
-		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, GL_RGB, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
+		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
 		pTextureOut->ClearBMP();
 		if (CheckOpenGLError()) { return false; }
 
 		// Positive Z image...
-		isLoaded = LoadBMP(posZ_fileName, pTextureOut);
+		isLoaded = LoadFunction(posZ_fileName, pTextureOut);
 		assert(isLoaded);
-		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, GL_RGB, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
+		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
 		pTextureOut->ClearBMP();
 		if (CheckOpenGLError()) { return false; }
 
 		// Negative Z image...
-		isLoaded = LoadBMP(negZ_fileName, pTextureOut);
+		isLoaded = LoadFunction(negZ_fileName, pTextureOut);
 		assert(isLoaded);
-		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, GL_RGB, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
+		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
 		pTextureOut->ClearBMP();
 		if (CheckOpenGLError()) { return false; }
 
@@ -170,7 +203,7 @@ namespace MyEngine
 		return true;
 	}
 
-	bool TextureUtils::LoadBMP(std::string fileName, std::shared_ptr<sTextureInfo> pTextureOut)
+	bool TextureUtils::LoadBMP(const std::string& fileName, std::shared_ptr<sTextureInfo> pTextureOut)
 	{
 		std::ifstream theFile;
 		theFile.open(fileName.c_str(), std::ios_base::binary);
@@ -232,10 +265,10 @@ namespace MyEngine
 		long numberOfPaddingBytes = bytesPerRow - 3 * pTextureOut->numCols;
 
 		// Allocate enough space...
-		pTextureOut->pPixels = new s24BitPixel[pTextureOut->numCols * pTextureOut->numRows];
+		s24BitPixel* pPixels = new s24BitPixel[pTextureOut->numCols * pTextureOut->numRows];
 
 		// Did we run out of memory?
-		if (!pTextureOut->pPixels)
+		if (!pPixels)
 		{
 			LOG_ERROR("Error loading texture: NOT ENOUGH MEMORY FOR BITMAP");
 			return false;
@@ -253,9 +286,9 @@ namespace MyEngine
 				char thegreen = BitOperations::ReadNextChar(pRawData, curIndex);
 				char thered   = BitOperations::ReadNextChar(pRawData, curIndex);
 
-				pTextureOut->pPixels[pixelCount].redPixel = static_cast<uchar>(thered);
-				pTextureOut->pPixels[pixelCount].greenPixel = static_cast<uchar>(thegreen);
-				pTextureOut->pPixels[pixelCount].bluePixel = static_cast<uchar>(theblue);
+				pPixels[pixelCount].redPixel = static_cast<uchar>(thered);
+				pPixels[pixelCount].greenPixel = static_cast<uchar>(thegreen);
+				pPixels[pixelCount].bluePixel = static_cast<uchar>(theblue);
 
 				pixelCount++;
 			}
@@ -269,7 +302,22 @@ namespace MyEngine
 			}
 		}
 
+		pTextureOut->pPixels = static_cast<void*>(pPixels);
+
 		delete pRawData;
+
+		return true;
+	}
+
+	bool TextureUtils::LoadPNG(const std::string& fileName, std::shared_ptr<sTextureInfo> pTextureOut)
+	{
+		png::image< png::rgba_pixel > image(fileName);
+
+		void* buffer = image.get_pixbuf().get_row(0).data();
+
+		pTextureOut->numCols = static_cast<ulong>(image.get_width());
+		pTextureOut->numRows = static_cast<ulong>(image.get_height());
+		pTextureOut->pPixels = buffer;
 
 		return true;
 	}
