@@ -10,6 +10,11 @@ namespace MyEngine
 		NullRendererManager() {};
 		virtual ~NullRendererManager() {};
 
+		virtual void AddToRender(const sRenderParticleInfo& renderInfo)
+		{
+			LOG_ERROR("Renderer manager not initialized!");
+		}
+
 		virtual void AddToRender(const sRenderModelInfo& renderInfo)
 		{
 			LOG_ERROR("Renderer manager not initialized!");

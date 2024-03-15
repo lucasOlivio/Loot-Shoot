@@ -7,6 +7,13 @@
 
 namespace MyEngine
 {
+	struct sRenderParticleInfo
+	{
+		size_t textureIndex = 0;
+
+		glm::mat4 matModel = glm::mat4(1.0f);
+	};
+
 	struct sRenderModelInfo
 	{
 		std::string materialName = "";

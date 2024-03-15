@@ -36,6 +36,7 @@ namespace MyEngine
 
         virtual std::vector<std::shared_ptr<iResource>>& GetResources() = 0;
 
+        virtual void ActivateResource(const size_t& index) = 0;
         virtual void ActivateResource(const std::string& name) = 0;
         virtual void DeactivateResource() = 0;
         virtual std::shared_ptr<iResource> GetActiveResource() = 0;

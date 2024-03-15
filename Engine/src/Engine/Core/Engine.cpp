@@ -27,8 +27,9 @@
 
 #include "Engine/Physics/Components/PhysicsLocator.h"
 
-#include <chrono>
-#include <thread>
+// timeBeginPeriod
+#include <mmsystem.h> 
+#pragma comment(lib, "winmm.lib")
 
 namespace MyEngine
 {
@@ -214,7 +215,12 @@ namespace MyEngine
             {
                 float diff = MIN_FRAME_DURATION - frameTime;
                 DWORD sleepTime = static_cast<DWORD>(diff * 1000.0f);
+
+                // Activate high precision sleeping using timeBeginPeriod
+                // The OS usually can only Sleep for minimum of 15ms, if needed less we use this
+                timeBeginPeriod(1);
                 Sleep(sleepTime);
+                timeEndPeriod(1);
             }
             else
             {

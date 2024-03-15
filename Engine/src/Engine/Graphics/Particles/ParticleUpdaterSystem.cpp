@@ -46,9 +46,6 @@ namespace MyEngine
 
             particle.orientation = TransformUtils::AdjustOrientation(particle.orientation, glm::vec3(particle.rotationSpeed * deltaTime));
 
-            // Color change over time
-            particle.defaultColor = particle.defaultColor + (particle.colorChange * deltaTime);
-
             pParticleManager->UpdateParticle(i, particle);
         }
     }

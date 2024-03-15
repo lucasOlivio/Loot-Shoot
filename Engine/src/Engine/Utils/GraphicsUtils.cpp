@@ -2,17 +2,12 @@
 
 #include "GraphicsUtils.h"
 
-#include "Engine/Core/Resources/ResourceManagerFactory.h"
-#include "Engine/Core/Resources/Shaders/ShaderManager.h"
-
 #include "Engine/Utils/Math.h"
 
 namespace MyEngine
 {
-	void GraphicsUtils::DrawModel(const sRenderModelInfo& renderInfo)
+	void GraphicsUtils::DrawModel(const sRenderModelInfo& renderInfo, std::shared_ptr<ShaderManager> pShader)
 	{
-		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
-
 		pShader->SetWireframe(renderInfo.isWireFrame);
 		pShader->SetUniformFloat("doNotLight", renderInfo.doNotLight);
 		pShader->SetUniformFloat("bUseColorTexture", renderInfo.useColorTexture);
@@ -57,5 +52,21 @@ namespace MyEngine
 				}
 			}
 		}
+	}
+
+	void GraphicsUtils::DrawParticle(const sRenderParticleInfo& renderInfo, std::shared_ptr<ShaderManager> pShader)
+	{
+		pShader->SetUniformMatrix4f("matModel", renderInfo.matModel);
+
+		// Also calculate and pass the "inverse transpose" for the model matrix
+		glm::mat4 matModelIT = glm::inverse(glm::transpose(renderInfo.matModel));
+		pShader->SetUniformMatrix4f("matModel_IT", matModelIT);
+
+		glBindVertexArray(IMPOSTOR_VAO_ID); //  enable VAO (and everything else)
+		glDrawElements(GL_TRIANGLES,
+			IMPOSTOR_NUM_INDICES,
+			GL_UNSIGNED_INT,
+			0);
+		glBindVertexArray(0); 			  // disable VAO (and everything else)
 	}
 }

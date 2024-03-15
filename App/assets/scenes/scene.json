@@ -1,454 +1,475 @@
 [
-    {
-        "gridBroadphase": {
-            "lengthPerBox": [
-                5.0,
-                5.0,
-                5.0
-            ]
-        }
-    },
-    {
-        "camera": {
-            "upVector": [
-                0.0,
-                1.0,
-                0.0
-            ],
-            "distance": 30.0,
-            "height": 7.0,
-            "offsetTarget": 50.0,
-            "fovy": 0.6000000238418579,
-            "zNear": 1.0,
-            "zFar": 20000.0
-        },
-        "tag": {
-            "name": "Camera"
-        },
-        "transform": {
-            "position": [
-                5000.0,
-                10.0,
-                5000.0
-            ],
-            "orientation": [
-                0.8983066082000732,
-                -0.05170966312289238,
-                -0.4355946183204651,
-                -0.02507435716688633
-            ],
-            "scale": 1.0
-        },
-        "movement": {
-            "velocity": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "acceleration": [
-                0.0,
-                -25.0,
-                0.0
-            ],
-            "maxSpeed": 500.0,
-            "drag": 0.0
-        },
-      "model": {
-        "isActive": 1,
-        "doNotLight": 0,
-        "isWireframe": 0,
-        "isDynamic": 0,
-        "useDefaultColor": 1,
-        "useTransparency": 0,
-        "defaultColor": [
-          1.0,
-          0.0,
-          0.0
-        ],
-        "useColorTexture": 0,
-        "material": "",
-        "model": "sphere.ply"
-      },
-        "rigidBody": {
-            "bodyType": 1,
-            "radius": 1.0
-        },
-        "player": {
-            "speed": 50.0
-        }
-    },
-    {
-        "tag": {
-            "name": "Cube"
-        },
-        "transform": {
-            "position": [
-                5000.0,
-                10.0,
-                4990.0
-            ],
-            "orientation": [
-                0.9238760471343994,
-                0.0021976090501993895,
-                0.002533860271796584,
-                0.3826771378517151
-            ],
-            "scale": 1.0
-        },
-        "movement": {
-            "velocity": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "acceleration": [
-                0.0,
-                -25.0,
-                0.0
-            ],
-            "maxSpeed": 500.0,
-            "drag": 0.0
-        },
-        "model": {
-            "isActive": 1,
-            "doNotLight": 0,
-            "isWireframe": 0,
-            "isDynamic": 0,
-            "useDefaultColor": 1,
-            "useTransparency": 0,
-            "defaultColor": [
-                1.0,
-                0.0,
-                0.0
-            ],
-            "useColorTexture": 0,
-            "material": "",
-            "model": "cube.ply"
-        },
-        "softBody": {
-            "meshName": "cube.ply",
-            "defaultSpringStrength": 1.0,
-            "defaultParticleMass": 0.0
-        }
-    },
-    {
-        "tag": {
-            "name": "directionallight"
-        },
-        "transform": {
-            "position": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": 0.0
-        },
-        "light": {
-            "distanceOffset": 0.0,
-            "atten": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "diffuse": [
-                0.8999999761581421,
-                0.8999999761581421,
-                0.8999999761581421,
-                1.0
-            ],
-            "direction": [
-                1.0,
-                -1.0,
-                0.0,
-                1.0
-            ],
-            "directionOffset": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "positionOffset": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "params": [
-                2.0,
-                1.0,
-                1.0,
-                0.0
-            ],
-            "specular": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-            ],
-            "status": 1
-        }
-    },
-    {
-        "tag": {
-            "name": "matskybox"
-        },
-        "texture": {
-            "fileName": "textcube",
-            "textureType": 20,
-            "vecTextures": [
-                "cubetexture/TropicalSunnyDayLeft2048.bmp",
-                "cubetexture/TropicalSunnyDayRight2048.bmp",
-                "cubetexture/TropicalSunnyDayDown2048.bmp",
-                "cubetexture/TropicalSunnyDayUp2048.bmp",
-                "cubetexture/TropicalSunnyDayFront2048.bmp",
-                "cubetexture/TropicalSunnyDayBack2048.bmp"
-            ]
-        },
-        "material": {
-            "name": "matcubetext",
-            "alphaTexture": "",
-            "colorTextures": [],
-            "colorTexturesRatios": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "cubeTexture": "textcube",
-            "offset": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "currOffset": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "offsetHeightMap": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "currOffsetHeightMap": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "offsetMove": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "discardTexture": "",
-            "heightMapTexture": "",
-            "heightScale": 0.0,
-            "isEmissive": 0,
-            "normalTexture": "",
-            "specularTexture": "",
-            "useAlphaTexture": 0,
-            "useCubeTexture": 1,
-            "useDiscardTexture": 0,
-            "useHeightMap": 0,
-            "useNormalTexture": 0,
-            "useSpecularTexture": 0
-        }
-    },
-    {
-        "tag": {
-            "name": "skybox"
-        },
-        "transform": {
-            "position": [
-                5000.0,
-                0.0,
-                5000.0
-            ],
-            "orientation": [
-                1.0,
-                0.0,
-                -0.0,
-                0.0
-            ],
-            "scale": 10000.0
-        },
-      "model": {
-        "isActive": 1,
-        "doNotLight": 0,
-        "isWireframe": 0,
-        "isDynamic": 0,
-        "useDefaultColor": 0,
-        "useTransparency": 0,
-        "defaultColor": [
-          1.0,
-          1.0,
-          1.0
-        ],
-        "useColorTexture": 1,
-        "material": "matcubetext",
-        "model": "skybox.ply"
-      }
-    },
-    {
-        "tag": {
-            "name": "directionallight"
-        },
-        "transform": {
-            "position": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": 0.0
-        },
-        "light": {
-            "distanceOffset": 0.0,
-            "atten": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "diffuse": [
-                0.4000000059604645,
-                0.4000000059604645,
-                0.4000000059604645,
-                1.0
-            ],
-            "direction": [
-                -1.0,
-                1.0,
-                0.0,
-                1.0
-            ],
-            "directionOffset": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "positionOffset": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "params": [
-                2.0,
-                1.0,
-                1.0,
-                0.0
-            ],
-            "specular": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-            ],
-            "status": 1
-        }
-    },
-    {
-        "tag": {
-            "name": "ground"
-        },
-        "transform": {
-            "position": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": 1000.0
-        },
-        "texture": {
-            "fileName": "ground.bmp",
-            "textureType": 0,
-            "vecTextures": []
-        },
-        "material": {
-            "name": "matground",
-            "alphaTexture": "",
-            "colorTextures": [
-                "ground.bmp"
-            ],
-            "colorTexturesRatios": [
-                1.0,
-                0.0,
-                0.0
-            ],
-            "cubeTexture": "",
-            "offset": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "currOffset": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "offsetHeightMap": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "currOffsetHeightMap": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "offsetMove": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "discardTexture": "",
-            "heightMapTexture": "",
-            "heightScale": 0.0,
-            "isEmissive": 0,
-            "normalTexture": "",
-            "specularTexture": "",
-            "useAlphaTexture": 0,
-            "useCubeTexture": 0,
-            "useDiscardTexture": 0,
-            "useHeightMap": 0,
-            "useNormalTexture": 0,
-            "useSpecularTexture": 0
-        },
-      "model": {
-        "isActive": 1,
-        "doNotLight": 0,
-        "isWireframe": 0,
-        "isDynamic": 0,
-        "useDefaultColor": 0,
-        "useTransparency": 0,
-        "defaultColor": [
-          1.0,
-          0.0,
-          0.0
-        ],
-        "useColorTexture": 1,
-        "material": "matground",
-        "model": "flat.obj"
-      }
+  {
+    "gridBroadphase": {
+      "lengthPerBox": [
+        5.0,
+        5.0,
+        5.0
+      ]
     }
+  },
+  {
+    "tag": {
+      "name": "imposter"
+    },
+    "model": {
+      "isActive": 1,
+      "doNotLight": 0,
+      "isWireframe": 0,
+      "isDynamic": 0,
+      "useDefaultColor": 0,
+      "useTransparency": 0,
+      "defaultColor": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "useColorTexture": 1,
+      "material": "",
+      "model": "imposter.ply"
+    }
+  },
+  {
+    "camera": {
+      "upVector": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "distance": 30.0,
+      "height": 7.0,
+      "offsetTarget": 50.0,
+      "fovy": 0.6000000238418579,
+      "zNear": 1.0,
+      "zFar": 20000.0
+    },
+    "tag": {
+      "name": "Camera"
+    },
+    "transform": {
+      "position": [
+        5000.0,
+        10.0,
+        5000.0
+      ],
+      "orientation": [
+        0.8983066082000732,
+        -0.05170966312289238,
+        -0.4355946183204651,
+        -0.02507435716688633
+      ],
+      "scale": 1.0
+    },
+    "movement": {
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "acceleration": [
+        0.0,
+        -25.0,
+        0.0
+      ],
+      "maxSpeed": 500.0,
+      "drag": 0.0
+    },
+    "model": {
+      "isActive": 1,
+      "doNotLight": 0,
+      "isWireframe": 0,
+      "isDynamic": 0,
+      "useDefaultColor": 1,
+      "useTransparency": 0,
+      "defaultColor": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "useColorTexture": 0,
+      "material": "",
+      "model": "sphere.ply"
+    },
+    "rigidBody": {
+      "bodyType": 1,
+      "radius": 1.0
+    },
+    "player": {
+      "speed": 50.0
+    }
+  },
+  {
+    "tag": {
+      "name": "Cube"
+    },
+    "transform": {
+      "position": [
+        5000.0,
+        10.0,
+        4990.0
+      ],
+      "orientation": [
+        0.9238760471343994,
+        0.0021976090501993895,
+        0.002533860271796584,
+        0.3826771378517151
+      ],
+      "scale": 1.0
+    },
+    "movement": {
+      "velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "acceleration": [
+        0.0,
+        -25.0,
+        0.0
+      ],
+      "maxSpeed": 500.0,
+      "drag": 0.0
+    },
+    "model": {
+      "isActive": 1,
+      "doNotLight": 0,
+      "isWireframe": 0,
+      "isDynamic": 0,
+      "useDefaultColor": 1,
+      "useTransparency": 0,
+      "defaultColor": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "useColorTexture": 0,
+      "material": "",
+      "model": "cube.ply"
+    },
+    "softBody": {
+      "meshName": "cube.ply",
+      "defaultSpringStrength": 1.0,
+      "defaultParticleMass": 0.0
+    }
+  },
+  {
+    "tag": {
+      "name": "directionallight"
+    },
+    "transform": {
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "orientation": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": 0.0
+    },
+    "light": {
+      "distanceOffset": 0.0,
+      "atten": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "diffuse": [
+        0.8999999761581421,
+        0.8999999761581421,
+        0.8999999761581421,
+        1.0
+      ],
+      "direction": [
+        1.0,
+        -1.0,
+        0.0,
+        1.0
+      ],
+      "directionOffset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "positionOffset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "params": [
+        2.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "specular": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "status": 1
+    }
+  },
+  {
+    "tag": {
+      "name": "matskybox"
+    },
+    "texture": {
+      "fileName": "textcube",
+      "textureType": 20,
+      "vecTextures": [
+        "cubetexture/TropicalSunnyDayLeft2048.bmp",
+        "cubetexture/TropicalSunnyDayRight2048.bmp",
+        "cubetexture/TropicalSunnyDayDown2048.bmp",
+        "cubetexture/TropicalSunnyDayUp2048.bmp",
+        "cubetexture/TropicalSunnyDayFront2048.bmp",
+        "cubetexture/TropicalSunnyDayBack2048.bmp"
+      ]
+    },
+    "material": {
+      "name": "matcubetext",
+      "alphaTexture": "",
+      "colorTextures": [],
+      "colorTexturesRatios": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cubeTexture": "textcube",
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "currOffset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "offsetHeightMap": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "currOffsetHeightMap": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "offsetMove": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "discardTexture": "",
+      "heightMapTexture": "",
+      "heightScale": 0.0,
+      "isEmissive": 0,
+      "normalTexture": "",
+      "specularTexture": "",
+      "useAlphaTexture": 0,
+      "useCubeTexture": 1,
+      "useDiscardTexture": 0,
+      "useHeightMap": 0,
+      "useNormalTexture": 0,
+      "useSpecularTexture": 0
+    }
+  },
+  {
+    "tag": {
+      "name": "skybox"
+    },
+    "transform": {
+      "position": [
+        5000.0,
+        0.0,
+        5000.0
+      ],
+      "orientation": [
+        1.0,
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "scale": 10000.0
+    },
+    "model": {
+      "isActive": 1,
+      "doNotLight": 0,
+      "isWireframe": 0,
+      "isDynamic": 0,
+      "useDefaultColor": 0,
+      "useTransparency": 0,
+      "defaultColor": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "useColorTexture": 1,
+      "material": "matcubetext",
+      "model": "skybox.ply"
+    }
+  },
+  {
+    "tag": {
+      "name": "directionallight"
+    },
+    "transform": {
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "orientation": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": 0.0
+    },
+    "light": {
+      "distanceOffset": 0.0,
+      "atten": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "diffuse": [
+        0.4000000059604645,
+        0.4000000059604645,
+        0.4000000059604645,
+        1.0
+      ],
+      "direction": [
+        -1.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "directionOffset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "positionOffset": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "params": [
+        2.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "specular": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "status": 1
+    }
+  },
+  {
+    "tag": {
+      "name": "ground"
+    },
+    "transform": {
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "orientation": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": 1000.0
+    },
+    "texture": {
+      "fileName": "ground.bmp",
+      "textureType": 0,
+      "vecTextures": []
+    },
+    "material": {
+      "name": "matground",
+      "alphaTexture": "",
+      "colorTextures": [
+        "ground.bmp"
+      ],
+      "colorTexturesRatios": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "cubeTexture": "",
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "currOffset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "offsetHeightMap": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "currOffsetHeightMap": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "offsetMove": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "discardTexture": "",
+      "heightMapTexture": "",
+      "heightScale": 0.0,
+      "isEmissive": 0,
+      "normalTexture": "",
+      "specularTexture": "",
+      "useAlphaTexture": 0,
+      "useCubeTexture": 0,
+      "useDiscardTexture": 0,
+      "useHeightMap": 0,
+      "useNormalTexture": 0,
+      "useSpecularTexture": 0
+    },
+    "model": {
+      "isActive": 1,
+      "doNotLight": 0,
+      "isWireframe": 0,
+      "isDynamic": 0,
+      "useDefaultColor": 0,
+      "useTransparency": 0,
+      "defaultColor": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "useColorTexture": 1,
+      "material": "matground",
+      "model": "flat.obj"
+    }
+  }
 ]

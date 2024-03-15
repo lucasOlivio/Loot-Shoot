@@ -2,6 +2,8 @@
 
 #include "Engine/Graphics/GraphicsProperties.h"
 
+#include "Engine/Core/Resources/Shaders/ShaderManager.h"
+
 #include <glm/mat4x4.hpp>
 
 namespace MyEngine
@@ -10,6 +12,8 @@ namespace MyEngine
 	{
 	public:
 		// Sets all needed uniforms and draw model using VAO and opengl
-		static void DrawModel(const sRenderModelInfo& renderInfo);
+		static void DrawModel(const sRenderModelInfo& renderInfo, std::shared_ptr<ShaderManager> pShader);
+
+		static void DrawParticle(const sRenderParticleInfo& renderInfo, std::shared_ptr<ShaderManager> pShader);
 	};
 }

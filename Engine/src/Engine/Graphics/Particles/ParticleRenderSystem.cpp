@@ -33,7 +33,7 @@ namespace MyEngine
         {
             const ParticleProps& particle = particles[i];
 
-            if (particle.lifetime <= 0.0f || particle.pMesh == nullptr)
+            if (particle.lifetime <= 0.0f)
             {
                 continue;
             }
@@ -45,18 +45,9 @@ namespace MyEngine
                                          particle.scale,
                                          matTransform);
 
-            sRenderModelInfo renderInfo = sRenderModelInfo();
-            renderInfo.materialName = particle.material;
+            sRenderParticleInfo renderInfo = sRenderParticleInfo();
+            renderInfo.textureIndex = particle.textureIndex;
             renderInfo.matModel = matTransform;
-            renderInfo.defaultColor = particle.defaultColor;
-            renderInfo.VAO_ID = particle.pMesh->VAO_ID;
-            renderInfo.numberOfIndices = particle.pMesh->numberOfIndices;
-            // This all should come from material
-            renderInfo.isWireFrame = false;
-            renderInfo.doNotLight = true;
-            renderInfo.useDefaultColor = true;
-            renderInfo.useColorTexture = false;
-            renderInfo.useDebugColor = false;
 
             pRendererManager->AddToRender(renderInfo);
         }

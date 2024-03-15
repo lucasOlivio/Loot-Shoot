@@ -6,13 +6,7 @@ namespace MyEngine
 {
 	struct ParticleProps
 	{
-		std::vector<uint> FBOIDs = { 0 };
-
-		std::shared_ptr<sMeshInfo> pMesh;
-		std::string material;
-
-		glm::vec3 defaultColor;
-		glm::vec3 colorChange;
+		size_t textureIndex;
 
 		Entity entityId; // Entity that emitted this particle
 
@@ -29,15 +23,10 @@ namespace MyEngine
 
 	struct EmitterProps
 	{
-		std::vector<uint> FBOIDs = { 0 };
+		std::string texture;
+		size_t textureIndex;
 
-		std::string meshName;
-		std::string material;
-
-		// The particle changes color over time if no material selected
-		glm::vec3 colorInitial;
-		glm::vec3 colorChange;
-
+		// Offset from emitter current position
 		glm::vec3 posMin;
 		glm::vec3 posMax;
 

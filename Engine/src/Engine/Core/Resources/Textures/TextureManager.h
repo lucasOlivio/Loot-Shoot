@@ -25,6 +25,9 @@ namespace MyEngine
 		virtual std::shared_ptr<iResource> GetResource(const std::string& name);
 		virtual std::vector<std::shared_ptr<iResource>>& GetResources();
 
+		// Used only by particles so must be fast
+		virtual void ActivateResource(const size_t& index);
+
 		virtual void ActivateResource(const std::string& name);
 		virtual void ActivateResource(const std::string& name, const float& ratio);
 		virtual void DeactivateResource();
@@ -43,6 +46,15 @@ namespace MyEngine
 		TextureManager();
 
 		void m_CreateSamplers();
+
+		void m_BindTexture(std::shared_ptr<sTextureInfo> pResource, 
+							std::shared_ptr<sSamplerInfo> pSampler,
+							int unitId);
+		void m_BindCubeTexture(std::shared_ptr<sTextureInfo> pResource, 
+								std::shared_ptr<sSamplerInfo> pSampler,
+								int unitId);
+		
+		void m_BindSampler(std::shared_ptr<sSamplerInfo> pSampler);
 
 		std::map<GLuint /* Sampler ID from OpenGL*/, std::shared_ptr<sSamplerInfo>> m_mapIdSampler;
 

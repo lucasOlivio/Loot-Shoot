@@ -12,7 +12,10 @@ namespace MyEngine
 		iRendererManager() {};
 		virtual ~iRendererManager() {};
 
-		// Add model to rendering pipeline into the respective FBO
+		// Add particle to rendering pipeline
+		virtual void AddToRender(const sRenderParticleInfo& renderInfo) = 0;
+
+		// Add model to rendering pipeline
 		virtual void AddToRender(const sRenderModelInfo& renderInfo) = 0;
 
 		// Render all models

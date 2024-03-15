@@ -98,33 +98,21 @@ namespace MyEngine
 		return m_vecTextures;
 	}
 	
+	void TextureManager::ActivateResource(const size_t& index)
+	{
+	}
+
 	void TextureManager::ActivateResource(const std::string& name)
 	{
-		int unitId = GL_TEXTURE0;
 		std::shared_ptr<sTextureInfo> pTexture = std::static_pointer_cast<sTextureInfo>(GetResource(name));
 		std::shared_ptr<sSamplerInfo> pSampler = GetSampler(pTexture->type);
+		int unitId = GL_TEXTURE0;
 
 		unitId += pSampler->samplerId;
 
-		glActiveTexture(unitId);
+		m_BindTexture(pTexture, pSampler, unitId);
 
-		if (pTexture->type == eTextureType::CUBE)
-		{
-			glBindTexture(GL_TEXTURE_CUBE_MAP, pTexture->textNumber);
-		}
-		else
-		{
-			glBindTexture(GL_TEXTURE_2D, pTexture->textNumber);
-		}
-
-		m_currTexture = name;
-
-		// Bind sampler and uniforms
-		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
-		pShader->SetUniformInt(pSampler->toggle.c_str(), true);
-		pShader->SetUniformInt(pSampler->name.c_str(), pSampler->samplerId);
-
-		return;
+		m_currTexture = "";
 	}
 
 	void TextureManager::ActivateResource(const std::string& name, const float& ratio)
@@ -135,24 +123,18 @@ namespace MyEngine
 
 		unitId += pSampler->samplerId;
 
-		glActiveTexture(unitId);
-
 		if (pTexture->type == eTextureType::CUBE)
 		{
-			glBindTexture(GL_TEXTURE_CUBE_MAP, pTexture->textNumber);
+			m_BindCubeTexture(pTexture, pSampler, unitId);
 		}
 		else
 		{
-			glBindTexture(GL_TEXTURE_2D, pTexture->textNumber);
+			m_BindTexture(pTexture, pSampler, unitId);
 		}
 
-		m_currTexture = name;
+		m_BindSampler(pSampler);
 
-		// Bind sampler and uniforms
-		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
-		pShader->SetUniformInt(pSampler->toggle.c_str(), true);
-		pShader->SetUniformInt(pSampler->name.c_str(), pSampler->samplerId);
-		pShader->SetUniformFloat(pSampler->ratio.c_str(), ratio);
+		m_currTexture = name;
 	}
 	
 	void TextureManager::DeactivateResource()
@@ -343,5 +325,27 @@ namespace MyEngine
 															    static_cast<GLuint>(eTextureType::CUBE)));
 
 		m_mapIdSampler[eTextureType::CUBE] = pCubeSampler;
+	}
+
+	void TextureManager::m_BindTexture(std::shared_ptr<sTextureInfo> pTexture, std::shared_ptr<sSamplerInfo> pSampler, int unitId)
+	{
+		glActiveTexture(unitId);
+
+		glBindTexture(GL_TEXTURE_2D, pTexture->textNumber);
+	}
+
+	void TextureManager::m_BindCubeTexture(std::shared_ptr<sTextureInfo> pTexture, std::shared_ptr<sSamplerInfo> pSampler, int unitId)
+	{
+		glActiveTexture(unitId);
+
+		glBindTexture(GL_TEXTURE_CUBE_MAP, pTexture->textNumber);
+	}
+
+	void TextureManager::m_BindSampler(std::shared_ptr<sSamplerInfo> pSampler)
+	{
+		// Bind sampler with uniforms names
+		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
+		pShader->SetUniformInt(pSampler->toggle.c_str(), true);
+		pShader->SetUniformInt(pSampler->name.c_str(), pSampler->samplerId);
 	}
 }

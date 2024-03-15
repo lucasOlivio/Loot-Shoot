@@ -4,6 +4,7 @@
 
 #include "Engine/Core/Components/Components.h"
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Components/CoreLocator.h"
 
 #include "Engine/Graphics/Components/Components.h"
 #include "Engine/Graphics/Particles/ParticleManagerLocator.h"
@@ -21,14 +22,13 @@ namespace MyEngine
     void ParticleEmissionSystem::Start(std::shared_ptr<Scene> pScene)
     {
         // Load all particles models
-        std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::MESH);
+        std::shared_ptr<iResourceManager> pTextureManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::TEXTURE);
         for (Entity entityId : m_vecEntities)
         {
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
 
             emitter.LockWrite();
-            size_t index = pMeshManager->LoadResource(emitter.properties.meshName);
-            emitter.pMesh = std::static_pointer_cast<sMeshInfo>(pMeshManager->GetResource(index));
+            emitter.properties.textureIndex = pTextureManager->LoadResource(emitter.properties.texture);
             emitter.UnlockWrite();
         }
 
@@ -51,8 +51,7 @@ namespace MyEngine
     void ParticleEmissionSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
         std::shared_ptr<iParticleManager> pParticleManager = ParticleManagerLocator::Get();
-
-        float timeScale = (deltaTime / 60.0f);
+        std::shared_ptr<TimerComponent> pTimer = CoreLocator::GetTimer();
 
         for (Entity entityId : m_vecEntities)
         {
@@ -69,7 +68,7 @@ namespace MyEngine
             emitter.timeLastEmit += deltaTime;
 
             // Get generate one particle every x time
-            uint32_t seed = (uint32_t)(entityId + emitter.totalEmitPart + (deltaTime * 1000));
+            uint32_t seed = static_cast<uint32_t>(pTimer->miliseconds + entityId);
             int randomRate = Random::Int(seed, emitter.emitRateMin, emitter.emitRateMax);
             float oneParticleTimer = 1.0f / randomRate;
             if (emitter.timeLastEmit < oneParticleTimer)
@@ -91,15 +90,13 @@ namespace MyEngine
             }
 
             // Emit particle with random properties
-            EmitterProps emitterProps = emitter.properties;
+            EmitterProps& emitterProps = emitter.properties;
             transform.LockRead();
             for (int i = 0; i < particlesToCreate; i++)
             {
                 ParticleProps particle;
 
                 particle.entityId = entityId;
-
-                particle.FBOIDs = emitterProps.FBOIDs;
 
                 particle.lifetime = Random::Float(seed, emitterProps.minLifeTime, emitterProps.maxLifeTime);
 
@@ -111,10 +108,7 @@ namespace MyEngine
                 particle.position = transform.position + Random::Vec3(seed, emitterProps.posMin, emitterProps.posMax);
                 particle.scale = Random::Float(seed, emitterProps.scaMin, emitterProps.scaMax);
                
-                particle.pMesh = emitter.pMesh;
-                particle.material = emitterProps.material;
-                particle.defaultColor = emitterProps.colorInitial;
-                particle.colorChange = emitterProps.colorChange;
+                particle.textureIndex = emitterProps.textureIndex;
 
                 pParticleManager->EmitParticle(particle);
             }

@@ -23,6 +23,11 @@ namespace MyEngine
 	{
 	}
 
+	void RendererManager::AddToRender(const sRenderParticleInfo& renderInfo)
+	{
+		m_vecRenderParticleInfos.push_back(renderInfo);
+	}
+
 	void RendererManager::AddToRender(const sRenderModelInfo& renderInfo)
 	{
 		m_vecRenderInfos.push_back(renderInfo);
@@ -43,13 +48,33 @@ namespace MyEngine
 	void RendererManager::m_RenderList(const std::vector<sRenderModelInfo>& renderInfos)
 	{
 		std::shared_ptr<iResourceManager> pMaterialManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::MATERIAL);
+		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 		
 		for (const sRenderModelInfo& renderInfo : renderInfos)
 		{
 			pMaterialManager->ActivateResource(renderInfo.materialName);
 
-			GraphicsUtils::DrawModel(renderInfo);
+			GraphicsUtils::DrawModel(renderInfo, pShader);
 		}
+	}
+
+	void RendererManager::m_RenderList(const std::vector<sRenderParticleInfo>& renderInfos)
+	{
+		size_t currTexture = 0;
+		std::shared_ptr<iResourceManager> pTextureManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::TEXTURE);
+		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
+
+		glDisable(GL_CULL_FACE);
+		for (const sRenderParticleInfo& renderInfo : renderInfos)
+		{
+			if (renderInfo.textureIndex != currTexture)
+			{
+				pTextureManager->ActivateResource(renderInfo.textureIndex);
+			}
+
+			GraphicsUtils::DrawParticle(renderInfo, pShader);
+		}
+		glEnable (GL_CULL_FACE);
 	}
 
 	void RendererManager::m_UpdateCamera(std::shared_ptr<Scene> pScene)

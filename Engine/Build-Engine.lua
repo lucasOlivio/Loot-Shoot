@@ -29,7 +29,9 @@ project "Engine"
       "Extern/Lua5.4.6/include",
       "Extern/rapidjson/include",
       "Extern/imgui/include",
-      "Extern/ImGuizmo/include"
+      "Extern/ImGuizmo/include",
+      "Extern/png++-0.2.9/include",
+      "Extern/libpng/include"
    }
 
    links
@@ -42,7 +44,9 @@ project "Engine"
       "Extern/fmod/lib/fmodL_vc.lib",
       -- Lua
       "Extern/Lua5.4.6/lib/lua5.4.6-static.lib",
-      "Extern/Lua5.4.6/lib/cjson.lib"
+      "Extern/Lua5.4.6/lib/cjson.lib",
+      "Extern/libpng/lib/libpng16.lib",
+      "Extern/libpng/lib/zlib.lib"
    }
 
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")
@@ -74,8 +78,7 @@ project "Engine"
         {
             "Extern/assimp/lib/Release/assimp-vc143-mt.lib",
             "Extern/fbxsdk/lib/Release/libfbxsdk.lib",
-            "Extern/glfw/lib/Release/glfw3.lib"
-        }
+            "Extern/glfw/lib/Release/glfw3.lib",        }
 
    filter "configurations:Dist"
        defines { "DIST" }

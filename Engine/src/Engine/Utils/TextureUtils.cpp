@@ -4,6 +4,8 @@
 
 #include "BitOperations.h"
 
+#include <png++/png.hpp>
+
 namespace MyEngine
 {
 	bool TextureUtils::CreateTextureFromBMPFile(std::string textureName, std::string fileNameFullPath, bool bGenerateMIPMap, std::shared_ptr<sTextureInfo> pTextureOut)

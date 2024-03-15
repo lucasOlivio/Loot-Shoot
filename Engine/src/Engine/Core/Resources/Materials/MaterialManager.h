@@ -27,6 +27,8 @@ namespace MyEngine
 		virtual std::shared_ptr<iResource> GetResource(const std::string& name);
 		virtual std::vector<std::shared_ptr<iResource>>& GetResources();
 
+		// No need for performance access for now
+		virtual void ActivateResource(const size_t& index) {};
 		virtual void ActivateResource(const std::string& name);
 		virtual void DeactivateResource();
 		virtual std::shared_ptr<iResource> GetActiveResource();
