@@ -10,7 +10,7 @@ namespace MyEngine
 	{
 	}
 
-	void TimerSystem::Start(Scene* pScene)
+	void TimerSystem::Start(std::shared_ptr<Scene> pScene)
 	{
 		std::shared_ptr<TimerComponent> pTimer = CoreLocator::GetTimer();
 
@@ -19,7 +19,7 @@ namespace MyEngine
 		pTimer->seconds = 0;
 	}
 
-	void TimerSystem::Update(Scene* pScene, float deltaTime)
+	void TimerSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 		std::shared_ptr<TimerComponent> pTimer = CoreLocator::GetTimer();
 
@@ -37,11 +37,11 @@ namespace MyEngine
 		pTimer->seconds = pTimer->miliseconds / 1000;
 	}
 
-	void TimerSystem::Render(Scene* pScene)
+	void TimerSystem::Render(std::shared_ptr<Scene> pScene)
 	{
 	}
 
-	void TimerSystem::End(Scene* pScene)
+	void TimerSystem::End(std::shared_ptr<Scene> pScene)
 	{
 	}
 

@@ -15,13 +15,13 @@ namespace MyEngine
 
 		virtual void Init();
 
-		virtual void Start(Scene* pScene);
+		virtual void Start(std::shared_ptr<Scene> pScene);
 
-		virtual void Update(Scene* pScene, float deltaTime);
+		virtual void Update(std::shared_ptr<Scene> pScene, float deltaTime);
 
-		virtual void Render(Scene* pScene);
+		virtual void Render(std::shared_ptr<Scene> pScene);
 
-		virtual void End(Scene* pScene);
+		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
 	};

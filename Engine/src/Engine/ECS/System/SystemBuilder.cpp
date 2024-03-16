@@ -4,6 +4,7 @@
 
 #include "Engine/Core/CoreSystem.h"
 #include "Engine/Core/FPSSystem.h"
+#include "Engine/Core/TimerSystem.h"
 #include "Engine/Core/InputSystem.h"
 #include "Engine/Core/StateSystem.h"
 
@@ -39,6 +40,7 @@ namespace MyEngine
         // Core Systems
         {"CoreSystem", []() { return new CoreSystem(); }},
         {"FPSSystem", []() { return new FPSSystem(); }},
+        {"TimerSystem", []() { return new TimerSystem(); }},
         {"InputSystem", []() { return new InputSystem(); }},
         {"StateSystem", []() { return new StateSystem(); }},
         // Graphics systems

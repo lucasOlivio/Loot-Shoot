@@ -32,6 +32,7 @@ namespace MyEngine
 		std::shared_ptr<GameStateComponent> pStates = CoreLocator::GetGameState();
 
 		pStates->mainSystems.push_back("FPSSystem");
+		pStates->mainSystems.push_back("TimerSystem");
 		pStates->mainSystems.push_back("WindowSystem");
 		pStates->mainSystems.push_back("WinTitleSystem");
 		pStates->mainSystems.push_back("InputSystem");
