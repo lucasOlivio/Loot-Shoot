@@ -50,6 +50,8 @@ namespace MyEngine
 
 	void GraphicsUtils::DrawParticle(const sRenderParticleInfo& renderInfo, std::shared_ptr<ShaderManager> pShader)
 	{
+		pShader->SetUniformFloat("particleAlpha", renderInfo.alpha);
+
 		pShader->SetUniformMatrix4f("matModel", renderInfo.matModel);
 
 		// Also calculate and pass the "inverse transpose" for the model matrix

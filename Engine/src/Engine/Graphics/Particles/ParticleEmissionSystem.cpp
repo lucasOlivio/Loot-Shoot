@@ -110,7 +110,8 @@ namespace MyEngine
 
                 particle.entityId = entityId;
 
-                particle.lifetime = Random::Float(seed, emitterProps.minLifeTime, emitterProps.maxLifeTime);
+                particle.initialLifeTime = Random::Float(seed, emitterProps.minLifeTime, emitterProps.maxLifeTime);
+                particle.lifetime = particle.initialLifeTime;
 
                 particle.acceleration = emitterProps.constForce;
                 particle.velocity = Random::Vec3(seed, emitterProps.velMin, emitterProps.velMax);

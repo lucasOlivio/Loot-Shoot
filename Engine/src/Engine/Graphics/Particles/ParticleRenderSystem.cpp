@@ -47,6 +47,7 @@ namespace MyEngine
 
             sRenderParticleInfo renderInfo = sRenderParticleInfo();
             renderInfo.textureIndex = particle.textureIndex;
+            renderInfo.alpha = particle.alpha;
             renderInfo.matModel = matTransform;
 
             pRendererManager->AddToRender(renderInfo);

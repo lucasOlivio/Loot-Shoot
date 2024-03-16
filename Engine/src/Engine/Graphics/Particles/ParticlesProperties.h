@@ -18,7 +18,9 @@ namespace MyEngine
 		glm::quat orientation;
 		float scale;
 
+		float initialLifeTime;
 		float lifetime;
+		float alpha = 1.0f;
 	};
 
 	struct EmitterProps
