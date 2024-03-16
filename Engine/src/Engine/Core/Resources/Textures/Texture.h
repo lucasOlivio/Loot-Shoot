@@ -15,7 +15,8 @@ namespace MyEngine
 		NORMAL = 12,
 		DISCARD = 16,
 		CUBE = 20,
-		SPECULAR = 24
+		SPECULAR = 24,
+		PARTICLE = 28
 	};
 
 	// Names of uniforms for texture binding

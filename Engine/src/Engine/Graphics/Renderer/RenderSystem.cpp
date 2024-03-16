@@ -119,7 +119,7 @@ namespace MyEngine
     {
 		std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
 
-		pRenderer->RenderAllModels(pScene);
+		pRenderer->RenderAll(pScene);
 		pRenderer->ClearRender();
     }
 

@@ -3,6 +3,7 @@
 #include "ParticleEmissionSystem.h"
 
 #include "Engine/Core/Components/Components.h"
+#include "Engine/Core/Resources/Textures/TextureManager.h"
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
 #include "Engine/Core/Components/CoreLocator.h"
 
@@ -21,8 +22,10 @@ namespace MyEngine
 
     void ParticleEmissionSystem::Start(std::shared_ptr<Scene> pScene)
     {
+        EntitySystem::Start(pScene);
+
         // Load all particles models
-        std::shared_ptr<iResourceManager> pTextureManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::TEXTURE);
+        std::shared_ptr<TextureManager> pTextureManager = ResourceManagerFactory::GetOrCreate<TextureManager>(eResourceTypes::TEXTURE);
         for (Entity entityId : m_vecEntities)
         {
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
@@ -58,22 +61,26 @@ namespace MyEngine
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
             
-            emitter.LockWrite();
             if (!emitter.isActive)
             {
                 continue;
             }
 
+            emitter.LockWrite();
             emitter.timer += deltaTime;
             emitter.timeLastEmit += deltaTime;
+            emitter.UnlockWrite();
 
             // Get generate one particle every x time
             uint32_t seed = static_cast<uint32_t>(pTimer->miliseconds + entityId);
+
+            emitter.LockRead();
             int randomRate = Random::Int(seed, emitter.emitRateMin, emitter.emitRateMax);
             float oneParticleTimer = 1.0f / randomRate;
             if (emitter.timeLastEmit < oneParticleTimer)
             {
                 // Not time to create one particle yet
+                emitter.UnlockRead();
                 continue;
             }
 
@@ -81,6 +88,7 @@ namespace MyEngine
 
             if (emitter.totalEmitPart > emitter.maxParticles)
             {
+                emitter.UnlockRead();
                 continue;
             }
 
@@ -91,7 +99,11 @@ namespace MyEngine
 
             // Emit particle with random properties
             EmitterProps& emitterProps = emitter.properties;
+
             transform.LockRead();
+            glm::vec3 position = transform.position;
+            transform.UnlockRead();
+
             for (int i = 0; i < particlesToCreate; i++)
             {
                 ParticleProps particle;
@@ -105,15 +117,16 @@ namespace MyEngine
                 particle.rotationSpeed = Random::Vec3(seed, emitterProps.rotMin, emitterProps.rotMax);
                 
                 particle.orientation = Random::Quat(seed, emitterProps.oriMin, emitterProps.oriMax);
-                particle.position = transform.position + Random::Vec3(seed, emitterProps.posMin, emitterProps.posMax);
+                particle.position = position + Random::Vec3(seed, emitterProps.posMin, emitterProps.posMax);
                 particle.scale = Random::Float(seed, emitterProps.scaMin, emitterProps.scaMax);
                
                 particle.textureIndex = emitterProps.textureIndex;
 
                 pParticleManager->EmitParticle(particle);
             }
-            transform.UnlockRead();
+            emitter.UnlockRead();
 
+            emitter.LockWrite();
             emitter.totalEmitPart += particlesToCreate;
             emitter.timeLastEmit = 0.0f;
             emitter.UnlockWrite();

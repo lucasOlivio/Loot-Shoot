@@ -5,8 +5,8 @@
 #include "BitOperations.h"
 #include "Files.h"
 
-#include <png++/png.hpp>
-#include <png++/solid_pixel_buffer.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 namespace MyEngine
 {
@@ -19,7 +19,7 @@ namespace MyEngine
 
 		if (pTextureOut->extension == "png") {
 			LoadFunction = LoadPNG;
-			format = GL_ABGR_EXT;
+			format = GL_RGBA;
 		}
 		else if (pTextureOut->extension == "bmp") {
 			LoadFunction = LoadBMP;
@@ -313,13 +313,12 @@ namespace MyEngine
 
 	bool TextureUtils::LoadPNG(const std::string& fileName, std::shared_ptr<sTextureInfo> pTextureOut)
 	{
-		png::image<png::rgba_pixel, png::solid_pixel_buffer< png::rgba_pixel>> image(fileName);
+		int width, height, numChannels;
+		unsigned char* data = stbi_load(fileName.c_str(), &width, &height, &numChannels, 0);
 
-		const void* buffer = static_cast<const void*>(image.get_pixbuf().fetch_bytes().data());
-
-		pTextureOut->numCols = static_cast<ulong>(image.get_width());
-		pTextureOut->numRows = static_cast<ulong>(image.get_height());
-		pTextureOut->pPixels = buffer;
+		pTextureOut->numCols = static_cast<ulong>(width);
+		pTextureOut->numRows = static_cast<ulong>(height);
+		pTextureOut->pPixels = static_cast<const void*>(data);
 
 		return true;
 	}

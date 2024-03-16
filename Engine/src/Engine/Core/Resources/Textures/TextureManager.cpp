@@ -328,6 +328,14 @@ namespace MyEngine
 															    static_cast<GLuint>(eTextureType::CUBE)));
 
 		m_mapIdSampler[eTextureType::CUBE] = pCubeSampler;
+
+		// Particles
+		std::shared_ptr<sSamplerInfo> pParticleSampler(new sSamplerInfo("particleTexture",
+																	"",
+																	"isParticle",
+																	static_cast<GLuint>(eTextureType::PARTICLE)));
+
+		m_mapIdSampler[eTextureType::PARTICLE] = pParticleSampler;
 	}
 
 	void TextureManager::m_BindTexture(std::shared_ptr<sTextureInfo> pTexture, std::shared_ptr<sSamplerInfo> pSampler, int unitId)

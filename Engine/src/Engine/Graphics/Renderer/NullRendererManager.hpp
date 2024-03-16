@@ -25,7 +25,7 @@ namespace MyEngine
 			LOG_ERROR("Renderer manager not initialized!");
 		}
 
-		virtual void RenderAllModels(std::shared_ptr<Scene> pScene)
+		virtual void RenderAll(std::shared_ptr<Scene> pScene)
 		{
 			LOG_ERROR("Renderer manager not initialized!");
 		}

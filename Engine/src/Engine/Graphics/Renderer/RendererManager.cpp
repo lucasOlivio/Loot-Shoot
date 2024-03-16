@@ -33,16 +33,19 @@ namespace MyEngine
 		m_vecRenderInfos.push_back(renderInfo);
 	}
 
-	void RendererManager::RenderAllModels(std::shared_ptr<Scene> pScene)
+	void RendererManager::RenderAll(std::shared_ptr<Scene> pScene)
 	{
 		m_UpdateCamera(pScene);
 
 		m_RenderList(m_vecRenderInfos);
+
+		m_RenderList(m_vecRenderParticleInfos);
 	}
 
 	void RendererManager::ClearRender()
 	{
 		m_vecRenderInfos.clear();
+		m_vecRenderParticleInfos.clear();
 	}
 
 	void RendererManager::m_RenderList(const std::vector<sRenderModelInfo>& renderInfos)
@@ -70,6 +73,7 @@ namespace MyEngine
 			if (renderInfo.textureIndex != currTexture)
 			{
 				pTextureManager->ActivateResource(renderInfo.textureIndex);
+				currTexture = renderInfo.textureIndex;
 			}
 
 			GraphicsUtils::DrawParticle(renderInfo, pShader);

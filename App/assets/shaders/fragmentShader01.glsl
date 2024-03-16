@@ -81,7 +81,7 @@ vec4 calculateParticle(vec4 vertexRGBA, vec2 UVFinal);
 
 vec4 calculateMaterial(vec4 vertexRGBA, vec2 UVFinal);
 
-vec4 calculateLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal, 
+vec4 calculateLightContrib( vec4 vertexMaterialColour, vec3 vertexNormal, 
                             vec3 vertexWorldPos, vec4 vertexSpecular );
 
 vec3 calculateColorTextures(vec2 UVFinal);
@@ -109,6 +109,11 @@ void main()
 
 vec4 calculateParticle(vec4 vertexRGBA, vec2 UVFinal)
 {
+	vec4 vertexSpecular = vec4(0.1f, 0.1f, 0.1f, 1.0f);
+	vertexRGBA = texture(particleTexture, UVFinal.st).rgba;
+	vertexRGBA = calculateLightContrib(vertexRGBA, vertexWorldNormal.xyz,
+									   vertexWorldPos.xyz, vertexSpecular);
+
 	return vertexRGBA;
 }
 
@@ -160,7 +165,7 @@ vec4 calculateMaterial(vec4 vertexRGBA, vec2 UVFinal)
 	// xyzw or rgba or stuw
 	// RGB is the specular highglight colour (usually white or the colour of the light)
 	// 4th value is the specular POWER (STARTS at 1, and goes to 1000000s)
-	vec4 vertexColourLit = calculateLightContrib(vertexRGBA.rgb, vertexWorldNormal.xyz,
+	vec4 vertexColourLit = calculateLightContrib(vertexRGBA, vertexWorldNormal.xyz,
 												vertexWorldPos.xyz, vertexSpecular);
 	// *************************************
 
@@ -172,13 +177,13 @@ vec4 calculateMaterial(vec4 vertexRGBA, vec2 UVFinal)
 	}
 	else
 	{
-		vertexRGBA = vertexColourLit;
+		vertexRGBA.rgb = vertexColourLit.rgb;
 	}
 
 	return vertexRGBA;
 }
 
-vec4 calculateLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal, 
+vec4 calculateLightContrib( vec4 vertexMaterialColour, vec3 vertexNormal, 
                             vec3 vertexWorldPos, vec4 vertexSpecular )
 {
 	vec3 norm = normalize(vertexNormal);
@@ -315,7 +320,7 @@ vec4 calculateLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal,
 
 	}//for(intindex=0...
 	
-	finalObjectColour.a = 1.0f;
+	finalObjectColour.a = vertexMaterialColour.a;
 	
 	return finalObjectColour;
 }
@@ -329,71 +334,4 @@ vec3 calculateColorTextures(vec2 UVFinal)
 				+ texture(colorTexture02, UVFinal.st).rgb * colorTextureRatio02;
 
 	return tempColor;
-}
-
-vec3 BlurFilter(sampler2D textureColor, vec2 textureCoords, int pixelOffset)
-{
-	// pixelOffset = 1   pixelOffset = 2
-	// 3x3               5x5
-	//   *                   * 
-	// * O *                 * 
-	//   *               * * O * * 
-	//                       *  
-	//                       * 
-	// 
-	// "O" is the pixel we are "on"
-	// * are the adjacent pixels
-
-	vec3 outColour = vec3(0.0f);
-	int totalSamples = 0;
-
-	// Add up a horizontal sample
-	for (int xOffset = -pixelOffset; xOffset <= pixelOffset; xOffset++)
-	{
-		totalSamples++;
-
-		vec2 pixelUV = vec2(textureCoords.x + xOffset,
-							 textureCoords.y);
-
-		outColour += texture(textureColor, pixelUV).rgb;
-	}
-
-	// Add up a vertical sample
-	for (int yOffset = -pixelOffset; yOffset <= pixelOffset; yOffset++)
-	{
-		totalSamples++;
-
-		vec2 pixelUV = vec2(textureCoords.x,
-							 textureCoords.y + yOffset);
-
-		outColour += texture(textureColor, pixelUV).rgb;
-	}
-
-
-	// Average this colour by the number of samples
-	outColour.rgb /= float(totalSamples);
-
-	return outColour;
-}
-
-vec3 ChromicAberration(sampler2D textureColor, vec2 textureCoords, float offsetX, float offsetY)
-{
-	vec3 theColour = vec3(0.0f);
-
-	// Red coordinate is off up (-0.025 in y) and to the left (-0.01f in x)
-	vec2 redYV = vec2(textureCoords.x - offsetX,
-					  textureCoords.y - offsetY);
-	theColour.r = texture(textureColor, redYV).r;
-
-	// Green coordinate is off up (+0.002 in y) and to the right (+0.01f in x)
-	vec2 greenYV = vec2(textureCoords.x + offsetX,
-						textureCoords.y + offsetY);
-	theColour.g = texture(textureColor, greenYV).g;
-
-	// Green coordinate is off the left (-0.015f in x)
-	vec2 blueYV = vec2(textureCoords.x - offsetX,
-					   textureCoords.y);
-	theColour.b = texture(textureColor, blueYV).b;
-
-	return theColour;
 }

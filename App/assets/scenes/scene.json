@@ -69,6 +69,26 @@
       "material": "",
       "model": "sphere.ply"
     },
+    "emitter": {
+      "emitRateMin": 1,
+      "emitRateMax": 10,
+      "maxParticles": 100,
+      "isActive": true,
+      "texture": "smoke.png",
+      "constForce": [ 0.0, 10.0, 0.0 ],
+      "maxLifeTime": 5.0,
+      "minLifeTime": 2.0,
+      "oriMax": [ 1.0, 0.0, 0.0, 0.0 ],
+      "oriMin": [ 1.0, 0.0, 0.0, 0.0 ],
+      "posMax": [ 5.0, 0.0, 5.0 ],
+      "posMin": [ -5.0, 0.0, -5.0 ],
+      "rotMax": [ 15.0, 15.0, 15.0 ],
+      "rotMin": [ 5.0, 5.0, 5.0 ],
+      "scaMax": 2.0,
+      "scaMin": 1.0,
+      "velMax": [ 0.0, 15.0, 0.0 ],
+      "velMin": [ 0.0, 5.0, 0.0 ]
+    },
     "rigidBody": {
       "bodyType": 1,
       "radius": 1.0
@@ -476,7 +496,7 @@
 
     "texture": {
       "fileName": "smoke.png",
-      "textureType": 0,
+      "textureType": 28,
       "vecTextures": []
     }
   }

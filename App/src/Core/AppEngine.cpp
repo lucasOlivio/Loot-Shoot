@@ -52,6 +52,9 @@ namespace MyEngine
 		pStates->mapStateSystems[eGameStates::RUNNING] = {
 			"PlayerControllerSystem",
 			// Graphics
+			"ParticleEmissionSystem",
+			"ParticleUpdaterSystem",
+			"ParticleRenderSystem",
 			"AnimationPlayerSystem",
 			// Physics
 			"MovementSystem",

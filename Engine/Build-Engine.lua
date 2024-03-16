@@ -30,8 +30,7 @@ project "Engine"
       "Extern/rapidjson/include",
       "Extern/imgui/include",
       "Extern/ImGuizmo/include",
-      "Extern/png++-0.2.9/include",
-      "Extern/libpng/include"
+      "Extern/stb_image/include",
    }
 
    links
@@ -44,9 +43,7 @@ project "Engine"
       "Extern/fmod/lib/fmodL_vc.lib",
       -- Lua
       "Extern/Lua5.4.6/lib/lua5.4.6-static.lib",
-      "Extern/Lua5.4.6/lib/cjson.lib",
-      "Extern/libpng/lib/libpng16.lib",
-      "Extern/libpng/lib/zlib.lib"
+      "Extern/Lua5.4.6/lib/cjson.lib"
    }
 
    targetdir ("../bin/" .. OutputDir .. "/%{prj.name}")

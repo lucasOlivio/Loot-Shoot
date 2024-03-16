@@ -19,7 +19,7 @@ namespace MyEngine
 		virtual void AddToRender(const sRenderModelInfo& renderInfo) = 0;
 
 		// Render all models
-		virtual void RenderAllModels(std::shared_ptr<Scene> pScene) = 0;
+		virtual void RenderAll(std::shared_ptr<Scene> pScene) = 0;
 
 		virtual void ClearRender() = 0;
 	};
