@@ -72,7 +72,7 @@ namespace MyEngine
 		glPixelStorei(GL_UNPACK_ALIGNMENT, GL_UNPACK_ALIGNMENT_old);
 
 		// PNG library handles the png buffer
-		pTextureOut->ClearBMP();
+		pTextureOut->Clear();
 
 		if (bGenerateMIPMap)
 		{
@@ -92,10 +92,10 @@ namespace MyEngine
 	}
 
 	bool TextureUtils::CreateCubeTextureFromFiles(const std::string& cubeMapName, const std::string& posX_fileName,
-														const std::string& negX_fileName, const std::string& posY_fileName, 
-														const std::string& negY_fileName, const std::string& posZ_fileName,	
-														const std::string& negZ_fileName, bool bIsSeamless, 
-														std::shared_ptr<sTextureInfo> pTextureOut)
+		const std::string& negX_fileName, const std::string& posY_fileName,
+		const std::string& negY_fileName, const std::string& posZ_fileName,
+		const std::string& negZ_fileName, bool bIsSeamless,
+		std::shared_ptr<sTextureInfo> pTextureOut)
 	{
 		pTextureOut->extension = GetFileExtension(posX_fileName);
 		int format = GL_RGB;
@@ -161,7 +161,7 @@ namespace MyEngine
 			format,
 			GL_UNSIGNED_BYTE,
 			pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		pTextureOut->Clear();
 		if (CheckOpenGLError()) { return false; }
 
 
@@ -169,35 +169,35 @@ namespace MyEngine
 		isLoaded = LoadFunction(negX_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		pTextureOut->Clear();
 		if (CheckOpenGLError()) { return false; }
 
 		// Positive Y image...
 		isLoaded = LoadFunction(posY_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		pTextureOut->Clear();
 		if (CheckOpenGLError()) { return false; }
 
 		// Negative Y image...
 		isLoaded = LoadFunction(negY_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		pTextureOut->Clear();
 		if (CheckOpenGLError()) { return false; }
 
 		// Positive Z image...
 		isLoaded = LoadFunction(posZ_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		pTextureOut->Clear();
 		if (CheckOpenGLError()) { return false; }
 
 		// Negative Z image...
 		isLoaded = LoadFunction(negZ_fileName, pTextureOut);
 		assert(isLoaded);
 		glTexSubImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, 0, 0, pTextureOut->numCols, pTextureOut->numRows, format, GL_UNSIGNED_BYTE, pTextureOut->pPixels);
-		pTextureOut->ClearBMP();
+		pTextureOut->Clear();
 		if (CheckOpenGLError()) { return false; }
 
 		pTextureOut->name = cubeMapName;

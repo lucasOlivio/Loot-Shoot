@@ -41,7 +41,7 @@ namespace MyEngine
 	{
 		virtual ~sTextureInfo()
 		{
-			ClearBMP();
+			Clear();
 		}
 
 		std::string extension;
@@ -69,7 +69,7 @@ namespace MyEngine
 		ulong numberOfLookUpTableEntries;	// Could be 0 for 24 bit format
 		ulong numberOfImportantColours;	// 0 if all colours are important
 
-		void ClearBMP()
+		void Clear()
 		{
 			// PNG lib handles the png files buffer
 			if (extension == "png")
