@@ -14,12 +14,8 @@ uniform vec4 eyeLocation;
 uniform bool bUseDefaultColor;	// if this is true, then use DefaultColor for all vertex
 uniform vec3 defaultColor;
 
-uniform bool bUseDebugColour;	// if this is true, then use debugColourRGBA for the colour
-uniform vec4 debugColourRGBA;	
-
 // TEXTURES
 // -----------------------------------------------------------------
-
 uniform bool isEmissive;
 
 uniform vec2 UVOffset;
@@ -50,14 +46,6 @@ uniform sampler2D discardTexture;
 uniform sampler2D alphaTexture;
 uniform samplerCube cubeTexture;
 
-// Frame buffers views
-// -----------------------------------------------------------------
-uniform bool isFBOView;
-uniform sampler2D FBOViewTexture;
-uniform vec2 screenWidthAndHeight;
-
-uniform int FBOViewFilter;
-
 // LIGHTS
 // -----------------------------------------------------------------
 uniform bool doNotLight; // If true, then passes the colour without calculating lighting
@@ -84,15 +72,19 @@ const int DIRECTIONAL_LIGHT_TYPE = 2;
 const int NUMBEROFLIGHTS = 3;
 uniform sLight theLights[NUMBEROFLIGHTS];
 
+// Particles
+//--------------------------------------------------------------------
+uniform bool isParticle;
+uniform sampler2D particleTexture;
+
+vec4 calculateParticle(vec4 vertexRGBA, vec2 UVFinal);
+
+vec4 calculateMaterial(vec4 vertexRGBA, vec2 UVFinal);
 
 vec4 calculateLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal, 
                             vec3 vertexWorldPos, vec4 vertexSpecular );
 
 vec3 calculateColorTextures(vec2 UVFinal);
-
-// FILTERS
-vec3 BlurFilter(sampler2D textureColor, vec2 textureCoords, int pixelOffset);
-vec3 ChromicAberration(sampler2D textureColor, vec2 textureCoords, float offsetX, float offsetY);
 
 void main()
 {
@@ -102,23 +94,37 @@ void main()
 	vec4 vertexRGBA = colour;
 	vertexRGBA.a = 1.0f;
 
+	if (isParticle)
+	{
+		vertexRGBA = calculateParticle(vertexRGBA, UVFinal);
+	}
+	else
+	{
+		vertexRGBA = calculateMaterial(vertexRGBA, UVFinal);
+	}
+			
+	outputColour = vertexRGBA;
+	return;
+}
+
+vec4 calculateParticle(vec4 vertexRGBA, vec2 UVFinal)
+{
+	return vertexRGBA;
+}
+
+vec4 calculateMaterial(vec4 vertexRGBA, vec2 UVFinal)
+{
 	if (bUseCubeTexture)
 	{
 		vec4 cubeSampleColour = texture(cubeTexture, vertexWorldNormal.xyz).rgba;
-		outputColour.rgb = cubeSampleColour.rgb;
-		outputColour.a = 1.0f;
-		return;
+		vertexRGBA.rgb = cubeSampleColour.rgb;
+		vertexRGBA.a = 1.0f;
+		return vertexRGBA;
 	}
 
 	if (bUseDefaultColor)
 	{
 		vertexRGBA = vec4(defaultColor, 1.0f);
-	}
-
-	if (bUseDebugColour)
-	{
-		outputColour = debugColourRGBA;
-		return;
 	}
 
 	if (bUseAlphaTexture)
@@ -130,34 +136,9 @@ void main()
 		}
 	}
 
-	if (isFBOView)
-	{
-		// FILTERS
-		if (FBOViewFilter == 1)
-		{
-			vertexRGBA.rgb = BlurFilter(FBOViewTexture, textureCoords, 5);
-		}
-		else if (FBOViewFilter == 2)
-		{
-			vertexRGBA.rgb = ChromicAberration(FBOViewTexture, textureCoords, 0.001, 0.001);
-		}
-		else
-		{
-			vertexRGBA.rgb = texture(FBOViewTexture, textureCoords.st).rgb;
-		}
-	}
-	
 	if (bUseColorTexture)
 	{
-		// In case its a FBO view we want to just adjust the color with the mask
-		if (isFBOView)
-		{
-			vertexRGBA.rgb += calculateColorTextures(UVFinal);
-		}
-		else
-		{
-			vertexRGBA.rgb = calculateColorTextures(UVFinal);
-		}
+		vertexRGBA.rgb = calculateColorTextures(UVFinal);
 	}
 
 	if (bUseDiscardTexture)
@@ -168,13 +149,7 @@ void main()
 			discard;
 		}
 	}
-	
-	if ( doNotLight )
-	{
-		outputColour = vertexRGBA;
-		return;
-	}
-	
+
 	// *************************************
 	vec4 vertexSpecular = vec4(0.1f, 0.1f, 0.1f, 1.0f);
 	if (bUseSpecularTexture)
@@ -185,21 +160,22 @@ void main()
 	// xyzw or rgba or stuw
 	// RGB is the specular highglight colour (usually white or the colour of the light)
 	// 4th value is the specular POWER (STARTS at 1, and goes to 1000000s)
-	
-	vec4 vertexColourLit = calculateLightContrib( vertexRGBA.rgb, vertexWorldNormal.xyz, 
-	                                              vertexWorldPos.xyz, vertexSpecular );
+	vec4 vertexColourLit = calculateLightContrib(vertexRGBA.rgb, vertexWorldNormal.xyz,
+												vertexWorldPos.xyz, vertexSpecular);
 	// *************************************
 
 	// TODO: Add an emissive map and emissive intensity regulator
 	// For now we control it here for simplicity
 	if (isEmissive)
 	{
-		vertexColourLit.rgb = vertexColourLit.rgb + (vertexRGBA.rgb * 0.75);
+		vertexRGBA.rgb = vertexColourLit.rgb + (vertexRGBA.rgb * 0.75);
 	}
-			
-	outputColour.rgb = vertexColourLit.rgb;
-	outputColour.a = vertexRGBA.a;
-	return;
+	else
+	{
+		vertexRGBA = vertexColourLit;
+	}
+
+	return vertexRGBA;
 }
 
 vec4 calculateLightContrib( vec3 vertexMaterialColour, vec3 vertexNormal, 

@@ -104,9 +104,6 @@ namespace MyEngine
 
 		bool useDefaultColor;
 		bool useTransparency;
-		bool isWireframe;
-		bool isDynamic;
-		bool doNotLight;
 		bool useColorTexture;
 		bool isActive;
 	};

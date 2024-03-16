@@ -8,17 +8,11 @@ namespace MyEngine
 {
 	void GraphicsUtils::DrawModel(const sRenderModelInfo& renderInfo, std::shared_ptr<ShaderManager> pShader)
 	{
-		pShader->SetWireframe(renderInfo.isWireFrame);
-		pShader->SetUniformFloat("doNotLight", renderInfo.doNotLight);
 		pShader->SetUniformFloat("bUseColorTexture", renderInfo.useColorTexture);
 
 		// Debug variables
 		pShader->SetUniformFloat("bUseDefaultColor", renderInfo.useDefaultColor);
 		pShader->SetUniformVec3("defaultColor", renderInfo.defaultColor);
-
-		// Debug variables
-		pShader->SetUniformFloat("bUseDebugColour", renderInfo.useDebugColor);
-		pShader->SetUniformVec4("debugColourRGBA", renderInfo.debugColor);
 
 		// Translates the matrix for every tile
 		glm::mat4 matModel = renderInfo.matModel;

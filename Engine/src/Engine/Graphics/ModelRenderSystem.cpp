@@ -61,11 +61,8 @@ namespace MyEngine
             renderInfo.VAO_ID = pMesh->VAO_ID;
             renderInfo.numberOfIndices = pMesh->numberOfIndices;
             // This all should come from material
-            renderInfo.isWireFrame = model.isWireframe;
-            renderInfo.doNotLight = model.doNotLight;
             renderInfo.useDefaultColor = model.useDefaultColor;
             renderInfo.useColorTexture = model.useColorTexture;
-            renderInfo.useDebugColor = false;
             model.UnlockRead();
 
             bool hasTiling = false;

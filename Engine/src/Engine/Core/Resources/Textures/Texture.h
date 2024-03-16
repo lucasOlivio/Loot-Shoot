@@ -44,6 +44,7 @@ namespace MyEngine
 			ClearBMP();
 		}
 
+		std::string extension;
 		const void* pPixels;
 		GLuint textNumber;
 		eTextureType type;
@@ -70,6 +71,12 @@ namespace MyEngine
 
 		void ClearBMP()
 		{
+			// PNG lib handles the png files buffer
+			if (extension == "png")
+			{
+				return;
+			}
+
 			delete[] this->pPixels;
 			this->pPixels = 0;
 		}

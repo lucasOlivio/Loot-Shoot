@@ -47,10 +47,8 @@ namespace MyEngine
 			renderInfo.matModel = matTransf;
 			renderInfo.VAO_ID = pMesh->VAO_ID;
 			renderInfo.numberOfIndices = pMesh->numberOfIndices;
-			renderInfo.isWireFrame = true;
-			renderInfo.doNotLight = true;
-			renderInfo.useDebugColor = true;
-			renderInfo.debugColor = BLUE;
+			renderInfo.useDefaultColor = true;
+			renderInfo.defaultColor = BLUE;
 
 			pRendererManager->AddToRender(renderInfo);
 		}
