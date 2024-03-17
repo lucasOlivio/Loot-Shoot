@@ -31,7 +31,10 @@ namespace MyEngine
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
 
             emitter.LockWrite();
-            emitter.properties.textureIndex = pTextureManager->LoadResource(emitter.properties.texture);
+            for (const std::string& texture : emitter.properties.textures)
+            {
+                emitter.properties.texturesIndex.push_back(pTextureManager->LoadResource(texture));
+            }
             emitter.UnlockWrite();
         }
 
@@ -121,7 +124,8 @@ namespace MyEngine
                 particle.position = position + Random::Vec3(seed, emitterProps.posMin, emitterProps.posMax);
                 particle.scale = Random::Float(seed, emitterProps.scaMin, emitterProps.scaMax);
                
-                particle.textureIndex = emitterProps.textureIndex;
+                size_t textIndex = static_cast<size_t>(Random::Int(seed, 0, static_cast<int>(emitterProps.texturesIndex.size())));
+                particle.textureIndex = emitterProps.texturesIndex[textIndex];
 
                 pParticleManager->EmitParticle(particle);
             }

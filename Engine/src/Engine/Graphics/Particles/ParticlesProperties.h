@@ -25,8 +25,8 @@ namespace MyEngine
 
 	struct EmitterProps
 	{
-		std::string texture;
-		size_t textureIndex;
+		std::vector<std::string> textures;
+		std::vector<size_t> texturesIndex;
 
 		// Offset from emitter current position
 		glm::vec3 posMin;

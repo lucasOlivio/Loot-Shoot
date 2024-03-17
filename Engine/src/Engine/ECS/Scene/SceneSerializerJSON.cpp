@@ -561,7 +561,7 @@ namespace MyEngine
         parser.SetMember(jsonObject, "maxParticles", emitterIn.maxParticles, allocator);
         parser.SetMember(jsonObject, "isActive", emitterIn.isActive, allocator);
 
-        parser.SetMember(jsonObject, "texture", emitterIn.properties.texture, allocator);
+        parser.SetMember(jsonObject, "textures", emitterIn.properties.textures, allocator);
         parser.SetMember(jsonObject, "constForce", emitterIn.properties.constForce, allocator);
         parser.SetMember(jsonObject, "maxLifeTime", emitterIn.properties.maxLifeTime, allocator);
         parser.SetMember(jsonObject, "minLifeTime", emitterIn.properties.minLifeTime, allocator);
@@ -1059,7 +1059,7 @@ namespace MyEngine
         parser.GetValue(jsonObject["maxParticles"], emitterOut.maxParticles);
         parser.GetValue(jsonObject["isActive"], emitterOut.isActive);
 
-        parser.GetValue(jsonObject["texture"], emitterOut.properties.texture);
+        parser.GetValue(jsonObject["textures"], emitterOut.properties.textures);
         parser.GetValue(jsonObject["constForce"], emitterOut.properties.constForce);
         parser.GetValue(jsonObject["maxLifeTime"], emitterOut.properties.maxLifeTime);
         parser.GetValue(jsonObject["minLifeTime"], emitterOut.properties.minLifeTime);

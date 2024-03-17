@@ -114,8 +114,8 @@ vec4 calculateParticle(vec4 vertexRGBA, vec2 UVFinal, float alpha)
 {
 	vec4 vertexSpecular = vec4(0.1f, 0.1f, 0.1f, 1.0f);
 	vertexRGBA = texture(particleTexture, UVFinal.st).rgba;
-	vertexRGBA = calculateLightContrib(vertexRGBA, vertexWorldNormal.xyz,
-									   vertexWorldPos.xyz, vertexSpecular);
+	/*vertexRGBA = calculateLightContrib(vertexRGBA, vertexWorldNormal.xyz,
+									   vertexWorldPos.xyz, vertexSpecular);*/
 
 	vertexRGBA.a = vertexRGBA.a * alpha;
 
