@@ -6,9 +6,10 @@ namespace MyEngine
 {
 	struct ParticleProps
 	{
-		size_t textureIndex;
-
 		Entity entityId; // Entity that emitted this particle
+
+		glm::vec4 color = glm::vec4(1.0f);
+		glm::vec4 colorChange;
 
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
@@ -25,8 +26,9 @@ namespace MyEngine
 
 	struct EmitterProps
 	{
-		std::vector<std::string> textures;
-		std::vector<size_t> texturesIndex;
+		// The particle changes color over time if no material selected
+		glm::vec4 colorInitial;
+		glm::vec4 colorChange;
 
 		// Offset from emitter current position
 		glm::vec3 posMin;

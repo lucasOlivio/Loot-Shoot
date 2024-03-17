@@ -63,7 +63,8 @@
       "defaultColor": [
         1.0,
         0.0,
-        0.0
+        0.0,
+        1.0
       ],
       "useColorTexture": 0,
       "material": "",
@@ -74,16 +75,17 @@
       "emitRateMax": 20,
       "maxParticles": 0,
       "isActive": true,
-      "textures": [ "smokes/smoke1.png", "smokes/smoke2.png", "smokes/smoke3.png", "smokes/smoke4.png" ],
+      "colorInitial": [ 0.33, 0.33, 0.33, 0.75 ],
+      "colorChange": [ 0.1, 0.1, 0.1, 0.0 ],
       "constForce": [ 0.0, 1.0, 0.0 ],
-      "maxLifeTime": 2.0,
-      "minLifeTime": 1.0,
-      "oriMax": [ 0.5, 0.0, 0.5, 0.0 ],
-      "oriMin": [ 0.12, 0.75, 0.75, 0.75 ],
+      "maxLifeTime": 10.0,
+      "minLifeTime": 5.0,
+      "oriMax": [ 1.0, 0.0, 0.0, 0.0 ],
+      "oriMin": [ 1.0, 0.0, 0.0, 0.0 ],
       "posMax": [ 1.0, 1.0, 1.0 ],
       "posMin": [ -1.0, -1.0, -1.0 ],
-      "rotMax": [ 120.0, 120.0, 120.0 ],
-      "rotMin": [ 45.0, 45.0, 45.0 ],
+      "rotMax": [ 0.0, 0.0, 0.0 ],
+      "rotMin": [ 0.0, 0.0,0.0 ],
       "scaMax": 3.0,
       "scaMin": 2.0,
       "velMax": [ 0.0, 5.0, 0.0 ],
@@ -111,7 +113,8 @@
       "defaultColor": [
         1.0,
         0.0,
-        0.0
+        0.0,
+        1.0
       ],
       "useColorTexture": 1,
       "material": "",
@@ -160,7 +163,8 @@
       "defaultColor": [
         1.0,
         0.0,
-        0.0
+        0.0,
+        1.0
       ],
       "useColorTexture": 0,
       "material": "",
@@ -172,22 +176,23 @@
       "defaultParticleMass": 0.0
     },
     "emitter": {
-      "emitRateMin": 2500,
-      "emitRateMax": 5000,
-      "maxParticles": 20000,
+      "emitRateMin": 10000,
+      "emitRateMax": 50000,
+      "maxParticles": 100000,
       "isActive": true,
-      "textures": [ "smokes/smoke1.png", "smokes/smoke2.png", "smokes/smoke3.png", "smokes/smoke4.png" ],
+      "colorInitial": [ 0.66, 0.66, 0.66, 0.9 ],
+      "colorChange": [ 0.1, 0.1, 0.1, 0.0 ],
       "constForce": [ 0.0, 1.0, 0.0 ],
-      "maxLifeTime": 1.5,
+      "maxLifeTime": 2.0,
       "minLifeTime": 0.25,
-      "oriMax": [ 0.5, 0.0, 0.5, 0.0 ],
-      "oriMin": [ 0.12, 0.75, 0.75, 0.75 ],
-      "posMax": [ 1.0, 1.0, 1.0 ],
-      "posMin": [ -1.0, -1.0, -1.0 ],
-      "rotMax": [ 150.0, 150.0, 150.0 ],
-      "rotMin": [ -150.0, -150.0, -150.0 ],
-      "scaMax": 0.75,
-      "scaMin": 0.1,
+      "oriMax": [ 1.0, 0.0, 0.0, 0.0 ],
+      "oriMin": [ 1.0, 0.0, 0.0, 0.0 ],
+      "posMax": [ 1.0, 1.5, 1.0 ],
+      "posMin": [ -1.0, 0.0, -1.0 ],
+      "rotMax": [ 0.0, 0.0, 0.0 ],
+      "rotMin": [ 0.0, 0.0, 0.0 ],
+      "scaMax": 0.1,
+      "scaMin": 0.01,
       "velMax": [ 0.0, 5.0, 0.0 ],
       "velMin": [ 0.0, 1.0, 0.0 ]
     }
@@ -350,6 +355,7 @@
       "defaultColor": [
         1.0,
         1.0,
+        1.0,
         1.0
       ],
       "useColorTexture": 1,
@@ -505,7 +511,8 @@
       "defaultColor": [
         1.0,
         0.0,
-        0.0
+        0.0,
+        1.0
       ],
       "useColorTexture": 1,
       "material": "matground",

@@ -24,20 +24,6 @@ namespace MyEngine
     {
         EntitySystem::Start(pScene);
 
-        // Load all particles models
-        std::shared_ptr<TextureManager> pTextureManager = ResourceManagerFactory::GetOrCreate<TextureManager>(eResourceTypes::TEXTURE);
-        for (Entity entityId : m_vecEntities)
-        {
-            EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
-
-            emitter.LockWrite();
-            for (const std::string& texture : emitter.properties.textures)
-            {
-                emitter.properties.texturesIndex.push_back(pTextureManager->LoadResource(texture));
-            }
-            emitter.UnlockWrite();
-        }
-
         // Kill all particles
         std::shared_ptr<iParticleManager> pParticleManager = ParticleManagerLocator::Get();
 
@@ -124,8 +110,8 @@ namespace MyEngine
                 particle.position = position + Random::Vec3(seed, emitterProps.posMin, emitterProps.posMax);
                 particle.scale = Random::Float(seed, emitterProps.scaMin, emitterProps.scaMax);
                
-                size_t textIndex = static_cast<size_t>(Random::Int(seed, 0, static_cast<int>(emitterProps.texturesIndex.size())));
-                particle.textureIndex = emitterProps.texturesIndex[textIndex];
+                particle.color = emitterProps.colorInitial;
+                particle.colorChange = emitterProps.colorChange;
 
                 pParticleManager->EmitParticle(particle);
             }

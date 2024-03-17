@@ -12,7 +12,7 @@ out vec4 outputColour;		// To the frame buffer (aka screen)
 uniform vec4 eyeLocation;
 
 uniform bool bUseDefaultColor;	// if this is true, then use DefaultColor for all vertex
-uniform vec3 defaultColor;
+uniform vec4 defaultColor;
 
 // TEXTURES
 // -----------------------------------------------------------------
@@ -75,7 +75,6 @@ uniform sLight theLights[NUMBEROFLIGHTS];
 // Particles
 //--------------------------------------------------------------------
 uniform bool isParticle;
-uniform sampler2D particleTexture;
 uniform float particleAlpha;
 
 // Functions
@@ -95,7 +94,6 @@ void main()
 
 	// Use model vertex as default
 	vec4 vertexRGBA = colour;
-	vertexRGBA.a = 1.0f;
 
 	if (isParticle)
 	{
@@ -113,13 +111,11 @@ void main()
 vec4 calculateParticle(vec4 vertexRGBA, vec2 UVFinal, float alpha)
 {
 	vec4 vertexSpecular = vec4(0.1f, 0.1f, 0.1f, 1.0f);
-	vertexRGBA = texture(particleTexture, UVFinal.st).rgba;
-	/*vertexRGBA = calculateLightContrib(vertexRGBA, vertexWorldNormal.xyz,
-									   vertexWorldPos.xyz, vertexSpecular);*/
+	vertexRGBA = defaultColor;
 
 	vertexRGBA.a = vertexRGBA.a * alpha;
 
-	if (vertexRGBA.a < 0.2)
+	if (vertexRGBA.a < 0.1)
 		discard;
 
 	return vertexRGBA;
@@ -137,7 +133,7 @@ vec4 calculateMaterial(vec4 vertexRGBA, vec2 UVFinal)
 
 	if (bUseDefaultColor)
 	{
-		vertexRGBA = vec4(defaultColor, 1.0f);
+		vertexRGBA = defaultColor;
 	}
 
 	if (bUseAlphaTexture)

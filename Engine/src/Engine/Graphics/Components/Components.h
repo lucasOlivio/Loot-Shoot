@@ -100,7 +100,7 @@ namespace MyEngine
 
 		std::string material;
 
-		glm::vec3 defaultColor;
+		glm::vec4 defaultColor;
 
 		bool useDefaultColor;
 		bool useTransparency;

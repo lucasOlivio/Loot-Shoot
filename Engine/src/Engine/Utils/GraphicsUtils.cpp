@@ -12,7 +12,7 @@ namespace MyEngine
 
 		// Debug variables
 		pShader->SetUniformFloat("bUseDefaultColor", renderInfo.useDefaultColor);
-		pShader->SetUniformVec3("defaultColor", renderInfo.defaultColor);
+		pShader->SetUniformVec4("defaultColor", renderInfo.defaultColor);
 
 		// Translates the matrix for every tile
 		glm::mat4 matModel = renderInfo.matModel;
@@ -50,6 +50,8 @@ namespace MyEngine
 
 	void GraphicsUtils::DrawParticle(const sRenderParticleInfo& renderInfo, std::shared_ptr<ShaderManager> pShader)
 	{
+		pShader->SetUniformInt("isParticle", true);
+		pShader->SetUniformVec4("defaultColor", renderInfo.color);
 		pShader->SetUniformFloat("particleAlpha", renderInfo.alpha);
 
 		pShader->SetUniformMatrix4f("matModel", renderInfo.matModel);

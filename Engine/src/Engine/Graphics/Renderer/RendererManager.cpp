@@ -63,22 +63,12 @@ namespace MyEngine
 
 	void RendererManager::m_RenderList(const std::vector<sRenderParticleInfo>& renderInfos)
 	{
-		size_t currTexture = 0;
-		std::shared_ptr<iResourceManager> pTextureManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::TEXTURE);
 		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
-		glDisable(GL_CULL_FACE);
 		for (const sRenderParticleInfo& renderInfo : renderInfos)
 		{
-			if (renderInfo.textureIndex != currTexture)
-			{
-				pTextureManager->ActivateResource(renderInfo.textureIndex);
-				currTexture = renderInfo.textureIndex;
-			}
-
 			GraphicsUtils::DrawParticle(renderInfo, pShader);
 		}
-		glEnable (GL_CULL_FACE);
 	}
 
 	void RendererManager::m_UpdateCamera(std::shared_ptr<Scene> pScene)
