@@ -11,9 +11,10 @@ namespace MyEngine
 		std::shared_ptr<iResourceManager> pShader = ResourceManagerFactory::GetOrCreate(eResourceTypes::SHADER);
 
 		// Setup shaders
-		std::string shaderName = "Shader01"; // TODO: This should come from config?
-		size_t index = pShader->LoadResource(shaderName);
-		pShader->ActivateResource(shaderName);
+		pShader->LoadResource(INSTANCING_SHADER);
+
+		pShader->LoadResource(DEFAULT_SHADER);
+		pShader->ActivateResource(DEFAULT_SHADER);
 	}
 
 	void ShaderSystem::Start(std::shared_ptr<Scene> pScene)

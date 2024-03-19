@@ -72,7 +72,7 @@ namespace MyEngine
 			model.LockWrite();
 			size_t index = pMeshManager->LoadResource(model.model);
 			model.pMesh = std::static_pointer_cast<sMeshInfo>(pMeshManager->GetResource(index));
-			model.LockWrite();
+			model.UnlockWrite();
 		}
 
 		// Load Materials
@@ -117,10 +117,6 @@ namespace MyEngine
 
     void RenderSystem::Render(std::shared_ptr<Scene> pScene)
     {
-		std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
-
-		pRenderer->RenderAll(pScene);
-		pRenderer->ClearRender();
     }
 
     void RenderSystem::End(std::shared_ptr<Scene> pScene)

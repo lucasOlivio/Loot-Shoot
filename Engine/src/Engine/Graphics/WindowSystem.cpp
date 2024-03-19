@@ -64,20 +64,6 @@ namespace MyEngine
 
     void WindowSystem::Render(std::shared_ptr<Scene> pScene)
     {
-        std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
-
-        if (glfwWindowShouldClose(pWindow->pGLFWWindow))
-        {
-            m_TriggerWindowClose();
-        }
-
-        // Update window title
-        if (pWindow->prevName == pWindow->name)
-        {
-            return;
-        }
-        glfwSetWindowTitle(pWindow->pGLFWWindow, pWindow->name.c_str());
-        pWindow->prevName = pWindow->name;
     }
 
     void WindowSystem::End(std::shared_ptr<Scene> pScene)
@@ -91,11 +77,5 @@ namespace MyEngine
             glfwDestroyWindow(pWindow->pGLFWWindow);
         }
         glfwTerminate();
-    }
-
-    void WindowSystem::m_TriggerWindowClose()
-    {
-        WindowCloseEvent windowEvent = WindowCloseEvent();
-        PUBLISH_WINDOW_CLOSE_EVENT(windowEvent);
     }
 }

@@ -12,16 +12,17 @@ namespace MyEngine
 		virtual ~NullParticleManager() {};
 
 		// Returns all the particles alive or not
-		virtual const std::vector<ParticleProps>& GetParticles()
+		virtual std::vector<ParticleProps>& GetParticles()
 		{
 			LOG_ERROR("Particle manager not initialized!");
 			return emptyVec;
 		}
 
 		// Sets the necessary parameters for the next available particle
-		virtual void EmitParticle(const ParticleProps& props)
+		virtual ParticleProps& EmitParticle()
 		{
 			LOG_ERROR("Particle manager not initialized!");
+			return emptyParticle;
 		}
 
 		// Update the values for the corresponding particle
@@ -37,5 +38,6 @@ namespace MyEngine
 		}
 
 		std::vector<ParticleProps> emptyVec = {};
+		ParticleProps emptyParticle = ParticleProps();
 	};
 }

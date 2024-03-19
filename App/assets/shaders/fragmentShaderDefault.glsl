@@ -72,15 +72,8 @@ const int DIRECTIONAL_LIGHT_TYPE = 2;
 const int NUMBEROFLIGHTS = 3;
 uniform sLight theLights[NUMBEROFLIGHTS];
 
-// Particles
-//--------------------------------------------------------------------
-uniform bool isParticle;
-uniform float particleAlpha;
-
 // Functions
 //--------------------------------------------------------------------
-vec4 calculateParticle(vec4 vertexRGBA, vec2 UVFinal, float alpha);
-
 vec4 calculateMaterial(vec4 vertexRGBA, vec2 UVFinal);
 
 vec4 calculateLightContrib( vec4 vertexMaterialColour, vec3 vertexNormal, 
@@ -95,30 +88,10 @@ void main()
 	// Use model vertex as default
 	vec4 vertexRGBA = colour;
 
-	if (isParticle)
-	{
-		vertexRGBA = calculateParticle(vertexRGBA, UVFinal, particleAlpha);
-	}
-	else
-	{
-		vertexRGBA = calculateMaterial(vertexRGBA, UVFinal);
-	}
+	vertexRGBA = calculateMaterial(vertexRGBA, UVFinal);
 			
 	outputColour = vertexRGBA;
 	return;
-}
-
-vec4 calculateParticle(vec4 vertexRGBA, vec2 UVFinal, float alpha)
-{
-	vec4 vertexSpecular = vec4(0.1f, 0.1f, 0.1f, 1.0f);
-	vertexRGBA = defaultColor;
-
-	vertexRGBA.a = vertexRGBA.a * alpha;
-
-	if (vertexRGBA.a < 0.1)
-		discard;
-
-	return vertexRGBA;
 }
 
 vec4 calculateMaterial(vec4 vertexRGBA, vec2 UVFinal)

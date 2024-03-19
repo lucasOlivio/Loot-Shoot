@@ -559,6 +559,7 @@ namespace MyEngine
         parser.SetMember(jsonObject, "emitRateMin", emitterIn.emitRateMin, allocator);
         parser.SetMember(jsonObject, "emitRateMax", emitterIn.emitRateMax, allocator);
         parser.SetMember(jsonObject, "maxParticles", emitterIn.maxParticles, allocator);
+        parser.SetMember(jsonObject, "meshName", emitterIn.meshName, allocator);
         parser.SetMember(jsonObject, "isActive", emitterIn.isActive, allocator);
 
         parser.SetMember(jsonObject, "colorInitial", emitterIn.properties.colorInitial, allocator);
@@ -1058,6 +1059,7 @@ namespace MyEngine
         parser.GetValue(jsonObject["emitRateMin"], emitterOut.emitRateMin);
         parser.GetValue(jsonObject["emitRateMax"], emitterOut.emitRateMax);
         parser.GetValue(jsonObject["maxParticles"], emitterOut.maxParticles);
+        parser.GetValue(jsonObject["meshName"], emitterOut.meshName);
         parser.GetValue(jsonObject["isActive"], emitterOut.isActive);
 
         parser.GetValue(jsonObject["colorInitial"], emitterOut.properties.colorInitial);

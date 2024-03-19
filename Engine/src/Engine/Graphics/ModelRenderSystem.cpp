@@ -51,6 +51,7 @@ namespace MyEngine
             std::shared_ptr<sMeshInfo> pMesh = model.pMesh;
             if (!pMesh)
             {
+                model.UnlockRead();
                 continue;
             }
 

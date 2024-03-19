@@ -9,12 +9,17 @@ namespace MyEngine
 {
 	struct sRenderParticleInfo
 	{
+		uint VAO_ID;
+		uint bufferId;
+		uint numberOfIndices;
+
 		float alpha = 1.0f;
 		glm::vec4 color = glm::vec4(1.0f);
 
 		glm::mat4 matModel = glm::mat4(1.0f);
 	};
 
+	// TODO: Join this with the RenderInfo and set everything use instancing
 	struct sRenderModelInfo
 	{
 		std::string materialName = "";

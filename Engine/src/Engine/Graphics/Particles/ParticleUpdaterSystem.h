@@ -2,9 +2,10 @@
 
 #include "Engine/ECS/System/iSystem.h"
 
+#include "Engine/Graphics/Particles/ParticlesProperties.h"
+
 namespace MyEngine
 {
-	// TODO: The particles could be entities later
 	// Processes the particles attributes every frame
 	class ParticleUpdaterSystem : public iSystem
 	{
@@ -25,5 +26,9 @@ namespace MyEngine
 		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
+
+		static void UpdateParticles(ParticleProps* vecParticles,
+								 size_t startIndex, size_t endIndex,
+								 std::shared_ptr<Scene> pScene, float deltaTime);
 	};
 }

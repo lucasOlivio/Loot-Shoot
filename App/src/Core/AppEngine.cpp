@@ -55,7 +55,6 @@ namespace MyEngine
 			// Graphics
 			"ParticleEmissionSystem",
 			"ParticleUpdaterSystem",
-			"ParticleRenderSystem",
 			"AnimationPlayerSystem",
 			// Physics
 			"MovementSystem",

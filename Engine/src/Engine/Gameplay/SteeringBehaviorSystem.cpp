@@ -36,10 +36,10 @@ namespace MyEngine
 
             TransformComponent& transformTarget = pScene->Get<TransformComponent>(steeringBehavior.targetId);
 
+            transform.LockWrite();
             transformTarget.LockRead();
             steeringBehavior.LockRead();
             movement.LockWrite();
-            transform.LockWrite();
             switch (steeringBehavior.steeringType)
             {
             case eSteeringTypes::SEEK:
@@ -89,10 +89,10 @@ namespace MyEngine
             default:
                 break;
             }
-            transform.UnlockWrite();
             movement.UnlockWrite();
             steeringBehavior.UnlockRead();
             transformTarget.UnlockRead();
+            transform.UnlockWrite();
         }
     }
 

@@ -3,17 +3,18 @@
 #include "NullThreadPool.hpp"
 #include "iThreadPool.h"
 
+#include <map>
+
 namespace MyEngine
 {
 	class ThreadPoolLocator
 	{
 	public:
-		static std::shared_ptr<iThreadPool> Get();
+		static std::shared_ptr<iThreadPool> GetOrCreate(const std::string& poolName);
 
-		static void Set(std::shared_ptr<iThreadPool> pThreadPool);
+		static void CloseAllPools();
 
 	private:
-		static std::shared_ptr<iThreadPool> m_pThreadPool;
-		static std::shared_ptr<NullThreadPool> m_nullService;
+		static std::map<std::string, std::shared_ptr<iThreadPool>> m_mapThreadPool;
 	};
 }

@@ -95,8 +95,9 @@ namespace MyEngine
 
             for (int i = 0; i < particlesToCreate; i++)
             {
-                ParticleProps particle;
+                ParticleProps& particle = pParticleManager->EmitParticle();
 
+                particle.LockWrite();
                 particle.entityId = entityId;
 
                 particle.initialLifeTime = Random::Float(seed, emitterProps.minLifeTime, emitterProps.maxLifeTime);
@@ -113,7 +114,7 @@ namespace MyEngine
                 particle.color = emitterProps.colorInitial;
                 particle.colorChange = emitterProps.colorChange;
 
-                pParticleManager->EmitParticle(particle);
+                particle.UnlockWrite();
             }
             emitter.UnlockRead();
 

@@ -2,25 +2,38 @@
 
 #include "ThreadPoolLocator.h"
 
+#include "ThreadPool.h"
+
 namespace MyEngine
 {
-	std::shared_ptr<NullThreadPool> ThreadPoolLocator::m_nullService(new NullThreadPool());
-	std::shared_ptr<iThreadPool> ThreadPoolLocator::m_pThreadPool = m_nullService;
+	using itPools = std::map<std::string, std::shared_ptr<iThreadPool>>::iterator;
+	using pairPools = std::pair<std::string, std::shared_ptr<iThreadPool>>;
 
-	std::shared_ptr<iThreadPool> ThreadPoolLocator::Get()
+	std::map<std::string, std::shared_ptr<iThreadPool>> ThreadPoolLocator::m_mapThreadPool = {};
+
+	std::shared_ptr<iThreadPool> ThreadPoolLocator::GetOrCreate(const std::string& poolName)
 	{
-		return m_pThreadPool;
+		itPools it = m_mapThreadPool.find(poolName);
+		if (it == m_mapThreadPool.end())
+		{
+			std::shared_ptr<iThreadPool> pThreadPool = std::shared_ptr<iThreadPool>(new ThreadPool());
+			pThreadPool->CreateWorkers();
+
+			m_mapThreadPool.emplace(poolName, pThreadPool);
+
+			it = m_mapThreadPool.find(poolName);
+		}
+
+		std::shared_ptr<iThreadPool> pThreadPool = it->second;
+
+		return pThreadPool;
 	}
 
-	void ThreadPoolLocator::Set(std::shared_ptr<iThreadPool> pThreadPool)
+	void ThreadPoolLocator::CloseAllPools()
 	{
-		if (pThreadPool == nullptr)
+		for (const pairPools& pool : m_mapThreadPool)
 		{
-			m_pThreadPool = m_nullService;
-		}
-		else
-		{
-			m_pThreadPool = pThreadPool;
+			pool.second->CloseThreads();
 		}
 	}
 }

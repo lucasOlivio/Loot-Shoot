@@ -11,10 +11,10 @@ namespace MyEngine
 		virtual ~ParticleManager();
 
 		// Returns all the particles alive or not
-		virtual const std::vector<ParticleProps>& GetParticles();
+		virtual std::vector<ParticleProps>& GetParticles();
 
-		// Sets the necessary parameters for the next available particle
-		virtual void EmitParticle(const ParticleProps& props);
+		// Get the next available particle
+		virtual ParticleProps& EmitParticle();
 
 		// Update the values for the corresponding particle
 		virtual void UpdateParticle(uint index, const ParticleProps& props);

@@ -10,20 +10,17 @@
 
 namespace MyEngine
 {
-	ThreadPool::ThreadPool() : m_isRunning(false), m_runningTasks(0), m_CSTasks(CRITICAL_SECTION())
+	ThreadPool::ThreadPool() : m_isRunning(false), 
+							m_runningTasks(0), 
+							m_CSTasks(CRITICAL_SECTION()),
+							m_nextId(0)
 	{
-		InitializeCriticalSection(&m_CSTasks);
-	}
-
-	ThreadPool::~ThreadPool()
-	{
-		DeleteCriticalSection(&m_CSTasks);
-		CloseHandle(m_events[0]);
-		CloseHandle(m_events[1]);
 	}
 
 	void ThreadPool::CreateWorkers()
 	{
+		InitializeCriticalSection(&m_CSTasks);
+
 		m_isRunning = true;
 
 		// New task event
@@ -61,10 +58,13 @@ namespace MyEngine
 		}
 	}
 
-	void ThreadPool::EnqueueTask(Task task)
+	void ThreadPool::EnqueueTask(TaskHandler handler)
 	{
 		InterlockedIncrement(&m_runningTasks);
 
+		Task task = Task();
+		task.ID = m_nextId;
+		task.handler = handler;
 		EnterCriticalSection(&m_CSTasks);
 		m_taskQueue.push(task);
 		LeaveCriticalSection(&m_CSTasks);
@@ -75,6 +75,8 @@ namespace MyEngine
 			LOG_ERROR("ThreadPool::EnqueueTask SetEvent failed (" + std::to_string(GetLastError()) + ") :" + WindowsUtils::GetLastErrorAsString());
 			return;
 		}
+
+		InterlockedIncrement(&m_nextId);
 	}
 
 	void ThreadPool::CloseThreads()
@@ -97,7 +99,6 @@ namespace MyEngine
 		{
 			// All thread objects were signaled
 		case WAIT_OBJECT_0:
-			LOG_INFO("All threads ended, cleaning up for application exit...");
 			break;
 
 			// An error occurred
@@ -105,6 +106,10 @@ namespace MyEngine
 			LOG_ERROR("ThreadPool::CloseThreads WaitForMultipleObjects failed (" + std::to_string(GetLastError()) + ") :" + WindowsUtils::GetLastErrorAsString());
 			return;
 		}
+
+		DeleteCriticalSection(&m_CSTasks);
+		CloseHandle(m_events[0]);
+		CloseHandle(m_events[1]);
 	}
 
 	LONG ThreadPool::RunningTasks()
@@ -127,36 +132,42 @@ namespace MyEngine
 			// m_events[0] was signaled
 			case WAIT_OBJECT_0:
 			{
-				// Execute new task
-
-				EnterCriticalSection(&threadPool->m_CSTasks);
-				if (threadPool->m_taskQueue.empty())
+				// Execute while there are tasks available
+				Task task;
+				while (threadPool->m_GetNextTask(task))
 				{
-					LeaveCriticalSection(&threadPool->m_CSTasks);
-					break;
+					task.handler();
+					InterlockedDecrement(&threadPool->m_runningTasks);
 				}
-
-				Task task = threadPool->m_taskQueue.front();
-				threadPool->m_taskQueue.pop();
-				LeaveCriticalSection(&threadPool->m_CSTasks);
-
-				task();
-
-				InterlockedDecrement(&threadPool->m_runningTasks);
 
 				break;
 			}
 			// m_events[1] was signaled
 			case WAIT_OBJECT_0 + 1:
+				InterlockedDecrement(&threadPool->m_runningTasks);
 				break;
 			default:
 				LOG_ERROR("ThreadPool::m_WorkerThread Wait error (" + std::to_string(GetLastError()) + ") :" + WindowsUtils::GetLastErrorAsString());
 				return 0;
 			}
-
-			InterlockedDecrement(&threadPool->m_runningTasks);
 		}
 
 		return 0;
+	}
+
+	bool ThreadPool::m_GetNextTask(Task& task)
+	{
+		EnterCriticalSection(&m_CSTasks);
+		if (m_taskQueue.empty())
+		{
+			LeaveCriticalSection(&m_CSTasks);
+			return false;
+		}
+
+		task = m_taskQueue.front();
+		m_taskQueue.pop();
+		LeaveCriticalSection(&m_CSTasks);
+
+		return true;
 	}
 }

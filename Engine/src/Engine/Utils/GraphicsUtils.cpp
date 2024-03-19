@@ -48,23 +48,24 @@ namespace MyEngine
 		}
 	}
 
-	void GraphicsUtils::DrawParticle(const sRenderParticleInfo& renderInfo, std::shared_ptr<ShaderManager> pShader)
+	void GraphicsUtils::DrawInstanced(const uint& BUFFER_ID, const uint& VAO_ID,
+									  const uint& numIndices/*, 
+									  const std::vector<sRenderInfo>& renderInfo*/)
 	{
-		pShader->SetUniformInt("isParticle", true);
-		pShader->SetUniformVec4("defaultColor", renderInfo.color);
-		pShader->SetUniformFloat("particleAlpha", renderInfo.alpha);
+		// Update models buffer data
+		//glBindBuffer(GL_UNIFORM_BUFFER, BUFFER_ID);
+		//GLsizei sizeToRender = static_cast<uint>(renderInfo.size());
+		//uint bytes = sizeof(sRenderInfo) * static_cast<uint>(sizeToRender);
+		//glBufferSubData(GL_UNIFORM_BUFFER,
+		//				0, bytes,
+		//				&(renderInfo));
+		//glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-		pShader->SetUniformMatrix4f("matModel", renderInfo.matModel);
-
-		// Also calculate and pass the "inverse transpose" for the model matrix
-		glm::mat4 matModelIT = glm::inverse(glm::transpose(renderInfo.matModel));
-		pShader->SetUniformMatrix4f("matModel_IT", matModelIT);
-
-		glBindVertexArray(IMPOSTOR_VAO_ID); //  enable VAO (and everything else)
-		glDrawElements(GL_TRIANGLES,
-			IMPOSTOR_NUM_INDICES,
-			GL_UNSIGNED_INT,
-			0);
-		glBindVertexArray(0); 			  // disable VAO (and everything else)
+		// Draw as much elements as needed
+		glBindVertexArray(VAO_ID);
+		glDrawElementsInstanced(
+			GL_TRIANGLES, numIndices, 
+			GL_UNSIGNED_INT, 0, /*sizeToRender*/0
+		);
 	}
 }

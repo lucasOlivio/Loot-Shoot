@@ -19,30 +19,30 @@ namespace MyEngine
             DeleteCriticalSection(&m_csWriter);
         }
 
-        void LockRead() 
+        void LockRead()
         {
             InterlockedIncrement(&m_readers);
-            if (m_readers == 1) 
+            if (m_readers == 1)
             {
                 EnterCriticalSection(&m_csWriter);
             }
         }
 
-        void UnlockRead() 
+        void UnlockRead()
         {
             InterlockedDecrement(&m_readers);
-            if (m_readers == 0) 
+            if (m_readers == 0)
             {
                 LeaveCriticalSection(&m_csWriter);
             }
         }
 
-        void LockWrite() 
+        void LockWrite()
         {
             EnterCriticalSection(&m_csWriter);
         }
 
-        void UnlockWrite() 
+        void UnlockWrite()
         {
             LeaveCriticalSection(&m_csWriter);
         }
@@ -50,5 +50,6 @@ namespace MyEngine
     private:
         CRITICAL_SECTION m_csWriter; // Critical section for controlling access to writer
         LONG m_readers;              // Number of active readers
+
     };
 }

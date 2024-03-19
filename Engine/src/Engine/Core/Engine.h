@@ -86,8 +86,7 @@ namespace MyEngine
 		// Updates the timer
 		float m_GetDeltaTime();
 
-		// Thread pool main service
-		std::shared_ptr<iThreadPool> m_threadPool;
+		void m_TriggerWindowClose();
 
 		// All systems update. Runs one thread per-system them wait for them all to finish
 		static DWORD WINAPI m_Update(LPVOID lpParam);

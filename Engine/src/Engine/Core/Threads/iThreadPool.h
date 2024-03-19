@@ -1,6 +1,7 @@
 #pragma once
 
-#include <functional>
+#include "Engine/Core/Threads/ThreadsProperties.h"
+
 #include <Windows.h>
 
 namespace MyEngine
@@ -10,14 +11,12 @@ namespace MyEngine
 	class iThreadPool
 	{
 	public:
-		using Task = std::function<void()>;
-
 		iThreadPool() {};
 		virtual ~iThreadPool() {};
 
 		virtual void CreateWorkers() = 0;
 
-		virtual void EnqueueTask(Task task) = 0;
+		virtual void EnqueueTask(TaskHandler handler) = 0;
 
 		virtual void CloseThreads() = 0;
 

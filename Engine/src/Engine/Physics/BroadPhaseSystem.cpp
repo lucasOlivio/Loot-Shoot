@@ -195,8 +195,8 @@ namespace MyEngine
 				continue;
 			}
 
-			pGrid->LockRead();
 			transform.LockRead();
+			pGrid->LockRead();
 			uint idxpos = GridUtils::LocatePoint(transform.position, pGrid->lengthPerBox);
 			pGrid->UnlockRead();
 

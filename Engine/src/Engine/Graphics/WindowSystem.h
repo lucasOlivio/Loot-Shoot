@@ -24,8 +24,5 @@ namespace MyEngine
 		virtual void End(std::shared_ptr<Scene> pScene);
 
 		virtual void Shutdown();
-
-	private:
-		void m_TriggerWindowClose();
 	};
 }

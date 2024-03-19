@@ -38,7 +38,6 @@ namespace MyEngine
 
     Engine::Engine() : m_rendererManager(new RendererManager()),
                        m_particleManager(new ParticleManager()),
-                       m_threadPool(new ThreadPool()),
                        m_pScene(new Scene())
 
     {
@@ -123,9 +122,8 @@ namespace MyEngine
         // Setting up services
         RendererManagerLocator::Set(m_rendererManager);
         ParticleManagerLocator::Set(m_particleManager);
-        ThreadPoolLocator::Set(m_threadPool);
-
-        m_threadPool->CreateWorkers();
+        ThreadPoolLocator::GetOrCreate("update");
+        ThreadPoolLocator::GetOrCreate("render");
 
         // Global events of engine interest
         SUBSCRIBE_WINDOW_CLOSE_EVENT([this](const WindowCloseEvent& event) { OnWindowClose(event); });
@@ -186,20 +184,22 @@ namespace MyEngine
 
     void Engine::Update()
     {
+        std::shared_ptr<iThreadPool> updateThreadPool = ThreadPoolLocator::GetOrCreate("update");
+
         while (m_isRunning)
         {
             float deltaTime = m_GetDeltaTime();
 
             for (int i = 0; i < m_vecSystems.size(); i++)
             {
-                m_threadPool->EnqueueTask([this, i, deltaTime]()
-                                            {
-                                                m_vecSystems[i]->Update(m_pScene, deltaTime);
-                                            });
+                updateThreadPool->EnqueueTask([this, i, deltaTime]()
+                {
+                    m_vecSystems[i]->Update(m_pScene, deltaTime);
+                });
                 //m_vecSystems[i]->Update(m_pScene, deltaTime);
             }
 
-            while (m_threadPool->RunningTasks() > 0)
+            while (updateThreadPool->RunningTasks() > 0)
             {
                 Sleep(0);
             }
@@ -227,24 +227,42 @@ namespace MyEngine
                 Sleep(0);
             }
         }
-
-        m_threadPool->CloseThreads();
     }
 
     void Engine::Render()
     {
+        std::shared_ptr<iThreadPool> renderThreadPool = ThreadPoolLocator::GetOrCreate("render");
+
         m_BeginFrame();
 
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
-            m_vecSystems[i]->Render(m_pScene);
+            renderThreadPool->EnqueueTask([this, i]()
+            {
+                m_vecSystems[i]->Render(m_pScene);
+            });
+            //m_vecSystems[i]->Render(m_pScene);
         }
+
+        // Wait all systems send their render commands
+        while (renderThreadPool->RunningTasks() > 0)
+        {
+            Sleep(0);
+        }
+        
+        // Render all on queue
+        std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
+
+        pRenderer->RenderAll(m_pScene);
+        pRenderer->ClearRender();
 
         m_EndFrame();
     }
 
     void Engine::Shutdown()
     {
+        ThreadPoolLocator::CloseAllPools();
+
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
             std::shared_ptr<iSystem> pSystem = m_vecSystems[i];
@@ -336,6 +354,12 @@ namespace MyEngine
         return averageFrameTime;
     }
 
+    void Engine::m_TriggerWindowClose()
+    {
+        WindowCloseEvent windowEvent = WindowCloseEvent();
+        PUBLISH_WINDOW_CLOSE_EVENT(windowEvent);
+    }
+
     void Engine::m_ClearFrame()
     {
         m_pScene->m_DestroyEntities();
@@ -396,6 +420,18 @@ namespace MyEngine
         {
             // No window created
             return;
+        }
+
+        if (glfwWindowShouldClose(pWindow->pGLFWWindow))
+        {
+            m_TriggerWindowClose();
+        }
+
+        // Update window title
+        if (pWindow->prevName != pWindow->name)
+        {
+            glfwSetWindowTitle(pWindow->pGLFWWindow, pWindow->name.c_str());
+            pWindow->prevName = pWindow->name;
         }
 
         // ImGui endframe

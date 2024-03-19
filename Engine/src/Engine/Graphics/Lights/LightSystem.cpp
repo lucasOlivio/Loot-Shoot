@@ -37,16 +37,16 @@ namespace MyEngine
         // Set lights to transform position of entity
         for (Entity entityId : m_vecEntities)
         {
-            LightComponent& light = pScene->Get<LightComponent>(entityId);
-            TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
+        //    LightComponent& light = pScene->Get<LightComponent>(entityId);
+        //    TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
 
-            m_UpdatePositionUL(transform, light, pShader);
-            m_UpdateDirectionUL(light, pShader);
-            m_UpdateDiffuseUL(light, pShader);
-            m_UpdateSpecularUL(light, pShader);
-            m_UpdateAttenUL(light, pShader);
-            m_UpdateParamsUL(light, pShader);
-            m_UpdateStatusUL(light, pShader);
+        //    m_UpdatePositionUL(transform, light, pShader);
+        //    m_UpdateDirectionUL(light, pShader);
+        //    m_UpdateDiffuseUL(light, pShader);
+        //    m_UpdateSpecularUL(light, pShader);
+        //    m_UpdateAttenUL(light, pShader);
+        //    m_UpdateParamsUL(light, pShader);
+        //    m_UpdateStatusUL(light, pShader);
         }
     }
 

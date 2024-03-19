@@ -12,9 +12,6 @@ namespace MyEngine
 		iRendererManager() {};
 		virtual ~iRendererManager() {};
 
-		// Add particle to rendering pipeline
-		virtual void AddToRender(const sRenderParticleInfo& renderInfo) = 0;
-
 		// Add model to rendering pipeline
 		virtual void AddToRender(const sRenderModelInfo& renderInfo) = 0;
 

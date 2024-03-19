@@ -2,19 +2,21 @@
 
 #include "Engine/Graphics/Particles/ParticlesProperties.h"
 
+#include "Engine/ThreadSafe.h"
+
 namespace MyEngine
 {
-	class iParticleManager
+	class iParticleManager : public ThreadSafe
 	{
 	public:
-		iParticleManager() {};
+		iParticleManager() : ThreadSafe() {};
 		virtual ~iParticleManager() {};
 
 		// Returns all the particles alive or not
-		virtual const std::vector<ParticleProps>& GetParticles() = 0;
+		virtual std::vector<ParticleProps>& GetParticles() = 0;
 
-		// Sets the necessary parameters for the next available particle
-		virtual void EmitParticle(const ParticleProps& props) = 0;
+		// Get the next available particle
+		virtual ParticleProps& EmitParticle() = 0;
 
 		// Update the values for the corresponding particle
 		virtual void UpdateParticle(uint index, const ParticleProps& props) = 0;

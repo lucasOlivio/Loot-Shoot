@@ -17,6 +17,6 @@ namespace MyEngine
 
     protected:
         Singleton() {}
-        ~Singleton() {}
+        virtual ~Singleton() {}
     };
 }

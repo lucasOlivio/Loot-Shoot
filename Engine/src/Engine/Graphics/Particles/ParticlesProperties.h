@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Engine/Core/Resources/Meshes/Mesh.h"
+#include "Engine/ThreadSafe.h"
 
 namespace MyEngine
 {
-	struct ParticleProps
+	struct ParticleProps : public ThreadSafe
 	{
 		Entity entityId; // Entity that emitted this particle
 
@@ -20,7 +21,7 @@ namespace MyEngine
 		float scale;
 
 		float initialLifeTime;
-		float lifetime;
+		float lifetime = 0.0f;
 		float alpha = 1.0f;
 	};
 

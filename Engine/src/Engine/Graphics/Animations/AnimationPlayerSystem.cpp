@@ -41,7 +41,7 @@ namespace MyEngine
                     pAnimController->timeLastKeyFrame = keyframe.time;
                 }
             }
-            animation.LockRead();
+            animation.UnlockRead();
             pAnimController->UnlockWrite();
 
             pAnimController->LockWrite();
@@ -57,7 +57,7 @@ namespace MyEngine
                     pAnimController->timeLastKeyFrame = keyframe.time;
                 }
             }
-            animation.LockRead();
+            animation.UnlockRead();
             pAnimController->UnlockWrite();
 
             pAnimController->LockWrite();
@@ -73,7 +73,7 @@ namespace MyEngine
                     pAnimController->timeLastKeyFrame = keyframe.time;
                 }
             }
-            animation.LockRead();
+            animation.UnlockRead();
             pAnimController->UnlockWrite();
         }
     }
@@ -115,6 +115,7 @@ namespace MyEngine
             animation.LockWrite();
             if (!animation.isActive)
             {
+                animation.UnlockWrite();
                 continue;
             }
 

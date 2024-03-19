@@ -13,22 +13,25 @@ namespace MyEngine
 	{
 	}
 
-	const std::vector<ParticleProps>& ParticleManager::GetParticles()
+	std::vector<ParticleProps>& ParticleManager::GetParticles()
 	{
 		return m_vecParticles;
 	}
 
-	void ParticleManager::EmitParticle(const ParticleProps& props)
+	ParticleProps& ParticleManager::EmitParticle()
 	{
 		ParticleProps& particle = m_vecParticles[m_nextParticle];
-		particle = props;
-
 		m_nextParticle = ++m_nextParticle % m_vecParticles.size();
+
+		return particle;
 	}
 
 	void ParticleManager::UpdateParticle(uint index, const ParticleProps& props)
 	{
-		m_vecParticles[index] = props;
+		ParticleProps& particle = m_vecParticles[index];
+		particle.LockWrite();
+		particle = props;
+		particle.UnlockWrite();
 	}
 
 	void ParticleManager::ResetParticles()

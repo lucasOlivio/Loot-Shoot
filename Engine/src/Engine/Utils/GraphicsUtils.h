@@ -14,6 +14,9 @@ namespace MyEngine
 		// Sets all needed uniforms and draw model using VAO and opengl
 		static void DrawModel(const sRenderModelInfo& renderInfo, std::shared_ptr<ShaderManager> pShader);
 
-		static void DrawParticle(const sRenderParticleInfo& renderInfo, std::shared_ptr<ShaderManager> pShader);
+		// Use instancing to render as much objects as needed updating the buffer data
+		static void DrawInstanced(const uint& BUFFER_ID, const uint& VAO_ID,
+								  const uint& numIndices/*, 
+								  const std::vector<sRenderInfo>& renderInfo*/);
 	};
 }

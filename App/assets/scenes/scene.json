@@ -71,6 +71,7 @@
       "model": "sphere.ply"
     },
     "emitter": {
+      "meshName":  "sphere.ply",
       "emitRateMin": 10,
       "emitRateMax": 20,
       "maxParticles": 0,
@@ -85,7 +86,7 @@
       "posMax": [ 1.0, 1.0, 1.0 ],
       "posMin": [ -1.0, -1.0, -1.0 ],
       "rotMax": [ 0.0, 0.0, 0.0 ],
-      "rotMin": [ 0.0, 0.0,0.0 ],
+      "rotMin": [ 0.0, 0.0, 0.0 ],
       "scaMax": 3.0,
       "scaMin": 2.0,
       "velMax": [ 0.0, 5.0, 0.0 ],
@@ -176,6 +177,7 @@
       "defaultParticleMass": 0.0
     },
     "emitter": {
+      "meshName": "sphere.ply",
       "emitRateMin": 10000,
       "emitRateMax": 50000,
       "maxParticles": 100000,

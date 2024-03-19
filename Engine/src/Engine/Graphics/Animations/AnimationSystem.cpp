@@ -50,7 +50,7 @@ namespace MyEngine
             // Scale
             AnimationUtils::InterpolateAndApply<ScaleKeyFrame, float>(animation.scaleKeyFrames, 
                                                       currTime, animation.currStartScaKF, animation.currEndScaKF, transform.scale);
-            animation.LockRead();
+            animation.UnlockRead();
             transform.UnlockWrite();
         }
     }

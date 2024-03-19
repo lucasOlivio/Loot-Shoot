@@ -19,14 +19,16 @@ namespace MyEngine
 
 #define TEXT_FONT_SIZE 1.2f
 
-#define MAX_PARTICLES 100000
-#define IMPOSTOR_VAO_ID 2
-#define IMPOSTOR_NUM_INDICES 2880
+#define MAX_PARTICLES 100'000
 
 #define DEFAULT_MOUSE_SENSITIVITY 0.001f
 
 	const std::string DEFAULT_CONFIG = "config.json";
 	const std::string DEFAULT_SCENE = "scene.json";
+
+	// TODO: This should come from config?
+	const std::string DEFAULT_SHADER = "ShaderDefault";
+	const std::string INSTANCING_SHADER = "ShaderInstancing";
 
 	const glm::vec3 X_VECTOR = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	const glm::vec3 Y_VECTOR = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
