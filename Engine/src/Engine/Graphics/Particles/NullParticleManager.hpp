@@ -11,6 +11,12 @@ namespace MyEngine
 		NullParticleManager() {};
 		virtual ~NullParticleManager() {};
 
+		// Setup the buffers and attributes for the shader
+		virtual void Initialize()
+		{
+			LOG_ERROR("Particle manager not initialized!");
+		}
+
 		// Returns all the particles alive or not
 		virtual std::vector<ParticleProps>& GetParticles()
 		{
@@ -33,6 +39,11 @@ namespace MyEngine
 
 		// Reset all particles life to 0
 		virtual void ResetParticles()
+		{
+			LOG_ERROR("Particle manager not initialized!");
+		}
+
+		virtual void DrawParticles()
 		{
 			LOG_ERROR("Particle manager not initialized!");
 		}

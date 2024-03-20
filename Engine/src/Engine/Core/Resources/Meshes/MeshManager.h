@@ -3,6 +3,8 @@
 #include "Engine/Core/Resources/iResourceManager.h"
 #include "Engine/Core/Resources/Meshes/Mesh.h"
 
+#include "Engine/Graphics/Particles/ParticlesProperties.h"
+
 #include "Engine/Singleton.hpp"
 
 #include <map>
@@ -16,6 +18,9 @@ namespace MyEngine
 	public:
 		virtual void SetBasePath(const std::string& basePath);
 		virtual size_t LoadResource(const std::string& name);
+
+		// HACK: Separate loading for the different particles attributes VAO and VBO
+		std::shared_ptr<sMeshInfo> LoadParticles(const std::string& name, std::vector<ParticleProps>& particles, uint& particlePropsVBOID);
 
 		virtual void DeleteResource(const std::string& name);
 		virtual void DeleteResource(const size_t& index);
@@ -35,7 +40,10 @@ namespace MyEngine
 		MeshManager() {};
 
 		bool m_LoadMeshData(std::string theFileName, std::shared_ptr<sMeshInfo> pMesh);
+
 		void m_LoadVAOData(std::shared_ptr<sMeshInfo> pMesh);
+		void m_LoadParticleVAOData(std::shared_ptr<sMeshInfo> pMesh, 
+								   std::vector<ParticleProps>& particles);
 
 		// VAO binded to shader at moment
 		std::string m_currMesh;
@@ -45,5 +53,9 @@ namespace MyEngine
 		std::vector<std::shared_ptr<iResource>> m_vecMeshes;
 
 		std::shared_ptr<iResource> m_defaultMesh;
+
+		// HACK: Particles IDs separated
+		uint m_particlePropsVBOID;
+		std::shared_ptr<sMeshInfo> m_pMeshParticle = nullptr;
 	};
 }

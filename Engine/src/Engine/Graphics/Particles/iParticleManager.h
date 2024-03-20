@@ -12,6 +12,9 @@ namespace MyEngine
 		iParticleManager() : ThreadSafe() {};
 		virtual ~iParticleManager() {};
 
+		// Setup the buffers and attributes for the shader
+		virtual void Initialize() = 0;
+
 		// Returns all the particles alive or not
 		virtual std::vector<ParticleProps>& GetParticles() = 0;
 
@@ -20,6 +23,9 @@ namespace MyEngine
 
 		// Update the values for the corresponding particle
 		virtual void UpdateParticle(uint index, const ParticleProps& props) = 0;
+
+		// Update the buffer data and draw particles instanced
+		virtual void DrawParticles() = 0;
 
 		// Reset all particles life to 0
 		virtual void ResetParticles() = 0;

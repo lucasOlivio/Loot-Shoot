@@ -100,6 +100,12 @@ namespace MyEngine
 
             particle.orientation = TransformUtils::AdjustOrientation(particle.orientation, glm::vec3(particle.rotationSpeed * deltaTime));
 
+            particle.transform = glm::mat4(1.0f);
+            TransformUtils::GetTransform(particle.position, 
+                                         particle.orientation, 
+                                         particle.scale, 
+                                         particle.transform);
+
             // Color change over time
             particle.color = particle.color + (particle.colorChange * deltaTime);
             // Particle total alpha from 1 to 0 to die

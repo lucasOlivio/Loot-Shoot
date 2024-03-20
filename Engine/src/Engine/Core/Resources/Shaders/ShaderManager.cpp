@@ -98,10 +98,11 @@ namespace MyEngine
 
 	int ShaderManager::GetUL(const char* name)
 	{
+		std::shared_ptr<ShaderProgram> pShader = std::static_pointer_cast<ShaderProgram>(GetActiveResource());
 		std::map< std::string /*name of uniform variable*/,
 			int /* uniform location ID */ >::iterator
-			itUniform = m_mapUniformNameToUniformLocation.find(name);
-		if (itUniform == m_mapUniformNameToUniformLocation.end())
+			itUniform = pShader->mapUniformToUL.find(name);
+		if (itUniform == pShader->mapUniformToUL.end())
 		{
 			// Not in map yet, so load to map cache
 			int uniLocation = m_LoadUniformLocation(name);
@@ -113,10 +114,11 @@ namespace MyEngine
 
 	int ShaderManager::GetAL(const char* name)
 	{
+		std::shared_ptr<ShaderProgram> pShader = std::static_pointer_cast<ShaderProgram>(GetActiveResource());
 		std::map< std::string /*name of attribute variable*/,
 			int /* attribute location ID */ >::iterator
-			itAttribute = m_mapAttributeNameToAttributeLocation.find(name);
-		if (itAttribute == m_mapAttributeNameToAttributeLocation.end())
+			itAttribute = pShader->mapAttributeToAL.find(name);
+		if (itAttribute == pShader->mapAttributeToAL.end())
 		{
 			// Not in map yet, so load to map cache
 			bool ulFound = m_LoadAttributeLocation(name);
@@ -126,7 +128,7 @@ namespace MyEngine
 				return -1;
 			}
 
-			itAttribute = m_mapAttributeNameToAttributeLocation.find(name);
+			itAttribute = pShader->mapAttributeToAL.find(name);
 		}
 
 		return itAttribute->second;		// second if the "int" value
@@ -375,12 +377,13 @@ namespace MyEngine
 
 	int ShaderManager::m_LoadUniformLocation(const char* variableName)
 	{
+		std::shared_ptr<ShaderProgram> pShader = std::static_pointer_cast<ShaderProgram>(GetActiveResource());
 		int uniLocation = glGetUniformLocation(m_currShaderID, variableName);
 		// Did it find it (not -1)
 		if (uniLocation > -1)
 		{
 			// Save it
-			m_mapUniformNameToUniformLocation[variableName] = uniLocation;
+			pShader->mapUniformToUL[variableName] = uniLocation;
 		}
 
 		return uniLocation;
@@ -388,6 +391,7 @@ namespace MyEngine
 
 	bool ShaderManager::m_LoadAttributeLocation(const char* variableName)
 	{
+		std::shared_ptr<ShaderProgram> pShader = std::static_pointer_cast<ShaderProgram>(GetActiveResource());
 		GLint attrLocation = glGetAttribLocation(m_currShaderID, variableName);
 		// Did it find it (not -1)
 		if (attrLocation == -1)
@@ -395,7 +399,7 @@ namespace MyEngine
 			return false;
 		}
 		// Save it
-		m_mapAttributeNameToAttributeLocation[variableName] = attrLocation;
+		pShader->mapAttributeToAL[variableName] = attrLocation;
 
 		return true;
 	}

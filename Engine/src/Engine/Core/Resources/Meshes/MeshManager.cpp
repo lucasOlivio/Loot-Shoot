@@ -45,6 +45,26 @@ namespace MyEngine
         return pMesh->index;
     }
 
+    std::shared_ptr<sMeshInfo> MeshManager::LoadParticles(const std::string& name, std::vector<ParticleProps>& particles, uint& particlePropsVBOID)
+    {
+        if (m_pMeshParticle)
+        {
+            // Particle already loaded and binded
+            return m_pMeshParticle;
+        }
+
+        m_pMeshParticle = std::shared_ptr<sMeshInfo>(new sMeshInfo());
+        m_pMeshParticle->name = name;
+
+        bool isLoaded = m_LoadMeshData(name, m_pMeshParticle);
+        assert(isLoaded);
+
+        m_LoadParticleVAOData(m_pMeshParticle, particles);
+
+        particlePropsVBOID = m_particlePropsVBOID;
+        return m_pMeshParticle;
+    }
+
     void MeshManager::DeleteResource(const std::string& name)
     {
         std::map<std::string, std::shared_ptr<iResource>>::iterator it = m_mapMeshes.find(name);
@@ -219,5 +239,99 @@ namespace MyEngine
         glDisableVertexAttribArray(vNormal_location);
 
         glDisableVertexAttribArray(vTextureCoords_location);
+    }
+
+    void MeshManager::m_LoadParticleVAOData(std::shared_ptr<sMeshInfo> pMesh, 
+								            std::vector<ParticleProps>& particles)
+    {
+        std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
+
+        // Define vertex attribute pointers
+        GLint vpos_location = pShader->GetAL("vPos");
+        GLint instanceColor_location = pShader->GetAL("instanceColor");
+        GLint instanceAlpha_location = pShader->GetAL("instanceAlpha");
+        GLint instanceLifeTime_location = pShader->GetAL("instanceLifeTime");
+        GLint instanceTransform_location = pShader->GetAL("instanceTransform");
+        
+        // Generate a new VAO
+        glGenVertexArrays(1, &(m_pMeshParticle->VAO_ID));
+        glBindVertexArray(m_pMeshParticle->VAO_ID);
+
+        // Now ANY state that is related to vertex or index buffer
+        //	and vertex attribute layout, is stored in the 'state' 
+        //	of the VAO... 
+        glGenBuffers(1, &(m_pMeshParticle->vertexBufferID));
+        glBindBuffer(GL_ARRAY_BUFFER, m_pMeshParticle->vertexBufferID);
+        glBufferData(GL_ARRAY_BUFFER,
+            sizeof(sVertex) * m_pMeshParticle->numberOfVertices,
+            (GLvoid*)m_pMeshParticle->pVertices,
+            GL_STATIC_DRAW);
+
+        // Enable and set vertex attribute pointers
+        glEnableVertexAttribArray(vpos_location);
+        glVertexAttribPointer(vpos_location, 4, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, x));
+
+        // Generate and bind Particles prosp VBO
+        glGenBuffers(1, &(m_particlePropsVBOID));
+        glBindBuffer(GL_ARRAY_BUFFER, m_particlePropsVBOID);
+        glBufferData(GL_ARRAY_BUFFER,
+            sizeof(ParticleProps) * MAX_PARTICLES,
+            (GLvoid*)&(particles[0]),
+            GL_DYNAMIC_DRAW);
+
+        glEnableVertexAttribArray(instanceColor_location);
+        glVertexAttribPointer(instanceColor_location, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)offsetof(ParticleProps, color));
+
+        glEnableVertexAttribArray(instanceAlpha_location);
+        glVertexAttribPointer(instanceAlpha_location, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)offsetof(ParticleProps, alpha));
+
+        glEnableVertexAttribArray(instanceLifeTime_location);
+        glVertexAttribPointer(instanceLifeTime_location, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)offsetof(ParticleProps, lifetime));
+
+        // Transform Mat 4 attribute binding
+        std::size_t vec4Size = sizeof(glm::vec4);
+        glEnableVertexAttribArray(instanceTransform_location);
+        glVertexAttribPointer(instanceTransform_location, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)offsetof(ParticleProps, transform));
+        glEnableVertexAttribArray(instanceTransform_location + 1);
+        glVertexAttribPointer(instanceTransform_location + 1, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)(offsetof(ParticleProps, transform) + vec4Size));
+        glEnableVertexAttribArray(instanceTransform_location + 2);
+        glVertexAttribPointer(instanceTransform_location + 2, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)(offsetof(ParticleProps, transform) + (2 * vec4Size)));
+        glEnableVertexAttribArray(instanceTransform_location + 3);
+        glVertexAttribPointer(instanceTransform_location + 3, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)(offsetof(ParticleProps, transform) + (3 * vec4Size)));
+
+        // Use glVertexAttribDivisor to specify that these attributes
+        // are updated for each instance rather than for each vertex
+        glVertexAttribDivisor(instanceColor_location, 1);
+        glVertexAttribDivisor(instanceAlpha_location, 1);
+        glVertexAttribDivisor(instanceLifeTime_location, 1);
+        glVertexAttribDivisor(instanceTransform_location, 1);
+        glVertexAttribDivisor(instanceTransform_location + 1, 1);
+        glVertexAttribDivisor(instanceTransform_location + 2, 1);
+        glVertexAttribDivisor(instanceTransform_location + 3, 1);
+
+        // Copy the index buffer into the video card, 
+        // too create an index buffer.
+        glGenBuffers(1, &(m_pMeshParticle->indexBufferID));
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_pMeshParticle->indexBufferID);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+            sizeof(uint) * m_pMeshParticle->numberOfIndices,
+            (GLvoid*)m_pMeshParticle->pIndices,
+            GL_STATIC_DRAW);
+
+        // Unbind VAO
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        // Disable vertex attrib arrays
+        glDisableVertexAttribArray(vpos_location);
+        glDisableVertexAttribArray(instanceColor_location);
+        glDisableVertexAttribArray(instanceAlpha_location);
+        glDisableVertexAttribArray(instanceLifeTime_location);
+        glDisableVertexAttribArray(instanceTransform_location);
+        glDisableVertexAttribArray(instanceTransform_location + 1);
+        glDisableVertexAttribArray(instanceTransform_location + 2);
+        glDisableVertexAttribArray(instanceTransform_location + 3);
     }
 }

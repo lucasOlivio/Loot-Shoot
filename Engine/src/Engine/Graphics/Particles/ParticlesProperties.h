@@ -9,20 +9,23 @@ namespace MyEngine
 	{
 		Entity entityId; // Entity that emitted this particle
 
-		glm::vec4 color = glm::vec4(1.0f);
-		glm::vec4 colorChange;
-
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
 		glm::vec3 rotationSpeed; // In degrees
 
-		glm::vec3 position;
-		glm::quat orientation;
-		float scale;
+		glm::vec4 colorChange;
 
 		float initialLifeTime;
-		float lifetime = 0.0f;
+
+		glm::vec3 position = glm::vec3(1.0f);
+		glm::quat orientation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		float scale = 1.0f;
+
+		// Buffer attributes
+		glm::vec4 color = glm::vec4(1.0f);
 		float alpha = 1.0f;
+		float lifetime = 0.0f;
+		glm::mat4 transform = glm::mat4(1.0f);
 	};
 
 	struct EmitterProps

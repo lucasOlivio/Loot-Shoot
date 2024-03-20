@@ -13,6 +13,7 @@
 #include "Engine/ECS/Scene/SceneView.hpp"
 
 #include "Engine/Utils/Random.h"
+#include "Engine/Utils/TransformUtils.h"
 
 namespace MyEngine
 {
@@ -107,9 +108,15 @@ namespace MyEngine
                 particle.velocity = Random::Vec3(seed, emitterProps.velMin, emitterProps.velMax);
                 particle.rotationSpeed = Random::Vec3(seed, emitterProps.rotMin, emitterProps.rotMax);
                 
+                particle.transform = glm::mat4(1.0f);
                 particle.orientation = Random::Quat(seed, emitterProps.oriMin, emitterProps.oriMax);
                 particle.position = position + Random::Vec3(seed, emitterProps.posMin, emitterProps.posMax);
                 particle.scale = Random::Float(seed, emitterProps.scaMin, emitterProps.scaMax);
+                
+                TransformUtils::GetTransform(particle.position, 
+                                             particle.orientation, 
+                                             particle.scale, 
+                                             particle.transform);
                
                 particle.color = emitterProps.colorInitial;
                 particle.colorChange = emitterProps.colorChange;

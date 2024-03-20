@@ -78,13 +78,5 @@ namespace MyEngine
 		// Current shader binded
 		std::string m_currShader;
 		int m_currShaderID;
-		
-		// Uniform managing (Maybe this should be separated?)
-		std::map< std::string /*name of uniform variable*/,
-					int /* uniform location ID */ >
-					m_mapUniformNameToUniformLocation;
-		std::map< std::string /*name of attribute variable*/,
-					int /* attribute location ID */ >
-					m_mapAttributeNameToAttributeLocation;
 	};
 }

@@ -19,7 +19,7 @@ namespace MyEngine
 
 #define TEXT_FONT_SIZE 1.2f
 
-#define MAX_PARTICLES 100'000
+#define MAX_PARTICLES 1'000'000
 
 #define DEFAULT_MOUSE_SENSITIVITY 0.001f
 
@@ -42,7 +42,7 @@ namespace MyEngine
 	const int   MAX_FRAME_RATE     = 512;
 	const float MIN_FRAME_DURATION = 1.0f / static_cast<float>(MAX_FRAME_RATE);
 
-	const int   FRAME_RATE = 60;  // Fixed frames per second
+	const int   FRAME_RATE = 30;  // Fixed frames per second
 	const float FRAME_DURATION = 1.0f / static_cast<float>(FRAME_RATE);
 
 	const glm::vec4 WHITE = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);

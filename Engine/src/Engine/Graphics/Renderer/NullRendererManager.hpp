@@ -29,5 +29,10 @@ namespace MyEngine
 		{
 			LOG_ERROR("Renderer manager not initialized!");
 		}
+
+		virtual void UpdateCamera(std::shared_ptr<Scene> pScene)
+		{
+			LOG_ERROR("Renderer manager not initialized!");
+		}
 	};
 }

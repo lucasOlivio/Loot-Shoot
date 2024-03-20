@@ -32,5 +32,12 @@ namespace MyEngine
 	{
 	public:
 		uint ID;	// ID from OpenGL
+
+		std::map< std::string /*name of uniform variable*/,
+					int /* uniform location ID */ >
+					mapUniformToUL;
+		std::map< std::string /*name of attribute variable*/,
+					int /* attribute location ID */ >
+					mapAttributeToAL;
 	};
 }

@@ -26,13 +26,13 @@ namespace MyEngine
 		// Clear all model listing
 		virtual void ClearRender();
 
+		// Calculate projection and view mats and bind to shader
+		virtual void UpdateCamera(std::shared_ptr<Scene> pScene);
+
 	private:
 		// Array buffer for all meshes to render information
 		uint m_bufferId;
 
 		std::vector<sRenderModelInfo> m_vecRenderModelInfos;
-
-		// Calculate projection and view mats and bind to shader
-		void m_UpdateCamera(std::shared_ptr<Scene> pScene);
 	};
 }

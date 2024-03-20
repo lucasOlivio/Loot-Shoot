@@ -10,6 +10,9 @@ namespace MyEngine
 		ParticleManager();
 		virtual ~ParticleManager();
 
+		// Setup the buffers and attributes for the shader
+		virtual void Initialize();
+
 		// Returns all the particles alive or not
 		virtual std::vector<ParticleProps>& GetParticles();
 
@@ -19,6 +22,9 @@ namespace MyEngine
 		// Update the values for the corresponding particle
 		virtual void UpdateParticle(uint index, const ParticleProps& props);
 
+		// Update the buffer data and draw particles instanced
+		virtual void DrawParticles();
+
 		// Reset all particles life to 0
 		virtual void ResetParticles();
 
@@ -26,5 +32,9 @@ namespace MyEngine
 		std::vector<ParticleProps> m_vecParticles;
 
 		size_t m_nextParticle = 0;
+
+		const std::string PARTICLE_MESH = "imposter.ply";
+		std::shared_ptr<sMeshInfo> m_pParticleMesh;
+		uint m_instanceVBO;
 	};
 }

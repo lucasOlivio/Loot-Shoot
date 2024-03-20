@@ -161,6 +161,9 @@ namespace MyEngine
         // Run update thread separated from render thread
         HANDLE updateHandle = CreateThread(NULL, 0, Engine::m_Update, this, 0, NULL);
 
+        // Initialize particles in VBO
+        m_particleManager->Initialize();
+
         while (m_isRunning)
         {
             Render();
@@ -252,9 +255,17 @@ namespace MyEngine
         
         // Render all on queue
         std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
+        std::shared_ptr<iResourceManager> pShaderManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::SHADER);
 
+        pShaderManager->ActivateResource(DEFAULT_SHADER);
+        pRenderer->UpdateCamera(m_pScene);
         pRenderer->RenderAll(m_pScene);
         pRenderer->ClearRender();
+
+        pShaderManager->ActivateResource(INSTANCING_SHADER);
+        pRenderer->UpdateCamera(m_pScene);
+        m_particleManager->DrawParticles();
+        pShaderManager->ActivateResource(DEFAULT_SHADER);
 
         m_EndFrame();
     }

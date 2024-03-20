@@ -30,34 +30,17 @@ namespace MyEngine
 
 	void RendererManager::RenderAll(std::shared_ptr<Scene> pScene)
 	{
-		m_UpdateCamera(pScene);
-
 		// TODO: Join this with the instancing stuff
 		// Render all models
 		std::shared_ptr<iResourceManager> pMaterialManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::MATERIAL);
 		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
-		pShader->ActivateResource(DEFAULT_SHADER);
 		for (const sRenderModelInfo& renderInfo : m_vecRenderModelInfos)
 		{
 			pMaterialManager->ActivateResource(renderInfo.materialName);
 
 			GraphicsUtils::DrawModel(renderInfo, pShader);
 		}
-
-		// Render particles using instancing
-		pShader->ActivateResource(INSTANCING_SHADER);
-		//for (const pairRenderInfos& pair : m_mapRenderInfos)
-		//{
-		//	std::shared_ptr<iResourceManager> pMeshManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::MESH);
-		//	std::shared_ptr<iResource> pResource = pMeshManager->GetResource(pair.first);
-		//	std::shared_ptr<sMeshInfo> pMesh = std::static_pointer_cast<sMeshInfo>(pResource);
-		//	
-		//	/*GraphicsUtils::DrawInstanced(m_bufferId, pMesh->VAO_ID, 
-		//								 pMesh->numberOfIndices, pair.second);*/
-		//}
-
-		pShader->ActivateResource(DEFAULT_SHADER);
 	}
 
 	void RendererManager::ClearRender()
@@ -70,7 +53,7 @@ namespace MyEngine
 		}*/
 	}
 
-	void RendererManager::m_UpdateCamera(std::shared_ptr<Scene> pScene)
+	void RendererManager::UpdateCamera(std::shared_ptr<Scene> pScene)
 	{
 		std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
 		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);

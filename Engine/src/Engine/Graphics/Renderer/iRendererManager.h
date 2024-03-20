@@ -19,5 +19,8 @@ namespace MyEngine
 		virtual void RenderAll(std::shared_ptr<Scene> pScene) = 0;
 
 		virtual void ClearRender() = 0;
+
+		// Calculate projection and view mats and bind to shader
+		virtual void UpdateCamera(std::shared_ptr<Scene> pScene) = 0;
 	};
 }
