@@ -149,8 +149,6 @@ namespace MyEngine
 		// Total number of particles emitted
 		int totalEmitPart = 0;
 
-		std::string meshName;
-
 		bool isActive = false;
 	};
 }

@@ -248,7 +248,7 @@ namespace MyEngine
 
         // Define vertex attribute pointers
         GLint vpos_location = pShader->GetAL("vPos");
-        GLint instanceColor_location = pShader->GetAL("instanceColor");
+        GLint vuv_location = pShader->GetAL("vUV");
         GLint instanceAlpha_location = pShader->GetAL("instanceAlpha");
         GLint instanceLifeTime_location = pShader->GetAL("instanceLifeTime");
         GLint instanceTransform_location = pShader->GetAL("instanceTransform");
@@ -270,6 +270,8 @@ namespace MyEngine
         // Enable and set vertex attribute pointers
         glEnableVertexAttribArray(vpos_location);
         glVertexAttribPointer(vpos_location, 4, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, x));
+        glEnableVertexAttribArray(vuv_location);
+        glVertexAttribPointer(vuv_location, 2, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, u));
 
         // Generate and bind Particles prosp VBO
         glGenBuffers(1, &(m_particlePropsVBOID));
@@ -278,9 +280,6 @@ namespace MyEngine
             sizeof(ParticleProps) * MAX_PARTICLES,
             (GLvoid*)&(particles[0]),
             GL_DYNAMIC_DRAW);
-
-        glEnableVertexAttribArray(instanceColor_location);
-        glVertexAttribPointer(instanceColor_location, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)offsetof(ParticleProps, color));
 
         glEnableVertexAttribArray(instanceAlpha_location);
         glVertexAttribPointer(instanceAlpha_location, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)offsetof(ParticleProps, alpha));
@@ -301,7 +300,6 @@ namespace MyEngine
 
         // Use glVertexAttribDivisor to specify that these attributes
         // are updated for each instance rather than for each vertex
-        glVertexAttribDivisor(instanceColor_location, 1);
         glVertexAttribDivisor(instanceAlpha_location, 1);
         glVertexAttribDivisor(instanceLifeTime_location, 1);
         glVertexAttribDivisor(instanceTransform_location, 1);
@@ -326,7 +324,6 @@ namespace MyEngine
 
         // Disable vertex attrib arrays
         glDisableVertexAttribArray(vpos_location);
-        glDisableVertexAttribArray(instanceColor_location);
         glDisableVertexAttribArray(instanceAlpha_location);
         glDisableVertexAttribArray(instanceLifeTime_location);
         glDisableVertexAttribArray(instanceTransform_location);

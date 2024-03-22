@@ -19,7 +19,7 @@ namespace MyEngine
 
 #define TEXT_FONT_SIZE 1.2f
 
-#define MAX_PARTICLES 1'000'000
+#define MAX_PARTICLES 100'000
 
 #define DEFAULT_MOUSE_SENSITIVITY 0.001f
 

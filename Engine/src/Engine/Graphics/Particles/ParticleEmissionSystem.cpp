@@ -3,7 +3,9 @@
 #include "ParticleEmissionSystem.h"
 
 #include "Engine/Core/Components/Components.h"
+#include "Engine/Core/Resources/Textures/Texture.h"
 #include "Engine/Core/Resources/Textures/TextureManager.h"
+#include "Engine/Core/Resources/Shaders/ShaderManager.h"
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
 #include "Engine/Core/Components/CoreLocator.h"
 
@@ -39,6 +41,26 @@ namespace MyEngine
             emitter.totalEmitPart = 0;
             emitter.UnlockWrite();
         }
+
+        std::shared_ptr<ShaderManager> pShaderManager = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
+        std::shared_ptr<TextureManager> pTextureManager = ResourceManagerFactory::GetOrCreate<TextureManager>(eResourceTypes::TEXTURE);
+        pShaderManager->ActivateResource(INSTANCING_SHADER);
+        for (Entity entityId : m_vecEntities)
+        {
+            EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
+
+            // Load and create all textures
+            for (const std::string& nameTexture : emitter.properties.textures)
+            {
+                size_t index = pTextureManager->LoadResource(nameTexture);
+                pTextureManager->Create2DTexture(nameTexture, eTextureType::COLOR);
+                std::shared_ptr<sTextureInfo> pTexture = std::static_pointer_cast<sTextureInfo>(pTextureManager->GetResource(index));
+
+                emitter.properties.numTextures.push_back(pTexture->textNumber);
+            }
+
+        }
+        pShaderManager->ActivateResource(DEFAULT_SHADER);
     }
 
     void ParticleEmissionSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
@@ -106,20 +128,18 @@ namespace MyEngine
 
                 particle.acceleration = emitterProps.constForce;
                 particle.velocity = Random::Vec3(seed, emitterProps.velMin, emitterProps.velMax);
-                particle.rotationSpeed = Random::Vec3(seed, emitterProps.rotMin, emitterProps.rotMax);
                 
                 particle.transform = glm::mat4(1.0f);
-                particle.orientation = Random::Quat(seed, emitterProps.oriMin, emitterProps.oriMax);
                 particle.position = position + Random::Vec3(seed, emitterProps.posMin, emitterProps.posMax);
+                particle.orientation = TransformUtils::GetDegreesAsQuat(glm::vec3(0.0f, 0.0f, Random::Float(seed, -89.0f, 89.0f))); // Random from Z -90 to 90 degrees
                 particle.scale = Random::Float(seed, emitterProps.scaMin, emitterProps.scaMax);
                 
-                TransformUtils::GetTransform(particle.position, 
-                                             particle.orientation, 
+                TransformUtils::GetTransform(particle.position,
                                              particle.scale, 
                                              particle.transform);
                
-                particle.color = emitterProps.colorInitial;
-                particle.colorChange = emitterProps.colorChange;
+                int indexTexture = Random::Int(seed, 0, emitter.properties.numTextures.size());
+                particle.numTexture = emitter.properties.numTextures[indexTexture];
 
                 particle.UnlockWrite();
             }

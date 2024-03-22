@@ -2,6 +2,7 @@
 
 #include "Engine/ECS/System/iSystem.h"
 
+#include "Engine/Graphics/Particles/iParticleManager.h"
 #include "Engine/Graphics/Particles/ParticlesProperties.h"
 
 namespace MyEngine
@@ -27,8 +28,10 @@ namespace MyEngine
 
 		virtual void Shutdown();
 
-		static void UpdateParticles(ParticleProps* vecParticles,
+		static void UpdateParticles(std::shared_ptr<iParticleManager> pParticleManager,
+								 ParticleProps* vecParticles,
 								 size_t startIndex, size_t endIndex,
+								 glm::vec3 cameraPosition,
 								 std::shared_ptr<Scene> pScene, float deltaTime);
 	};
 }

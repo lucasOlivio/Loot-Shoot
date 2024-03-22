@@ -24,6 +24,14 @@ namespace MyEngine
 		// Update the values for the corresponding particle
 		virtual void UpdateParticle(uint index, const ParticleProps& props) = 0;
 
+		// Send the particle to the rendering pipeline
+		virtual void SendToDraw(GLuint numTexture, const ParticleProps& props) = 0;
+		
+		// Check if the particles were already drawed and cleared
+		virtual bool ReadyToDraw() = 0;
+		virtual void ClearDraw() = 0;
+		virtual void SetReadyToDraw(bool setReady) = 0;
+
 		// Update the buffer data and draw particles instanced
 		virtual void DrawParticles() = 0;
 

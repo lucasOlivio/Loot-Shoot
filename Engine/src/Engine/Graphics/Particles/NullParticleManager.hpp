@@ -43,6 +43,30 @@ namespace MyEngine
 			LOG_ERROR("Particle manager not initialized!");
 		}
 
+		// Send the particle to the rendering pipeline
+		virtual void SendToDraw(GLuint numTexture, const ParticleProps& props)
+		{
+			LOG_ERROR("Particle manager not initialized!");
+		}
+
+		// Check if the particles were already drawed and cleared
+		virtual bool ReadyToDraw()
+		{
+			LOG_ERROR("Particle manager not initialized!");
+
+			return false;
+		}
+
+		virtual void ClearDraw()
+		{
+			LOG_ERROR("Particle manager not initialized!");
+		}
+
+		virtual void SetReadyToDraw(bool setReady)
+		{
+			LOG_ERROR("Particle manager not initialized!");
+		}
+
 		virtual void DrawParticles()
 		{
 			LOG_ERROR("Particle manager not initialized!");
