@@ -19,13 +19,12 @@ out float lifetime;
 
 void main()
 {
-	vec4 vertexModelPosition = vPos;
+    vertexColor = vec4(1.0) * instanceAlpha;
+    vertexUV = vUV;
+    lifetime = instanceLifeTime;
 
-	mat4 matMVP = matProjection * matView * instanceTransform;
-	gl_Position = matMVP * vec4(vertexModelPosition.xyz, 1.0);
-
-	vertexColor = vec4(1.0) * instanceAlpha;
-	vertexUV = vUV;
-	lifetime = instanceLifeTime;
+    // Billboard particles, always facing the camera
+    vec4 viewPos = (matView * instanceTransform[3].xyzw) + (vPos * instanceTransform[0].x);
+    gl_Position = matProjection * viewPos;
 }
 

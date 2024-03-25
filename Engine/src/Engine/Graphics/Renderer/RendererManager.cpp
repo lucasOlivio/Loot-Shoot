@@ -13,6 +13,7 @@
 
 #include "Engine/Utils/CameraUtils.h"
 #include "Engine/Utils/GraphicsUtils.h"
+#include "Engine/Utils/TransformUtils.h"
 
 namespace MyEngine
 {
