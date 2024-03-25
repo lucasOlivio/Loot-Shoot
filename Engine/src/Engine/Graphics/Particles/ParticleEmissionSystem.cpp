@@ -130,12 +130,8 @@ namespace MyEngine
                 particle.velocity = Random::Vec3(seed, emitterProps.velMin, emitterProps.velMax);
                 
                 particle.transform = glm::mat4(1.0f);
-                particle.position = position + Random::Vec3(seed, emitterProps.posMin, emitterProps.posMax);
-                particle.orientation = TransformUtils::GetDegreesAsQuat(glm::vec3(0.0f, 0.0f, Random::Float(seed, -89.0f, 89.0f))); // Random from Z -90 to 90 degrees
-                particle.scale = Random::Float(seed, emitterProps.scaMin, emitterProps.scaMax);
-                
-                TransformUtils::GetTransform(particle.position,
-                                             particle.scale, 
+                TransformUtils::GetTransform(position + Random::Vec3(seed, emitterProps.posMin, emitterProps.posMax),
+                                             Random::Float(seed, emitterProps.scaMin, emitterProps.scaMax),
                                              particle.transform);
                
                 int indexTexture = Random::Int(seed, 0, emitter.properties.numTextures.size());

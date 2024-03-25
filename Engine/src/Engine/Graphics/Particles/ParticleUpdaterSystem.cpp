@@ -112,22 +112,7 @@ namespace MyEngine
 
             // Euler integration
             particle.velocity = particle.velocity + (particle.acceleration * deltaTime);
-            particle.position = particle.position + (particle.velocity * deltaTime);
-
-            // Set plane to always face the camera
-            // Calculate the direction vector from the object's position to the target point
-            glm::vec3 currForward = TransformUtils::GetForwardVector(particle.orientation) + particle.position;
-            glm::vec3 currUp = TransformUtils::GetUpVector(particle.orientation);
-            glm::vec3 direction = glm::normalize(cameraPosition - currForward);
-
-            // Calculate the rotation quaternion to point towards the target point
-            glm::quat orientation = glm::quatLookAt(direction, currUp);
-
-            particle.transform = glm::mat4(1.0f);
-            TransformUtils::GetTransform(particle.position, 
-                                         orientation, 
-                                         particle.scale, 
-                                         particle.transform);
+            particle.transform = glm::translate(particle.transform, (particle.velocity * deltaTime));
 
             // Particle total alpha from 1 to 0 to die
             particle.alpha = particle.lifetime / particle.initialLifeTime;
