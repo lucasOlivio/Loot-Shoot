@@ -24,7 +24,9 @@ void main()
     lifetime = instanceLifeTime;
 
     // Billboard particles, always facing the camera
-    vec4 viewPos = (matView * instanceTransform[3].xyzw) + (vPos * instanceTransform[0].x);
+    float scale = instanceTransform[0].x;
+    vec4 position = instanceTransform[3].xyzw;
+    vec4 viewPos = (matView * position) + (vPos * scale);
     gl_Position = matProjection * viewPos;
 }
 
