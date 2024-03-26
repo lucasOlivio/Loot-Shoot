@@ -167,6 +167,7 @@ namespace MyEngine
 
 		// Total number of particles emitted
 		LONG totalEmitPart = 0;
+		uint nextParticle = 0;
 
 		std::shared_ptr<sMeshInfo> pMesh;
 		std::vector<ParticleProps> particles;

@@ -114,8 +114,7 @@ namespace MyEngine
 
             for (int i = 0; i < particlesToCreate; i++)
             {
-                ParticleProps& particle = emitter.particles[emitter.totalEmitPart];
-                InterlockedIncrement(&emitter.totalEmitPart);
+                ParticleProps& particle = emitter.particles[emitter.nextParticle];
 
                 particle.LockWrite();
                 particle.lifetime = Random::Float(seed, emitter.minLifeTime, emitter.maxLifeTime);
@@ -127,12 +126,13 @@ namespace MyEngine
                 TransformUtils::GetTransform(position + Random::Vec3(seed, emitter.posMin, emitter.posMax),
                                              Random::Float(seed, emitter.scaMin, emitter.scaMax),
                                              particle.transform);
-
                 particle.UnlockWrite();
+
+                InterlockedIncrement(&emitter.totalEmitPart);
+                emitter.nextParticle = (emitter.nextParticle + 1) % emitter.maxParticles;
             }
 
             emitter.LockWrite();
-            emitter.totalEmitPart += particlesToCreate;
             emitter.timeLastEmit = 0.0f;
             emitter.UnlockWrite();
         }
@@ -146,7 +146,6 @@ namespace MyEngine
         pShaderManager->ActivateResource(INSTANCING_SHADER);
         pRenderer->UpdateCamera(pScene);
 
-        glDisable(GL_CULL_FACE);
         glActiveTexture(GL_TEXTURE0);
 
         pShaderManager->SetUniformInt("textureColor", GL_TEXTURE0);
@@ -178,7 +177,6 @@ namespace MyEngine
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
 
-        glEnable(GL_CULL_FACE);
         pShaderManager->ActivateResource(DEFAULT_SHADER);
     }
 
