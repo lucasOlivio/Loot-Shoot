@@ -71,12 +71,13 @@
       "model": "sphere.ply"
     },
     "emitter": {
-      "emitRateMin": 1000,
-      "emitRateMax": 5000,
-      "maxParticles": 10000,
+      "emitRateMin": 100,
+      "emitRateMax": 500,
+      "maxParticles": 1000,
       "isActive": true,
-      "constForce": [ 1.0, 1.0, 0.0 ],
-      "maxLifeTime":  10.0,
+      "accMax": [ 1.0, 1.0, 0.0 ],
+      "accMin": [ 0.0, 0.0, 0.0 ],
+      "maxLifeTime": 10.0,
       "minLifeTime": 5.0,
       "posMax": [ 1.0, 1.0, 1.0 ],
       "posMin": [ -1.0, -1.0, -1.0 ],
@@ -84,7 +85,7 @@
       "scaMin": 2.0,
       "velMax": [ 0.0, 5.0, 0.0 ],
       "velMin": [ 0.0, 1.5, 0.0 ],
-      "textures": [ "smokes/smoke1.png", "smokes/smoke2.png", "smokes/smoke3.png", "smokes/smoke4.png" ]
+      "nameTexture": "smokes/smoke1.png"
     },
     "rigidBody": {
       "bodyType": 1,
@@ -171,20 +172,21 @@
       "defaultParticleMass": 0.0
     },
     "emitter": {
-      "emitRateMin": 1000,
-      "emitRateMax": 5000,
-      "maxParticles": 10000,
+      "emitRateMin": 100,
+      "emitRateMax": 500,
+      "maxParticles": 1000,
       "isActive": true,
-      "constForce": [ 10.0, 1.0, 0.0 ],
+      "accMax": [ 10.0, 1.0, 0.0 ],
+      "accMin": [ 0.0, 0.0, 0.0 ],
       "maxLifeTime": 0.5,
       "minLifeTime": 0.1,
       "posMax": [ 1.0, 1.0, 1.0 ],
       "posMin": [ -1.0, -1.0, -1.0 ],
       "scaMax": 3.0,
       "scaMin": 2.0,
-      "velMax": [ 0.0, 50.0, 0.0 ],
-      "velMin": [ 0.0, 10.5, 0.0 ],
-      "textures": [ "fires/fire1.png", "fires/fire2.png", "fires/fire3.png", "fires/fire4.png" ]
+      "velMax": [ 0.0, 10.0, 0.0 ],
+      "velMin": [ 0.0, 5.0, 0.0 ],
+      "nameTexture": "fires/fire1.png"
     }
   },
   {

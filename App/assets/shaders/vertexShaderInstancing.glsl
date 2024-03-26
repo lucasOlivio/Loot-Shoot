@@ -8,18 +8,15 @@ uniform mat4 matProjection;
 // Particle variables
 layout (location = 0) in vec4 vPos;
 layout (location = 1) in vec2 vUV;
-layout (location = 2) in float instanceAlpha;
-layout (location = 3) in float instanceLifeTime;
-layout (location = 4) in mat4 instanceTransform;
+layout (location = 2) in float instanceLifeTime;
+layout (location = 3) in mat4 instanceTransform;
 
 // Fragment shader variables
-out vec4 vertexColor;
 out vec2 vertexUV;
 out float lifetime;
 
 void main()
 {
-    vertexColor = vec4(1.0) * instanceAlpha;
     vertexUV = vUV;
     lifetime = instanceLifeTime;
 
@@ -27,6 +24,7 @@ void main()
     float scale = instanceTransform[0].x;
     vec4 position = instanceTransform[3].xyzw;
     vec4 viewPos = (matView * position) + (vPos * scale);
+
     gl_Position = matProjection * viewPos;
 }
 

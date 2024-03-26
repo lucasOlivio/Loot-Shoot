@@ -1,7 +1,6 @@
 // Fragment shader
 #version 420
 
-in vec4 vertexColor;
 in vec2 vertexUV;
 in float lifetime;
 
@@ -14,9 +13,9 @@ void main()
 	if (lifetime <= 0.01)
 		discard;
 
-	outputColour = (texture(textureColor, vertexUV) * vertexColor);
+	outputColour = texture(textureColor, vertexUV);
 
-	if (outputColour.a <= 0.15)
+	if (outputColour.a <= 0.1)
 		discard;
 
 	return;

@@ -47,22 +47,15 @@ namespace MyEngine
 
     std::shared_ptr<sMeshInfo> MeshManager::LoadParticles(const std::string& name, std::vector<ParticleProps>& particles, uint& particlePropsVBOID)
     {
-        if (m_pMeshParticle)
-        {
-            // Particle already loaded and binded
-            return m_pMeshParticle;
-        }
+        std::shared_ptr<sMeshInfo> pMesh(new sMeshInfo());
+        pMesh->name = name;
 
-        m_pMeshParticle = std::shared_ptr<sMeshInfo>(new sMeshInfo());
-        m_pMeshParticle->name = name;
-
-        bool isLoaded = m_LoadMeshData(name, m_pMeshParticle);
+        bool isLoaded = m_LoadMeshData(name, pMesh);
         assert(isLoaded);
 
-        m_LoadParticleVAOData(m_pMeshParticle, particles);
+        m_LoadParticleVAOData(pMesh, particles, particlePropsVBOID);
 
-        particlePropsVBOID = m_particlePropsVBOID;
-        return m_pMeshParticle;
+        return pMesh;
     }
 
     void MeshManager::DeleteResource(const std::string& name)
@@ -242,29 +235,29 @@ namespace MyEngine
     }
 
     void MeshManager::m_LoadParticleVAOData(std::shared_ptr<sMeshInfo> pMesh, 
-								            std::vector<ParticleProps>& particles)
+								            std::vector<ParticleProps>& particles,
+								            uint& particlePropsVBOID)
     {
         std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
         // Define vertex attribute pointers
         GLint vpos_location = pShader->GetAL("vPos");
         GLint vuv_location = pShader->GetAL("vUV");
-        GLint instanceAlpha_location = pShader->GetAL("instanceAlpha");
         GLint instanceLifeTime_location = pShader->GetAL("instanceLifeTime");
         GLint instanceTransform_location = pShader->GetAL("instanceTransform");
         
         // Generate a new VAO
-        glGenVertexArrays(1, &(m_pMeshParticle->VAO_ID));
-        glBindVertexArray(m_pMeshParticle->VAO_ID);
+        glGenVertexArrays(1, &(pMesh->VAO_ID));
+        glBindVertexArray(pMesh->VAO_ID);
 
         // Now ANY state that is related to vertex or index buffer
         //	and vertex attribute layout, is stored in the 'state' 
         //	of the VAO... 
-        glGenBuffers(1, &(m_pMeshParticle->vertexBufferID));
-        glBindBuffer(GL_ARRAY_BUFFER, m_pMeshParticle->vertexBufferID);
+        glGenBuffers(1, &(pMesh->vertexBufferID));
+        glBindBuffer(GL_ARRAY_BUFFER, pMesh->vertexBufferID);
         glBufferData(GL_ARRAY_BUFFER,
-            sizeof(sVertex) * m_pMeshParticle->numberOfVertices,
-            (GLvoid*)m_pMeshParticle->pVertices,
+            sizeof(sVertex) * pMesh->numberOfVertices,
+            (GLvoid*)pMesh->pVertices,
             GL_STATIC_DRAW);
 
         // Enable and set vertex attribute pointers
@@ -274,15 +267,12 @@ namespace MyEngine
         glVertexAttribPointer(vuv_location, 2, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, u));
 
         // Generate and bind Particles prosp VBO
-        glGenBuffers(1, &(m_particlePropsVBOID));
-        glBindBuffer(GL_ARRAY_BUFFER, m_particlePropsVBOID);
+        glGenBuffers(1, &(particlePropsVBOID));
+        glBindBuffer(GL_ARRAY_BUFFER, particlePropsVBOID);
         glBufferData(GL_ARRAY_BUFFER,
-            sizeof(ParticleProps) * MAX_PARTICLES,
+            sizeof(ParticleProps) * particles.size(),
             (GLvoid*)&(particles[0]),
             GL_DYNAMIC_DRAW);
-
-        glEnableVertexAttribArray(instanceAlpha_location);
-        glVertexAttribPointer(instanceAlpha_location, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)offsetof(ParticleProps, alpha));
 
         glEnableVertexAttribArray(instanceLifeTime_location);
         glVertexAttribPointer(instanceLifeTime_location, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)offsetof(ParticleProps, lifetime));
@@ -300,7 +290,6 @@ namespace MyEngine
 
         // Use glVertexAttribDivisor to specify that these attributes
         // are updated for each instance rather than for each vertex
-        glVertexAttribDivisor(instanceAlpha_location, 1);
         glVertexAttribDivisor(instanceLifeTime_location, 1);
         glVertexAttribDivisor(instanceTransform_location, 1);
         glVertexAttribDivisor(instanceTransform_location + 1, 1);
@@ -309,11 +298,11 @@ namespace MyEngine
 
         // Copy the index buffer into the video card, 
         // too create an index buffer.
-        glGenBuffers(1, &(m_pMeshParticle->indexBufferID));
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_pMeshParticle->indexBufferID);
+        glGenBuffers(1, &(pMesh->indexBufferID));
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pMesh->indexBufferID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-            sizeof(uint) * m_pMeshParticle->numberOfIndices,
-            (GLvoid*)m_pMeshParticle->pIndices,
+            sizeof(uint) * pMesh->numberOfIndices,
+            (GLvoid*)pMesh->pIndices,
             GL_STATIC_DRAW);
 
         // Unbind VAO
@@ -324,7 +313,6 @@ namespace MyEngine
 
         // Disable vertex attrib arrays
         glDisableVertexAttribArray(vpos_location);
-        glDisableVertexAttribArray(instanceAlpha_location);
         glDisableVertexAttribArray(instanceLifeTime_location);
         glDisableVertexAttribArray(instanceTransform_location);
         glDisableVertexAttribArray(instanceTransform_location + 1);

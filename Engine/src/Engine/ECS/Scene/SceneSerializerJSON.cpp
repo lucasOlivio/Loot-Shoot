@@ -561,16 +561,17 @@ namespace MyEngine
         parser.SetMember(jsonObject, "maxParticles", emitterIn.maxParticles, allocator);
         parser.SetMember(jsonObject, "isActive", emitterIn.isActive, allocator);
 
-        parser.SetMember(jsonObject, "constForce", emitterIn.properties.constForce, allocator);
-        parser.SetMember(jsonObject, "maxLifeTime", emitterIn.properties.maxLifeTime, allocator);
-        parser.SetMember(jsonObject, "minLifeTime", emitterIn.properties.minLifeTime, allocator);
-        parser.SetMember(jsonObject, "posMax", emitterIn.properties.posMax, allocator);
-        parser.SetMember(jsonObject, "posMin", emitterIn.properties.posMin, allocator);
-        parser.SetMember(jsonObject, "scaMax", emitterIn.properties.scaMax, allocator);
-        parser.SetMember(jsonObject, "scaMin", emitterIn.properties.scaMin, allocator);
-        parser.SetMember(jsonObject, "velMax", emitterIn.properties.velMax, allocator);
-        parser.SetMember(jsonObject, "velMin", emitterIn.properties.velMin, allocator);
-        parser.SetMember(jsonObject, "textures", emitterIn.properties.textures, allocator);
+        parser.SetMember(jsonObject, "accMax", emitterIn.accMax, allocator);
+        parser.SetMember(jsonObject, "accMin", emitterIn.accMin, allocator);
+        parser.SetMember(jsonObject, "maxLifeTime", emitterIn.maxLifeTime, allocator);
+        parser.SetMember(jsonObject, "minLifeTime", emitterIn.minLifeTime, allocator);
+        parser.SetMember(jsonObject, "posMax", emitterIn.posMax, allocator);
+        parser.SetMember(jsonObject, "posMin", emitterIn.posMin, allocator);
+        parser.SetMember(jsonObject, "scaMax", emitterIn.scaMax, allocator);
+        parser.SetMember(jsonObject, "scaMin", emitterIn.scaMin, allocator);
+        parser.SetMember(jsonObject, "velMax", emitterIn.velMax, allocator);
+        parser.SetMember(jsonObject, "velMin", emitterIn.velMin, allocator);
+        parser.SetMember(jsonObject, "nameTexture", emitterIn.nameTexture, allocator);
 
         return true;
     }
@@ -1055,16 +1056,17 @@ namespace MyEngine
         parser.GetValue(jsonObject["maxParticles"], emitterOut.maxParticles);
         parser.GetValue(jsonObject["isActive"], emitterOut.isActive);
 
-        parser.GetValue(jsonObject["constForce"], emitterOut.properties.constForce);
-        parser.GetValue(jsonObject["maxLifeTime"], emitterOut.properties.maxLifeTime);
-        parser.GetValue(jsonObject["minLifeTime"], emitterOut.properties.minLifeTime);
-        parser.GetValue(jsonObject["posMax"], emitterOut.properties.posMax);
-        parser.GetValue(jsonObject["posMin"], emitterOut.properties.posMin);
-        parser.GetValue(jsonObject["scaMax"], emitterOut.properties.scaMax);
-        parser.GetValue(jsonObject["scaMin"], emitterOut.properties.scaMin);
-        parser.GetValue(jsonObject["velMax"], emitterOut.properties.velMax);
-        parser.GetValue(jsonObject["velMin"], emitterOut.properties.velMin);
-        parser.GetValue(jsonObject["textures"], emitterOut.properties.textures);
+        parser.GetValue(jsonObject["accMax"], emitterOut.accMax);
+        parser.GetValue(jsonObject["accMin"], emitterOut.accMin);
+        parser.GetValue(jsonObject["maxLifeTime"], emitterOut.maxLifeTime);
+        parser.GetValue(jsonObject["minLifeTime"], emitterOut.minLifeTime);
+        parser.GetValue(jsonObject["posMax"], emitterOut.posMax);
+        parser.GetValue(jsonObject["posMin"], emitterOut.posMin);
+        parser.GetValue(jsonObject["scaMax"], emitterOut.scaMax);
+        parser.GetValue(jsonObject["scaMin"], emitterOut.scaMin);
+        parser.GetValue(jsonObject["velMax"], emitterOut.velMax);
+        parser.GetValue(jsonObject["velMin"], emitterOut.velMin);
+        parser.GetValue(jsonObject["nameTexture"], emitterOut.nameTexture);
 
         return true;
     }

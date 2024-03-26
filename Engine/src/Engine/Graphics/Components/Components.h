@@ -8,6 +8,7 @@
 #include "Engine/Graphics/Animations/AnimationProperties.h"
 #include "Engine/Graphics/Particles/ParticlesProperties.h"
 
+#include <Windows.h>
 #include <glm/glm.hpp>
 #include <string>
 #include <set>
@@ -135,7 +136,24 @@ namespace MyEngine
 
 	struct EmitterComponent : public ThreadSafe
 	{
-		EmitterProps properties = EmitterProps();
+		// Offset from emitter current position
+		glm::vec3 posMin;
+		glm::vec3 posMax;
+
+		glm::vec3 accMin;
+		glm::vec3 accMax;
+
+		glm::vec3 velMin;
+		glm::vec3 velMax;
+
+		float scaMin;
+		float scaMax;
+
+		float minLifeTime;
+		float maxLifeTime;
+
+		std::string nameTexture;
+		GLuint numTexture;
 
 		// Time since active
 		float timer;
@@ -144,10 +162,15 @@ namespace MyEngine
 		// Number of particles emitted per second
 		int emitRateMin;
 		int emitRateMax;
+
 		int maxParticles;
 
 		// Total number of particles emitted
-		int totalEmitPart = 0;
+		LONG totalEmitPart = 0;
+
+		std::shared_ptr<sMeshInfo> pMesh;
+		std::vector<ParticleProps> particles;
+		uint vboId;
 
 		bool isActive = false;
 	};

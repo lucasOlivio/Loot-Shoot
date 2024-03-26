@@ -10,7 +10,6 @@
 #include "Engine/Events/SceneEvent.h"
 
 #include "Engine/Graphics/Renderer/iRendererManager.h"
-#include "Engine/Graphics/Particles/iParticleManager.h"
 
 #include <map>
 #include <Windows.h>
@@ -67,7 +66,6 @@ namespace MyEngine
 
 		// Resources managers
 		std::shared_ptr<iRendererManager> m_rendererManager;
-		std::shared_ptr<iParticleManager> m_particleManager;
 
 		float m_lastTime = 0.0f;
 		std::vector<float> m_frameTimes;

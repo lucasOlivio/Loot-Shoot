@@ -3,14 +3,16 @@
 #include "ParticleEmissionSystem.h"
 
 #include "Engine/Core/Components/Components.h"
+#include "Engine/Core/Resources/Meshes/Mesh.h"
+#include "Engine/Core/Resources/Meshes/MeshManager.h"
 #include "Engine/Core/Resources/Textures/Texture.h"
 #include "Engine/Core/Resources/Textures/TextureManager.h"
 #include "Engine/Core/Resources/Shaders/ShaderManager.h"
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
 #include "Engine/Core/Components/CoreLocator.h"
 
+#include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 #include "Engine/Graphics/Components/Components.h"
-#include "Engine/Graphics/Particles/ParticleManagerLocator.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
 
@@ -19,6 +21,10 @@
 
 namespace MyEngine
 {
+    const std::string QUAD_MESH = "flat.ply";
+    std::shared_ptr<sMeshInfo> meshInfo = nullptr;
+    uint particlesVBO = 0;
+
     void ParticleEmissionSystem::Init()
     {
     }
@@ -27,11 +33,6 @@ namespace MyEngine
     {
         EntitySystem::Start(pScene);
 
-        // Kill all particles
-        std::shared_ptr<iParticleManager> pParticleManager = ParticleManagerLocator::Get();
-
-        pParticleManager->ResetParticles();
-
         // Reset all emitters count
         for (Entity entityId : m_vecEntities)
         {
@@ -39,9 +40,11 @@ namespace MyEngine
 
             emitter.LockWrite();
             emitter.totalEmitPart = 0;
+            emitter.particles.resize(emitter.maxParticles);
             emitter.UnlockWrite();
         }
 
+        std::shared_ptr<MeshManager> pMeshManager = ResourceManagerFactory::GetOrCreate<MeshManager>(eResourceTypes::MESH);
         std::shared_ptr<ShaderManager> pShaderManager = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
         std::shared_ptr<TextureManager> pTextureManager = ResourceManagerFactory::GetOrCreate<TextureManager>(eResourceTypes::TEXTURE);
         pShaderManager->ActivateResource(INSTANCING_SHADER);
@@ -50,22 +53,21 @@ namespace MyEngine
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
 
             // Load and create all textures
-            for (const std::string& nameTexture : emitter.properties.textures)
-            {
-                size_t index = pTextureManager->LoadResource(nameTexture);
-                pTextureManager->Create2DTexture(nameTexture, eTextureType::COLOR);
-                std::shared_ptr<sTextureInfo> pTexture = std::static_pointer_cast<sTextureInfo>(pTextureManager->GetResource(index));
+            size_t index = pTextureManager->LoadResource(emitter.nameTexture);
+            pTextureManager->Create2DTexture(emitter.nameTexture, eTextureType::COLOR);
+            std::shared_ptr<sTextureInfo> pTexture = std::static_pointer_cast<sTextureInfo>(pTextureManager->GetResource(index));
 
-                emitter.properties.numTextures.push_back(pTexture->textNumber);
-            }
+            emitter.numTexture = pTexture->textNumber;
 
+            // Load quad mash VBO
+            emitter.pMesh = pMeshManager->LoadParticles(QUAD_MESH, emitter.particles, emitter.vboId);
         }
+
         pShaderManager->ActivateResource(DEFAULT_SHADER);
     }
 
     void ParticleEmissionSystem::Update(std::shared_ptr<Scene> pScene, float deltaTime)
     {
-        std::shared_ptr<iParticleManager> pParticleManager = ParticleManagerLocator::Get();
         std::shared_ptr<TimerComponent> pTimer = CoreLocator::GetTimer();
 
         for (Entity entityId : m_vecEntities)
@@ -86,31 +88,25 @@ namespace MyEngine
             // Get generate one particle every x time
             uint32_t seed = static_cast<uint32_t>(pTimer->miliseconds + entityId);
 
-            emitter.LockRead();
             int randomRate = Random::Int(seed, emitter.emitRateMin, emitter.emitRateMax);
             float oneParticleTimer = 1.0f / randomRate;
             if (emitter.timeLastEmit < oneParticleTimer)
             {
                 // Not time to create one particle yet
-                emitter.UnlockRead();
                 continue;
             }
 
             int particlesToCreate = static_cast<int>(emitter.timeLastEmit * randomRate);
 
-            if (emitter.totalEmitPart > emitter.maxParticles)
+            if (emitter.totalEmitPart >= emitter.maxParticles)
             {
-                emitter.UnlockRead();
                 continue;
             }
 
-            if (emitter.totalEmitPart + particlesToCreate > emitter.maxParticles)
+            if (emitter.totalEmitPart + particlesToCreate >= emitter.maxParticles)
             {
                 particlesToCreate = emitter.maxParticles - emitter.totalEmitPart;
             }
-
-            // Emit particle with random properties
-            EmitterProps& emitterProps = emitter.properties;
 
             transform.LockRead();
             glm::vec3 position = transform.position;
@@ -118,28 +114,22 @@ namespace MyEngine
 
             for (int i = 0; i < particlesToCreate; i++)
             {
-                ParticleProps& particle = pParticleManager->EmitParticle();
+                ParticleProps& particle = emitter.particles[emitter.totalEmitPart];
+                InterlockedIncrement(&emitter.totalEmitPart);
 
                 particle.LockWrite();
-                particle.entityId = entityId;
+                particle.lifetime = Random::Float(seed, emitter.minLifeTime, emitter.maxLifeTime);
 
-                particle.initialLifeTime = Random::Float(seed, emitterProps.minLifeTime, emitterProps.maxLifeTime);
-                particle.lifetime = particle.initialLifeTime;
-
-                particle.acceleration = emitterProps.constForce;
-                particle.velocity = Random::Vec3(seed, emitterProps.velMin, emitterProps.velMax);
+                particle.acceleration = Random::Vec3(seed, emitter.accMin, emitter.accMax);
+                particle.velocity = Random::Vec3(seed, emitter.velMin, emitter.velMax);
                 
                 particle.transform = glm::mat4(1.0f);
-                TransformUtils::GetTransform(position + Random::Vec3(seed, emitterProps.posMin, emitterProps.posMax),
-                                             Random::Float(seed, emitterProps.scaMin, emitterProps.scaMax),
+                TransformUtils::GetTransform(position + Random::Vec3(seed, emitter.posMin, emitter.posMax),
+                                             Random::Float(seed, emitter.scaMin, emitter.scaMax),
                                              particle.transform);
-               
-                int indexTexture = Random::Int(seed, 0, emitter.properties.numTextures.size());
-                particle.numTexture = emitter.properties.numTextures[indexTexture];
 
                 particle.UnlockWrite();
             }
-            emitter.UnlockRead();
 
             emitter.LockWrite();
             emitter.totalEmitPart += particlesToCreate;
@@ -150,16 +140,51 @@ namespace MyEngine
 
     void ParticleEmissionSystem::Render(std::shared_ptr<Scene> pScene)
     {
+        std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
+        std::shared_ptr<ShaderManager> pShaderManager = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
+
+        pShaderManager->ActivateResource(INSTANCING_SHADER);
+        pRenderer->UpdateCamera(pScene);
+
+        glDisable(GL_CULL_FACE);
+        glActiveTexture(GL_TEXTURE0);
+
+        pShaderManager->SetUniformInt("textureColor", GL_TEXTURE0);
+
+        for (Entity entityId : m_vecEntities)
+        {
+            TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
+            EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
+
+            // Bind the VBO to update its data
+            glBindVertexArray(emitter.pMesh->VAO_ID);
+            glBindBuffer(GL_ARRAY_BUFFER, emitter.vboId);
+            glBindTexture(GL_TEXTURE_2D, emitter.numTexture);
+
+            // Update the VBO with the new data
+            emitter.LockRead();
+            size_t numParticles = emitter.maxParticles;
+            glBufferSubData(GL_ARRAY_BUFFER, 0,
+                (sizeof(ParticleProps) * numParticles),
+                &(emitter.particles[0]));
+            emitter.UnlockRead();
+
+            glDrawElementsInstanced(
+                GL_TRIANGLES, emitter.pMesh->numberOfIndices, GL_UNSIGNED_INT, 0, numParticles
+            );
+
+            // Unbind the VBO
+            glBindVertexArray(0);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+
+        glEnable(GL_CULL_FACE);
+        pShaderManager->ActivateResource(DEFAULT_SHADER);
     }
 
     void ParticleEmissionSystem::End(std::shared_ptr<Scene> pScene)
     {
         EntitySystem::End(pScene);
-
-        // Kill all particles
-        std::shared_ptr<iParticleManager> pParticleManager = ParticleManagerLocator::Get();
-
-        pParticleManager->ResetParticles();
     }
 
     void ParticleEmissionSystem::Shutdown()

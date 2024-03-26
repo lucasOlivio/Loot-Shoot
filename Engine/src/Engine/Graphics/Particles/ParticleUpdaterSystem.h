@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Engine/ECS/System/iSystem.h"
+#include "Engine/ECS/System/EntitySystem.h"
 
 #include "Engine/Graphics/Particles/iParticleManager.h"
 #include "Engine/Graphics/Particles/ParticlesProperties.h"
+#include "Engine/Graphics/Components/Components.h"
 
 namespace MyEngine
 {
 	// Processes the particles attributes every frame
-	class ParticleUpdaterSystem : public iSystem
+	class ParticleUpdaterSystem : public EntitySystem
 	{
 	public:
 		ParticleUpdaterSystem() = default;
@@ -28,10 +29,6 @@ namespace MyEngine
 
 		virtual void Shutdown();
 
-		static void UpdateParticles(std::shared_ptr<iParticleManager> pParticleManager,
-								 ParticleProps* vecParticles,
-								 size_t startIndex, size_t endIndex,
-								 glm::vec3 cameraPosition,
-								 std::shared_ptr<Scene> pScene, float deltaTime);
+		virtual void SetSystemMask(std::shared_ptr<Scene> pScene);
 	};
 }

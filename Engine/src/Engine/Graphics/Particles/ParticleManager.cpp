@@ -14,7 +14,6 @@ namespace MyEngine
 
 	ParticleManager::ParticleManager() : m_isReadyToDraw(false)
 	{
-		m_vecParticles.resize(MAX_PARTICLES);
 	}
 
 	ParticleManager::~ParticleManager()

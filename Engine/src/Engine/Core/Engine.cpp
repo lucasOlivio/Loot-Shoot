@@ -17,8 +17,6 @@
 
 #include "Engine/Graphics/Renderer/RendererManager.h"
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
-#include "Engine/Graphics/Particles/ParticleManager.h"
-#include "Engine/Graphics/Particles/ParticleManagerLocator.h"
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 
 #include "Engine/Utils/InputUtils.h"
@@ -37,7 +35,6 @@ namespace MyEngine
     using pairSystems = std::pair<std::string, std::shared_ptr<iSystem>>;
 
     Engine::Engine() : m_rendererManager(new RendererManager()),
-                       m_particleManager(new ParticleManager()),
                        m_pScene(new Scene())
 
     {
@@ -121,7 +118,6 @@ namespace MyEngine
 
         // Setting up services
         RendererManagerLocator::Set(m_rendererManager);
-        ParticleManagerLocator::Set(m_particleManager);
         ThreadPoolLocator::GetOrCreate("update");
         ThreadPoolLocator::GetOrCreate("render");
 
@@ -160,9 +156,6 @@ namespace MyEngine
 
         // Run update thread separated from render thread
         HANDLE updateHandle = CreateThread(NULL, 0, Engine::m_Update, this, 0, NULL);
-
-        // Initialize particles in VBO
-        m_particleManager->Initialize();
 
         while (m_isRunning)
         {
@@ -240,18 +233,18 @@ namespace MyEngine
 
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
-            renderThreadPool->EnqueueTask([this, i]()
+            /*renderThreadPool->EnqueueTask([this, i]()
             {
                 m_vecSystems[i]->Render(m_pScene);
-            });
-            //m_vecSystems[i]->Render(m_pScene);
+            });*/
+            m_vecSystems[i]->Render(m_pScene);
         }
 
         // Wait all systems send their render commands
-        while (renderThreadPool->RunningTasks() > 0)
+        /*while (renderThreadPool->RunningTasks() > 0)
         {
             Sleep(0);
-        }
+        }*/
         
         // Render all on queue
         std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
@@ -261,11 +254,6 @@ namespace MyEngine
         pRenderer->UpdateCamera(m_pScene);
         pRenderer->RenderAll(m_pScene);
         pRenderer->ClearRender();
-
-        pShaderManager->ActivateResource(INSTANCING_SHADER);
-        pRenderer->UpdateCamera(m_pScene);
-        m_particleManager->DrawParticles();
-        pShaderManager->ActivateResource(DEFAULT_SHADER);
 
         m_EndFrame();
     }

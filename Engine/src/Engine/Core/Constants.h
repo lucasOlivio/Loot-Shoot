@@ -19,8 +19,6 @@ namespace MyEngine
 
 #define TEXT_FONT_SIZE 1.2f
 
-#define MAX_PARTICLES 100'000
-
 #define DEFAULT_MOUSE_SENSITIVITY 0.001f
 
 	const std::string DEFAULT_CONFIG = "config.json";
