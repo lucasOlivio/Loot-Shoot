@@ -171,7 +171,7 @@ namespace MyEngine
 
 		std::shared_ptr<sMeshInfo> pMesh;
 		std::vector<ParticleProps> particles;
-		uint vboId;
+		uint ssbo0;
 
 		bool isActive = false;
 	};

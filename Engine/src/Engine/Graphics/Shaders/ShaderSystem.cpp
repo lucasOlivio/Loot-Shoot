@@ -11,7 +11,7 @@ namespace MyEngine
 		std::shared_ptr<iResourceManager> pShader = ResourceManagerFactory::GetOrCreate(eResourceTypes::SHADER);
 
 		// Setup shaders
-		pShader->LoadResource(INSTANCING_SHADER);
+		pShader->LoadResource(PARTICLES_SHADER);
 
 		pShader->LoadResource(DEFAULT_SHADER);
 		pShader->ActivateResource(DEFAULT_SHADER);

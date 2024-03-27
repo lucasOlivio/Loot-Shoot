@@ -47,7 +47,7 @@ namespace MyEngine
         std::shared_ptr<MeshManager> pMeshManager = ResourceManagerFactory::GetOrCreate<MeshManager>(eResourceTypes::MESH);
         std::shared_ptr<ShaderManager> pShaderManager = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
         std::shared_ptr<TextureManager> pTextureManager = ResourceManagerFactory::GetOrCreate<TextureManager>(eResourceTypes::TEXTURE);
-        pShaderManager->ActivateResource(INSTANCING_SHADER);
+        pShaderManager->ActivateResource(PARTICLES_SHADER);
         for (Entity entityId : m_vecEntities)
         {
             EmitterComponent& emitter = pScene->Get<EmitterComponent>(entityId);
@@ -60,7 +60,7 @@ namespace MyEngine
             emitter.numTexture = pTexture->textNumber;
 
             // Load quad mash VBO
-            emitter.pMesh = pMeshManager->LoadParticles(QUAD_MESH, emitter.particles, emitter.vboId);
+            emitter.pMesh = pMeshManager->LoadParticles(QUAD_MESH, emitter.particles, emitter.ssbo0);
         }
 
         pShaderManager->ActivateResource(DEFAULT_SHADER);
@@ -143,7 +143,7 @@ namespace MyEngine
         std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
         std::shared_ptr<ShaderManager> pShaderManager = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
-        pShaderManager->ActivateResource(INSTANCING_SHADER);
+        pShaderManager->ActivateResource(PARTICLES_SHADER);
         pRenderer->UpdateCamera(pScene);
 
         glActiveTexture(GL_TEXTURE0);
@@ -157,19 +157,19 @@ namespace MyEngine
 
             // Bind the VBO to update its data
             glBindVertexArray(emitter.pMesh->VAO_ID);
-            glBindBuffer(GL_ARRAY_BUFFER, emitter.vboId);
+            glBindBuffer(GL_ARRAY_BUFFER, emitter.ssbo0);
             glBindTexture(GL_TEXTURE_2D, emitter.numTexture);
 
             // Update the VBO with the new data
             emitter.LockRead();
-            size_t numParticles = emitter.maxParticles;
-            glBufferSubData(GL_ARRAY_BUFFER, 0,
-                (sizeof(ParticleProps) * numParticles),
-                &(emitter.particles[0]));
+            ParticleProps* arrayParticles = &emitter.particles[0];
+            glBindBuffer(GL_SHADER_STORAGE_BUFFER, emitter.ssbo0);
+            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, emitter.ssbo0);
+            glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(ParticleProps) * emitter.maxParticles, arrayParticles, GL_DYNAMIC_DRAW);
             emitter.UnlockRead();
 
             glDrawElementsInstanced(
-                GL_TRIANGLES, emitter.pMesh->numberOfIndices, GL_UNSIGNED_INT, 0, numParticles
+                GL_TRIANGLES, emitter.pMesh->numberOfIndices, GL_UNSIGNED_INT, 0, emitter.maxParticles
             );
 
             // Unbind the VBO

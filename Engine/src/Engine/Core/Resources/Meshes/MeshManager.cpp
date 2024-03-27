@@ -45,7 +45,7 @@ namespace MyEngine
         return pMesh->index;
     }
 
-    std::shared_ptr<sMeshInfo> MeshManager::LoadParticles(const std::string& name, std::vector<ParticleProps>& particles, uint& particlePropsVBOID)
+    std::shared_ptr<sMeshInfo> MeshManager::LoadParticles(const std::string& name, std::vector<ParticleProps>& particles, uint& particleSSBO0)
     {
         std::shared_ptr<sMeshInfo> pMesh(new sMeshInfo());
         pMesh->name = name;
@@ -53,7 +53,7 @@ namespace MyEngine
         bool isLoaded = m_LoadMeshData(name, pMesh);
         assert(isLoaded);
 
-        m_LoadParticleVAOData(pMesh, particles, particlePropsVBOID);
+        m_LoadParticleVAOData(pMesh, particles, particleSSBO0);
 
         return pMesh;
     }
@@ -172,7 +172,7 @@ namespace MyEngine
 
         glBufferData(GL_ARRAY_BUFFER,
             sizeof(sVertex) * pMesh->numberOfVertices,
-            (GLvoid*)pMesh->pVertices,
+            pMesh->pVertices,
             GL_STATIC_DRAW);
 
         // Copy the index buffer into the video card, 
@@ -183,7 +183,7 @@ namespace MyEngine
 
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,
             sizeof(uint) * pMesh->numberOfIndices,
-            (GLvoid*)pMesh->pIndices,
+            pMesh->pIndices,
             GL_STATIC_DRAW);
 
         std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
@@ -236,7 +236,7 @@ namespace MyEngine
 
     void MeshManager::m_LoadParticleVAOData(std::shared_ptr<sMeshInfo> pMesh, 
 								            std::vector<ParticleProps>& particles,
-								            uint& particlePropsVBOID)
+								            uint& particleSSBO0)
     {
         std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
@@ -257,7 +257,7 @@ namespace MyEngine
         glBindBuffer(GL_ARRAY_BUFFER, pMesh->vertexBufferID);
         glBufferData(GL_ARRAY_BUFFER,
             sizeof(sVertex) * pMesh->numberOfVertices,
-            (GLvoid*)pMesh->pVertices,
+            pMesh->pVertices,
             GL_STATIC_DRAW);
 
         // Enable and set vertex attribute pointers
@@ -266,57 +266,25 @@ namespace MyEngine
         glEnableVertexAttribArray(vuv_location);
         glVertexAttribPointer(vuv_location, 2, GL_FLOAT, GL_FALSE, sizeof(sVertex), (void*)offsetof(sVertex, u));
 
-        // Generate and bind Particles prosp VBO
-        glGenBuffers(1, &(particlePropsVBOID));
-        glBindBuffer(GL_ARRAY_BUFFER, particlePropsVBOID);
-        glBufferData(GL_ARRAY_BUFFER,
-            sizeof(ParticleProps) * particles.size(),
-            (GLvoid*)&(particles[0]),
-            GL_DYNAMIC_DRAW);
-
-        glEnableVertexAttribArray(instanceLifeTime_location);
-        glVertexAttribPointer(instanceLifeTime_location, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)offsetof(ParticleProps, lifetime));
-
-        // Transform Mat 4 attribute binding
-        std::size_t vec4Size = sizeof(glm::vec4);
-        glEnableVertexAttribArray(instanceTransform_location);
-        glVertexAttribPointer(instanceTransform_location, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)offsetof(ParticleProps, transform));
-        glEnableVertexAttribArray(instanceTransform_location + 1);
-        glVertexAttribPointer(instanceTransform_location + 1, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)(offsetof(ParticleProps, transform) + vec4Size));
-        glEnableVertexAttribArray(instanceTransform_location + 2);
-        glVertexAttribPointer(instanceTransform_location + 2, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)(offsetof(ParticleProps, transform) + (2 * vec4Size)));
-        glEnableVertexAttribArray(instanceTransform_location + 3);
-        glVertexAttribPointer(instanceTransform_location + 3, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleProps), (void*)(offsetof(ParticleProps, transform) + (3 * vec4Size)));
-
-        // Use glVertexAttribDivisor to specify that these attributes
-        // are updated for each instance rather than for each vertex
-        glVertexAttribDivisor(instanceLifeTime_location, 1);
-        glVertexAttribDivisor(instanceTransform_location, 1);
-        glVertexAttribDivisor(instanceTransform_location + 1, 1);
-        glVertexAttribDivisor(instanceTransform_location + 2, 1);
-        glVertexAttribDivisor(instanceTransform_location + 3, 1);
-
         // Copy the index buffer into the video card, 
         // too create an index buffer.
         glGenBuffers(1, &(pMesh->indexBufferID));
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pMesh->indexBufferID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,
             sizeof(uint) * pMesh->numberOfIndices,
-            (GLvoid*)pMesh->pIndices,
+            pMesh->pIndices,
             GL_STATIC_DRAW);
 
         // Unbind VAO
         glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        // Disable vertex attrib arrays
-        glDisableVertexAttribArray(vpos_location);
-        glDisableVertexAttribArray(instanceLifeTime_location);
-        glDisableVertexAttribArray(instanceTransform_location);
-        glDisableVertexAttribArray(instanceTransform_location + 1);
-        glDisableVertexAttribArray(instanceTransform_location + 2);
-        glDisableVertexAttribArray(instanceTransform_location + 3);
+        //Create SSBO
+        ParticleProps* arrayParticles = &particles[0];
+        glGenBuffers(1, &particleSSBO0);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, particleSSBO0);
+        glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(ParticleProps) * particles.size(), arrayParticles, GL_DYNAMIC_DRAW);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, particleSSBO0);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
     }
 }

@@ -20,7 +20,7 @@ namespace MyEngine
 		virtual size_t LoadResource(const std::string& name);
 
 		// HACK: Separate loading for the different particles attributes VAO and VBO
-		std::shared_ptr<sMeshInfo> LoadParticles(const std::string& name, std::vector<ParticleProps>& particles, uint& particlePropsVBOID);
+		std::shared_ptr<sMeshInfo> LoadParticles(const std::string& name, std::vector<ParticleProps>& particles, uint& particleSSBO0);
 
 		virtual void DeleteResource(const std::string& name);
 		virtual void DeleteResource(const size_t& index);
@@ -42,9 +42,9 @@ namespace MyEngine
 		bool m_LoadMeshData(std::string theFileName, std::shared_ptr<sMeshInfo> pMesh);
 
 		void m_LoadVAOData(std::shared_ptr<sMeshInfo> pMesh);
-		void m_LoadParticleVAOData(std::shared_ptr<sMeshInfo> pMesh, 
-								   std::vector<ParticleProps>& particles,
-								   uint& particlePropsVBOID);
+		void m_LoadParticleVAOData(std::shared_ptr<sMeshInfo> pMesh,
+			std::vector<ParticleProps>& particles,
+			uint& particleSSBO0);
 
 		// VAO binded to shader at moment
 		std::string m_currMesh;

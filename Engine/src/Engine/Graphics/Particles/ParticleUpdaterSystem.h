@@ -2,7 +2,6 @@
 
 #include "Engine/ECS/System/EntitySystem.h"
 
-#include "Engine/Graphics/Particles/iParticleManager.h"
 #include "Engine/Graphics/Particles/ParticlesProperties.h"
 #include "Engine/Graphics/Components/Components.h"
 

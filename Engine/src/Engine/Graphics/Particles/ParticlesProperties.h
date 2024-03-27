@@ -11,9 +11,11 @@ namespace MyEngine
 	struct ParticleProps : public ThreadSafe
 	{
 		glm::vec3 velocity;
+		float discard1;
 		glm::vec3 acceleration;
-
-		float lifetime = 0.0f;
+		float discard2;
 		glm::mat4 transform = glm::mat4(1.0f);
+		float lifetime = 0.0f;
+		float discard3[3];
 	};
 }

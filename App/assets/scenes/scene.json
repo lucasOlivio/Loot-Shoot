@@ -155,9 +155,9 @@
       "defaultParticleMass": 0.0
     },
     "emitter": {
-      "emitRateMin": 100,
-      "emitRateMax": 200,
-      "maxParticles": 1000,
+      "emitRateMin": 5000,
+      "emitRateMax": 7500,
+      "maxParticles": 15000,
       "isActive": true,
       "accMax": [ 10.0, 1.0, 0.0 ],
       "accMin": [ 0.0, 0.0, 0.0 ],

@@ -5,7 +5,6 @@
 #include "Engine/Core/Threads/ThreadPoolLocator.h"
 #include "Engine/Core/Components/Components.h"
 
-#include "Engine/Graphics/Particles/ParticleManagerLocator.h"
 #include "Engine/Graphics/Components/SingletonComponents.h"
 #include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 
