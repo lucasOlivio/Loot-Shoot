@@ -8,7 +8,8 @@ struct Particle
     float discard2;
     mat4 transform;
     float lifetime;
-    float discard3[3];
+    float initialLifetime;
+    float discard3[2];
 };
 
 struct EmitterSettings {
@@ -29,8 +30,9 @@ layout(std430, binding = 1) buffer FreeList {
     int indices[];
 } freelist;
 
-layout(location = 0) uniform int particlesToSpawn;
-layout(location = 1) uniform EmitterSettings emitter;
+uniform int particlesToSpawn;
+uniform int currMS;
+uniform EmitterSettings emitter;
 
 // Random functions
 uint pcg_Hash(uint seed)
@@ -67,19 +69,38 @@ vec3 rand3(inout uint seed, vec3 min, vec3 max)
 // make a particle with random attributes
 void MakeParticle(uint seed, out Particle particle) {
     particle.lifetime = rand1(seed, emitter.minLife, emitter.maxLife);
+    particle.initialLifetime = particle.lifetime;
     particle.velocity.xyz = rand3(seed, emitter.minVelocity.xyz, emitter.maxVelocity.xyz);
     particle.acceleration.xyz = rand3(seed, emitter.minAcceleration.xyz, emitter.maxAcceleration.xyz);
 
     float scale = rand1(seed, emitter.minScale, emitter.maxScale);
+    mat4 matscale = mat4(
+        scale, 0.0, 0.0, 0.0,
+        0.0, scale, 0.0, 0.0,
+        0.0, 0.0, scale, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    );
+
     vec3 offset = rand3(seed, emitter.minOffset.xyz, emitter.maxOffset.xyz);
     vec3 position = emitter.position + offset;
-
-    particle.transform = mat4(
-        vec4(scale, 0.0, 0.0, 0.0),
-        vec4(0.0, scale, 0.0, 0.0),
-        vec4(0.0, 0.0, scale, 0.0),
-        vec4(position.x, position.y, position.z, 1.0)
+    mat4 matposition = mat4(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        position.x, position.y, position.z, 1.0
     );
+
+    // Create rotation matrix around z-axis
+    float angle = rand1(seed, 0.0, 4.0 * 3.14);
+    mat4 matrotation = mat4(
+        cos(angle), -sin(angle), 0.0, 0.0,
+        sin(angle), cos(angle), 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    );
+
+    particle.transform = mat4(1.0);
+    particle.transform = particle.transform * matposition * matrotation * matscale;
 }
 
 layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
@@ -97,6 +118,6 @@ void main() {
     }
 
     int particleIndex = freelist.indices[freeListIndex];
-    uint seed = index + freelist.count;
+    uint seed = index + freelist.count + currMS;
     MakeParticle(seed, particles[particleIndex]);
 }

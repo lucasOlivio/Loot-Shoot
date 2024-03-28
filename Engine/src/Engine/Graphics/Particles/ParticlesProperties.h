@@ -16,6 +16,7 @@ namespace MyEngine
 		float discard2;
 		glm::mat4 transform = glm::mat4(1.0f);
 		float lifetime = 0.0f;
-		float discard3[3];
+		float initialLifetime = 0.0f;
+		float discard3[2];
 	};
 }

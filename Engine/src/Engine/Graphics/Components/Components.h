@@ -152,8 +152,11 @@ namespace MyEngine
 		float minLifeTime;
 		float maxLifeTime;
 
+		// Texture management
 		std::string nameTexture;
 		GLuint numTexture;
+		uint rowsTexture;
+		uint colsTexture;
 
 		// Time since active
 		float timer;

@@ -571,6 +571,8 @@ namespace MyEngine
         parser.SetMember(jsonObject, "velMax", emitterIn.velMax, allocator);
         parser.SetMember(jsonObject, "velMin", emitterIn.velMin, allocator);
         parser.SetMember(jsonObject, "nameTexture", emitterIn.nameTexture, allocator);
+        parser.SetMember(jsonObject, "rowsTexture", emitterIn.rowsTexture, allocator);
+        parser.SetMember(jsonObject, "colsTexture", emitterIn.colsTexture, allocator);
 
         return true;
     }
@@ -1065,6 +1067,8 @@ namespace MyEngine
         parser.GetValue(jsonObject["velMax"], emitterOut.velMax);
         parser.GetValue(jsonObject["velMin"], emitterOut.velMin);
         parser.GetValue(jsonObject["nameTexture"], emitterOut.nameTexture);
+        parser.GetValue(jsonObject["rowsTexture"], emitterOut.rowsTexture);
+        parser.GetValue(jsonObject["colsTexture"], emitterOut.colsTexture);
 
         return true;
     }

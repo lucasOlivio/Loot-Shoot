@@ -8,7 +8,8 @@ struct Particle
     float discard2;
     mat4 transform;
     float lifetime;
-    float discard3[3];
+    float initialLifetime;
+    float discard3[2];
 };
 
 layout(std430, binding = 0) buffer Particles {

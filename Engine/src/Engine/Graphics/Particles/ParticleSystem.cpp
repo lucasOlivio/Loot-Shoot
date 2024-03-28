@@ -2,6 +2,7 @@
 
 #include "ParticleSystem.h"
 
+#include "Engine/Core/Components/CoreLocator.h"
 #include "Engine/Core/Resources/Meshes/Mesh.h"
 #include "Engine/Core/Resources/Meshes/MeshManager.h"
 #include "Engine/Core/Resources/Textures/Texture.h"
@@ -112,6 +113,7 @@ namespace MyEngine
 
     void ParticleSystem::m_ParticlesUpdate(std::shared_ptr<Scene> pScene, float deltaTime)
     {
+        std::shared_ptr<TimerComponent> pTimer = CoreLocator::GetTimer();
         std::shared_ptr<ShaderManager> pShaderManager = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
         // ensure that writes from last frame's updates are complete
@@ -119,6 +121,7 @@ namespace MyEngine
 
         // particle spawn loop- one dispatch per emitter
         pShaderManager->ActivateResource(SPAWN_PARTICLES_SHADER);
+        pShaderManager->SetUniformInt("currMS", pTimer->miliseconds);
         for (Entity entityId : m_vecEntities)
         {
             TransformComponent& transform = pScene->Get<TransformComponent>(entityId);
@@ -172,6 +175,10 @@ namespace MyEngine
 
         glActiveTexture(GL_TEXTURE0);
 
+        glEnable(GL_BLEND);
+        glDepthMask(GL_FALSE);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         pShaderManager->SetUniformInt("textureColor", GL_TEXTURE0);
 
         // render each emitter with one draw call
@@ -185,6 +192,9 @@ namespace MyEngine
             glBindBuffer(GL_ARRAY_BUFFER, emitter.ssbo0);
             glBindTexture(GL_TEXTURE_2D, emitter.numTexture);
 
+            pShaderManager->SetUniformInt("rowsTexture", emitter.rowsTexture);
+            pShaderManager->SetUniformInt("colsTexture", emitter.colsTexture);
+
             glDrawElementsInstanced(
                 GL_TRIANGLES, emitter.pMesh->numberOfIndices, GL_UNSIGNED_INT, 0, emitter.maxParticles
             );
@@ -193,5 +203,7 @@ namespace MyEngine
             glBindVertexArray(0);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
+
+        glDepthMask(GL_TRUE);
     }
 }
