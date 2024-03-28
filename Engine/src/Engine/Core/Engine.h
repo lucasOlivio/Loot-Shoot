@@ -9,8 +9,6 @@
 #include "Engine/Events/WindowEvents.h"
 #include "Engine/Events/SceneEvent.h"
 
-#include "Engine/Graphics/Renderer/iRendererManager.h"
-
 #include <map>
 #include <Windows.h>
 
@@ -63,9 +61,6 @@ namespace MyEngine
 		std::vector<std::shared_ptr<iSystem>> m_vecSystems;
 
 		std::shared_ptr<Scene> m_pScene = nullptr;
-
-		// Resources managers
-		std::shared_ptr<iRendererManager> m_rendererManager;
 
 		float m_lastTime = 0.0f;
 		float m_lastRenderTime = 0.0f;

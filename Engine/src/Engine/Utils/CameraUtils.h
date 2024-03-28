@@ -20,5 +20,7 @@ namespace MyEngine
 
 		// For now just grab the first entity with camera in the scene
 		static Entity GetMainCamera(std::shared_ptr<Scene> pScene);
+
+		static void UpdateCamera(std::shared_ptr<Scene> pScene);
 	};
 }

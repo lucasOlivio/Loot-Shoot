@@ -2,7 +2,13 @@
 
 #include "CameraUtils.h"
 
+#include "Engine/Core/Components/Components.h"
+#include "Engine/Core/Resources/ResourceManagerFactory.h"
+#include "Engine/Core/Resources/Shaders/ShaderManager.h"
+#include "Engine/Core/Components/SingletonComponents.h"
+
 #include "Engine/Graphics/Components/SingletonComponents.h"
+#include "Engine/Graphics/Components/GraphicsLocator.h"
 
 #include "Engine/ECS/Scene/SceneView.hpp"
 
@@ -53,5 +59,23 @@ namespace MyEngine
 	Entity CameraUtils::GetMainCamera(std::shared_ptr<Scene> pScene)
 	{
 		return *(SceneView<CameraComponent>(*pScene).begin());
+	}
+
+	void CameraUtils::UpdateCamera(std::shared_ptr<Scene> pScene)
+	{
+		std::shared_ptr<WindowComponent> pWindow = GraphicsLocator::GetWindow();
+		std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
+
+		Entity cameraId = GetMainCamera(pScene);
+		CameraComponent& camera = pScene->Get<CameraComponent>(cameraId);
+		TransformComponent& transformCamera = pScene->Get<TransformComponent>(cameraId);
+
+		glm::mat4 matProjection = CameraUtils::ProjectionMat(camera.fovy, camera.zNear,
+			camera.zFar, pWindow->width, pWindow->height);
+		glm::mat4 matView = CameraUtils::ViewMat(transformCamera.position, transformCamera.orientation,
+			camera.distance, camera.height, camera.offsetTarget);
+
+		pShader->SetUniformMatrix4f("matProjection", matProjection);
+		pShader->SetUniformMatrix4f("matView", matView);
 	}
 }

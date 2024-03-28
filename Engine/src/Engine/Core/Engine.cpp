@@ -10,13 +10,9 @@
 
 #include "Engine/Events/EventsFacade.h"
 
-#include "Engine/Debug/Components/DebugLocator.h"
-
 #include "Engine/ECS/System/SystemBuilder.h"    
 #include "Engine/ECS/Scene/SceneSerializerFactory.h"
 
-#include "Engine/Graphics/Renderer/RendererManager.h"
-#include "Engine/Graphics/Renderer/RendererManagerLocator.h"
 #include "Engine/Graphics/Components/GraphicsLocator.h"
 
 #include "Engine/Utils/InputUtils.h"
@@ -34,8 +30,7 @@ namespace MyEngine
     using itSystems = std::map<std::string, std::shared_ptr<iSystem>>::iterator;
     using pairSystems = std::pair<std::string, std::shared_ptr<iSystem>>;
 
-    Engine::Engine() : m_rendererManager(new RendererManager()),
-                       m_pScene(new Scene())
+    Engine::Engine() : m_pScene(new Scene())
 
     {
     }
@@ -117,7 +112,6 @@ namespace MyEngine
         LoadConfigurations();
 
         // Setting up services
-        RendererManagerLocator::Set(m_rendererManager);
         ThreadPoolLocator::GetOrCreate("update");
         ThreadPoolLocator::GetOrCreate("render");
 
@@ -239,15 +233,6 @@ namespace MyEngine
         {
             m_vecSystems[i]->Render(m_pScene, deltaTime);
         }
-        
-        // Render all on queue
-        std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
-        std::shared_ptr<iResourceManager> pShaderManager = ResourceManagerFactory::GetOrCreate(eResourceTypes::SHADER);
-
-        pShaderManager->ActivateResource(DEFAULT_SHADER);
-        pRenderer->UpdateCamera(m_pScene);
-        pRenderer->RenderAll(m_pScene);
-        pRenderer->ClearRender();
 
         m_EndFrame();
     }

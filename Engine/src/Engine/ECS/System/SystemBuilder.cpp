@@ -10,7 +10,6 @@
 
 #include "Engine/Graphics/WindowSystem.h"
 #include "Engine/Graphics/ModelRenderSystem.h"
-#include "Engine/Graphics/Renderer/RenderSystem.h"
 #include "Engine/Graphics/Animations/AnimationSystem.h"
 #include "Engine/Graphics/Animations/AnimationPlayerSystem.h"
 #include "Engine/Graphics/Lights/LightSystem.h"
@@ -24,10 +23,6 @@
 #include "Engine/Physics/NarrowPhaseSystem.h"
 
 #include "Engine/Gameplay/SteeringBehaviorSystem.h"
-
-#include "Engine/Debug/DebugSystem.h"
-#include "Engine/Debug/DrawGridSystem.h"
-#include "Engine/Debug/DrawCollisionSystem.h"
 
 namespace MyEngine
 {
@@ -46,7 +41,6 @@ namespace MyEngine
         {"BaseUISystem", []() { return new BaseUISystem(); }},
         {"ShaderSystem", []() { return new ShaderSystem(); }},
         {"ModelRenderSystem", []() { return new ModelRenderSystem(); }},
-        {"RenderSystem", []() { return new RenderSystem(); }},
         {"LightSystem", []() { return new LightSystem(); }},
         {"AnimationSystem", []() { return new AnimationSystem(); }},
         {"AnimationPlayerSystem", []() { return new AnimationPlayerSystem(); }},
@@ -57,11 +51,7 @@ namespace MyEngine
         {"BroadPhaseSystem", []() { return new BroadPhaseSystem(); }},
         {"NarrowPhaseSystem", []() { return new NarrowPhaseSystem(); }},
         // Gameplay
-        {"SteeringBehaviorSystem", []() { return new SteeringBehaviorSystem(); }},
-        // Debug Systems
-        {"DebugSystem", []() { return new DebugSystem(); }},
-        {"DrawGridSystem", []() { return new DrawGridSystem(); }},
-        {"DrawCollisionSystem", []() { return new DrawCollisionSystem(); }}
+        {"SteeringBehaviorSystem", []() { return new SteeringBehaviorSystem(); }}
     };
 
     void SystemBuilder::RegisterSystem(const std::string& name, SystemFactory factory)

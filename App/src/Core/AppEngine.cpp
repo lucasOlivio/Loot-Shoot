@@ -60,22 +60,11 @@ namespace MyEngine
 			"RotationSystem",
 			"BroadPhaseSystem",
 			"NarrowPhaseSystem"
-
-			// Debug
-			#ifdef DEBUG
-			,"DebugSystem"
-			#endif
 		};
 
 		pStates->mapStateSystems[eGameStates::STOPPED] = {
 			// Physics
 			"GridBroadPhaseSystem"
-			#ifdef DEBUG
-			// Debug
-			,"DebugSystem",
-			"DrawGridSystem",
-			"DrawCollisionSystem"
-			#endif
 		};
 
 		pStates->mapStateSystems[eGameStates::GAMEOVER] = {};

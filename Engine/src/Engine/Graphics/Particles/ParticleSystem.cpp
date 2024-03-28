@@ -8,7 +8,7 @@
 #include "Engine/Core/Resources/Textures/TextureManager.h"
 #include "Engine/Core/Resources/ResourceManagerFactory.h"
 
-#include "Engine/Graphics/Renderer/RendererManagerLocator.h"
+#include "Engine/Utils/CameraUtils.h"
 
 namespace MyEngine
 {
@@ -165,11 +165,10 @@ namespace MyEngine
 
     void ParticleSystem::m_ParticlesRender(std::shared_ptr<Scene> pScene)
     {
-        std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();
         std::shared_ptr<ShaderManager> pShaderManager = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
         pShaderManager->ActivateResource(PARTICLES_SHADER);
-        pRenderer->UpdateCamera(pScene);
+        CameraUtils::UpdateCamera(pScene);
 
         glActiveTexture(GL_TEXTURE0);
 
