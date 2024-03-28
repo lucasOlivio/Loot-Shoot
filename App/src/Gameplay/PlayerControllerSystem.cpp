@@ -90,7 +90,7 @@ namespace MyEngine
         }
 	}
 
-	void PlayerControllerSystem::Render(std::shared_ptr<Scene> pScene)
+	void PlayerControllerSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 	}
 

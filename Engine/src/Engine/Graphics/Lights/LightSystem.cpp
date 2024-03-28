@@ -30,7 +30,7 @@ namespace MyEngine
     {
     }
 
-    void LightSystem::Render(std::shared_ptr<Scene> pScene)
+    void LightSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
         std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 

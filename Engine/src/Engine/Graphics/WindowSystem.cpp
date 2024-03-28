@@ -43,7 +43,7 @@ namespace MyEngine
         pWindow->UnlockWrite();
 
         gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        glfwSwapInterval(1);
+        glfwSwapInterval(0);
 
         // While drawing a pixel, see if the pixel that's already there is closer or not?
         glEnable(GL_DEPTH_TEST);
@@ -62,7 +62,7 @@ namespace MyEngine
     {
     }
 
-    void WindowSystem::Render(std::shared_ptr<Scene> pScene)
+    void WindowSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

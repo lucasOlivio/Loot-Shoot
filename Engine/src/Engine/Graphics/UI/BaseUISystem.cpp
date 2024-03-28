@@ -44,7 +44,7 @@ namespace MyEngine
     {
     }
 
-    void BaseUISystem::Render(std::shared_ptr<Scene> pScene)
+    void BaseUISystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

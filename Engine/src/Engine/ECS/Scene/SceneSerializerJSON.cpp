@@ -556,8 +556,7 @@ namespace MyEngine
     {
         ParserJSON parser = ParserJSON();
 
-        parser.SetMember(jsonObject, "emitRateMin", emitterIn.emitRateMin, allocator);
-        parser.SetMember(jsonObject, "emitRateMax", emitterIn.emitRateMax, allocator);
+        parser.SetMember(jsonObject, "spawnInterval", emitterIn.spawnInterval, allocator);
         parser.SetMember(jsonObject, "maxParticles", emitterIn.maxParticles, allocator);
         parser.SetMember(jsonObject, "isActive", emitterIn.isActive, allocator);
 
@@ -1051,8 +1050,7 @@ namespace MyEngine
     {
         ParserJSON parser = ParserJSON();
 
-        parser.GetValue(jsonObject["emitRateMin"], emitterOut.emitRateMin);
-        parser.GetValue(jsonObject["emitRateMax"], emitterOut.emitRateMax);
+        parser.GetValue(jsonObject["spawnInterval"], emitterOut.spawnInterval);
         parser.GetValue(jsonObject["maxParticles"], emitterOut.maxParticles);
         parser.GetValue(jsonObject["isActive"], emitterOut.isActive);
 

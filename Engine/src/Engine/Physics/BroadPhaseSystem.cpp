@@ -106,7 +106,7 @@ namespace MyEngine
 		//pGrid->UnlockWrite();
 	}
 
-	void BroadPhaseSystem::Render(std::shared_ptr<Scene> pScene)
+	void BroadPhaseSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 	}
 

@@ -157,11 +157,9 @@ namespace MyEngine
 
 		// Time since active
 		float timer;
-		float timeLastEmit;
 
-		// Number of particles emitted per second
-		int emitRateMin;
-		int emitRateMax;
+		// Spawn every x ms
+		float spawnInterval;
 
 		int maxParticles;
 
@@ -171,7 +169,10 @@ namespace MyEngine
 
 		std::shared_ptr<sMeshInfo> pMesh;
 		std::vector<ParticleProps> particles;
+		std::vector<int> freeList;
+
 		uint ssbo0;
+		uint ssbo1;
 
 		bool isActive = false;
 	};

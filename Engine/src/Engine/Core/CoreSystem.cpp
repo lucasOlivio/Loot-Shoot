@@ -43,7 +43,7 @@ namespace MyEngine
     {
     }
 
-    void CoreSystem::Render(std::shared_ptr<Scene> pScene)
+    void CoreSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

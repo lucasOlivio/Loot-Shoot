@@ -25,7 +25,7 @@ namespace MyEngine
 	{
 	}
 
-	void ShaderSystem::Render(std::shared_ptr<Scene> pScene)
+	void ShaderSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 	}
 

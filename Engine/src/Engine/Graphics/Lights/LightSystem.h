@@ -23,7 +23,7 @@ namespace MyEngine
 
 		virtual void Update(std::shared_ptr<Scene> pScene, float deltaTime);
 
-		virtual void Render(std::shared_ptr<Scene> pScene);
+		virtual void Render(std::shared_ptr<Scene> pScene, float deltaTime);
 
 		virtual void End(std::shared_ptr<Scene> pScene);
 

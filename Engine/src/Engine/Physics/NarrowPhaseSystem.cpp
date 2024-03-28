@@ -54,7 +54,7 @@ namespace MyEngine
         //pTests->UnlockRead();
     }
 
-    void NarrowPhaseSystem::Render(std::shared_ptr<Scene> pScene)
+    void NarrowPhaseSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

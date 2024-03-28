@@ -34,7 +34,7 @@ namespace MyEngine
 		pState->UnlockWrite();
 	}
 
-	void StateSystem::Render(std::shared_ptr<Scene> pScene)
+	void StateSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 	}
 

@@ -68,7 +68,7 @@ namespace MyEngine
 		}
 	}
 
-	void MaterialOffsetSystem::Render(std::shared_ptr<Scene> pScene)
+	void MaterialOffsetSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 	}
 

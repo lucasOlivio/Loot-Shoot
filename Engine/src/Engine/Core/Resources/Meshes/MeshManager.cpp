@@ -45,7 +45,11 @@ namespace MyEngine
         return pMesh->index;
     }
 
-    std::shared_ptr<sMeshInfo> MeshManager::LoadParticles(const std::string& name, std::vector<ParticleProps>& particles, uint& particleSSBO0)
+    std::shared_ptr<sMeshInfo> MeshManager::LoadParticles(const std::string& name, 
+												          std::vector<ParticleProps>& particles, 
+												          std::vector<int>& freelist,
+												          uint& particleSSBO0,
+												          uint& particleSSBO1)
     {
         std::shared_ptr<sMeshInfo> pMesh(new sMeshInfo());
         pMesh->name = name;
@@ -53,7 +57,7 @@ namespace MyEngine
         bool isLoaded = m_LoadMeshData(name, pMesh);
         assert(isLoaded);
 
-        m_LoadParticleVAOData(pMesh, particles, particleSSBO0);
+        m_LoadParticleVAOData(pMesh, particles, freelist, particleSSBO0, particleSSBO1);
 
         return pMesh;
     }
@@ -236,7 +240,9 @@ namespace MyEngine
 
     void MeshManager::m_LoadParticleVAOData(std::shared_ptr<sMeshInfo> pMesh, 
 								            std::vector<ParticleProps>& particles,
-								            uint& particleSSBO0)
+								            std::vector<int>& freelist,
+								            uint& particleSSBO0,
+								            uint& particleSSBO1)
     {
         std::shared_ptr<ShaderManager> pShader = ResourceManagerFactory::GetOrCreate<ShaderManager>(eResourceTypes::SHADER);
 
@@ -275,16 +281,21 @@ namespace MyEngine
             pMesh->pIndices,
             GL_STATIC_DRAW);
 
-        // Unbind VAO
-        glBindVertexArray(0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
         //Create SSBO
         ParticleProps* arrayParticles = &particles[0];
         glGenBuffers(1, &particleSSBO0);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, particleSSBO0);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, particleSSBO0);
         glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(ParticleProps) * particles.size(), arrayParticles, GL_DYNAMIC_DRAW);
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, particleSSBO0);
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+        int* arrayFreelist = &freelist[0];
+        glGenBuffers(1, &particleSSBO1);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, particleSSBO1);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, particleSSBO1);
+        glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(int) * (particles.size() + 1), arrayFreelist, GL_DYNAMIC_DRAW);
+
+        // Unbind VAO
+        glBindVertexArray(0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 }

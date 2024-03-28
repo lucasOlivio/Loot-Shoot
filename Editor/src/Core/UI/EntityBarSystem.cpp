@@ -28,7 +28,7 @@ namespace MyEngine
     {
     }
 
-    void EntityBarSystem::Render(std::shared_ptr<Scene> pScene)
+    void EntityBarSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
         Entity entityId = EntitySelector::GetSelectedEntity();
         std::string sliderTitle = "Entity #" + std::to_string(entityId);

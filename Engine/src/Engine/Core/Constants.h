@@ -27,6 +27,8 @@ namespace MyEngine
 	// TODO: This should come from config?
 	const std::string DEFAULT_SHADER = "ShaderDefault";
 	const std::string PARTICLES_SHADER = "ShaderParticles";
+	const std::string UPDATE_PARTICLES_SHADER = "ShaderUpdateParticles";
+	const std::string SPAWN_PARTICLES_SHADER = "ShaderSpawnParticles";
 
 	const glm::vec3 X_VECTOR = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	const glm::vec3 Y_VECTOR = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);

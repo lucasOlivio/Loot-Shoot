@@ -23,7 +23,7 @@ namespace MyEngine
 		virtual void Update(std::shared_ptr<Scene> pScene, float deltaTime) = 0;
 
 		// Any rendering in the window
-		virtual void Render(std::shared_ptr<Scene> pScene) = 0;
+		virtual void Render(std::shared_ptr<Scene> pScene, float deltaTime) = 0;
 
 		// Finished this specific scene simulation, not necessarily end of app
 		virtual void End(std::shared_ptr<Scene> pScene) = 0;

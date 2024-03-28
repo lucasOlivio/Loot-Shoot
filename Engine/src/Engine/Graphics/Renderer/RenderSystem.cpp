@@ -115,7 +115,7 @@ namespace MyEngine
     {
     }
 
-    void RenderSystem::Render(std::shared_ptr<Scene> pScene)
+    void RenderSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

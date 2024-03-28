@@ -37,7 +37,7 @@ namespace MyEngine
 		pTimer->seconds = pTimer->miliseconds / 1000;
 	}
 
-	void TimerSystem::Render(std::shared_ptr<Scene> pScene)
+	void TimerSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 	}
 

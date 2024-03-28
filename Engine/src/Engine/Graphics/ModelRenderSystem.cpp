@@ -25,7 +25,7 @@ namespace MyEngine
     {
     }
 
-    void ModelRenderSystem::Render(std::shared_ptr<Scene> pScene)
+    void ModelRenderSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
         std::shared_ptr<iRendererManager> pRendererManager = RendererManagerLocator::Get();
 

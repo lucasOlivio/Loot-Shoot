@@ -23,7 +23,7 @@ namespace MyEngine
     {
     }
 
-    void MenuSystem::Render(std::shared_ptr<Scene> pScene)
+    void MenuSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
         // Open text box popup
         bool openLoadScene = false;

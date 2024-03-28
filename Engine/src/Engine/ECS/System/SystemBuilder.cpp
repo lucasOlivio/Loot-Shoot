@@ -15,8 +15,7 @@
 #include "Engine/Graphics/Animations/AnimationPlayerSystem.h"
 #include "Engine/Graphics/Lights/LightSystem.h"
 #include "Engine/Graphics/Shaders/ShaderSystem.h"
-#include "Engine/Graphics/Particles/ParticleEmissionSystem.h"
-#include "Engine/Graphics/Particles/ParticleUpdaterSystem.h"
+#include "Engine/Graphics/Particles/ParticleSystem.h"
 #include "Engine/Graphics/UI/BaseUISystem.h"
 
 #include "Engine/Physics/MovementSystem.h"
@@ -51,8 +50,7 @@ namespace MyEngine
         {"LightSystem", []() { return new LightSystem(); }},
         {"AnimationSystem", []() { return new AnimationSystem(); }},
         {"AnimationPlayerSystem", []() { return new AnimationPlayerSystem(); }},
-        {"ParticleEmissionSystem", []() { return new ParticleEmissionSystem(); }},
-        {"ParticleUpdaterSystem", []() { return new ParticleUpdaterSystem(); }},
+        {"ParticleSystem", []() { return new ParticleSystem(); }},
         // Physics systems
         {"MovementSystem", []() { return new MovementSystem(); }},
         {"RotationSystem", []() { return new RotationSystem(); }},

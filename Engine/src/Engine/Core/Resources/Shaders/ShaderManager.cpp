@@ -21,6 +21,13 @@ namespace MyEngine
 		return index;
 	}
 
+	size_t ShaderManager::LoadComputeShader(const std::string& name)
+	{
+		size_t index = m_CreateComputeProgramFromFile(name);
+
+		return index;
+	}
+
 	void ShaderManager::DeleteResource(const std::string& name)
 	{
 		std::shared_ptr<iResource> pShader = GetResource(name);
@@ -239,9 +246,9 @@ namespace MyEngine
 	{
 		errorText = "";	// No error
 
-		GLint wasError = 0;
-		glGetProgramiv(programID, GL_LINK_STATUS, &wasError);
-		if (wasError == GL_FALSE)
+		GLint isSuccess = 0;
+		glGetProgramiv(programID, GL_LINK_STATUS, &isSuccess);
+		if (isSuccess == GL_FALSE)
 		{
 			GLint maxLength = 0;
 			glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &maxLength);
@@ -302,6 +309,47 @@ namespace MyEngine
 
 		glAttachShader(curProgram->ID, vertexShader.ID);
 		glAttachShader(curProgram->ID, fragmentShader.ID);
+		glLinkProgram(curProgram->ID);
+
+		// Was there a link error? 
+		errorText = "";
+		bool isError = m_WasThereALinkError(curProgram->ID, errorText);
+		assert(!isError);
+
+		// At this point, shaders are compiled and linked into a program
+		curProgram->name = shaderProgram;
+
+		// Add the shader to cache
+		m_mapShaders[curProgram->name] = curProgram;
+		curProgram->index = m_vecShaders.size();
+		m_vecShaders.push_back(curProgram);
+
+		return curProgram->index;
+	}
+
+	size_t ShaderManager::m_CreateComputeProgramFromFile(std::string shaderProgram)
+	{
+		std::string errorText = "";
+
+		Shader computeShader;
+		computeShader.fileName = "compute" + shaderProgram + ".glsl";
+
+		// Shader loading happening before compute buffer array
+		computeShader.ID = glCreateShader(GL_COMPUTE_SHADER);
+		computeShader.shaderType = eShaderType::COMPUTE_SHADER;
+
+		// Load some text from a file...
+		bool textLoaded = m_LoadSourceFromFile(computeShader.fileName, computeShader.vecSource, errorText);
+		assert(textLoaded);
+
+		errorText = "";
+		bool computeLoaded = m_CompileShaderFromSource(computeShader.ID, computeShader.vecSource, errorText);
+		assert(computeLoaded);
+
+		std::shared_ptr<ShaderProgram> curProgram(new ShaderProgram());
+		curProgram->ID = glCreateProgram();
+
+		glAttachShader(curProgram->ID, computeShader.ID);
 		glLinkProgram(curProgram->ID);
 
 		// Was there a link error? 

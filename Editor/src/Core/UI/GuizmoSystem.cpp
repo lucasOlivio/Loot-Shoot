@@ -19,7 +19,7 @@ namespace MyEngine
     {
     }
 
-    void GuizmoSystem::Render(std::shared_ptr<Scene> pScene)
+    void GuizmoSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
         Entity entityId = EntitySelector::GetSelectedEntity();
 

@@ -40,7 +40,7 @@ namespace MyEngine
 		pFrame->UnlockWrite();
 	}
 
-	void FPSSystem::Render(std::shared_ptr<Scene> pScene)
+	void FPSSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 		std::shared_ptr<FrameCounterComponent> pFrame = CoreLocator::GetFrameCounter();
 

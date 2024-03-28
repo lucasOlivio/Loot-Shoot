@@ -229,22 +229,16 @@ namespace MyEngine
     {
         std::shared_ptr<iThreadPool> renderThreadPool = ThreadPoolLocator::GetOrCreate("render");
 
+        float currentTime = static_cast<float>(glfwGetTime());
+        float deltaTime = currentTime - m_lastRenderTime;
+        m_lastRenderTime = currentTime;
+
         m_BeginFrame();
 
         for (int i = 0; i < m_vecSystems.size(); i++)
         {
-            /*renderThreadPool->EnqueueTask([this, i]()
-            {
-                m_vecSystems[i]->Render(m_pScene);
-            });*/
-            m_vecSystems[i]->Render(m_pScene);
+            m_vecSystems[i]->Render(m_pScene, deltaTime);
         }
-
-        // Wait all systems send their render commands
-        /*while (renderThreadPool->RunningTasks() > 0)
-        {
-            Sleep(0);
-        }*/
         
         // Render all on queue
         std::shared_ptr<iRendererManager> pRenderer = RendererManagerLocator::Get();

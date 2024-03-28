@@ -53,7 +53,7 @@ namespace MyEngine
         }
     }
 
-    void FlyingCameraSystem::Render(std::shared_ptr<Scene> pScene)
+    void FlyingCameraSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

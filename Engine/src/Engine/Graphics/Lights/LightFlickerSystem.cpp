@@ -38,7 +38,7 @@ namespace MyEngine
         }
     }
 
-    void LightFlickerSystem::Render(std::shared_ptr<Scene> pScene)
+    void LightFlickerSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

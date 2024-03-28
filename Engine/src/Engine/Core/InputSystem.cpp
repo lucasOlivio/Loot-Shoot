@@ -37,7 +37,7 @@ namespace MyEngine
 	{
 	}
 
-	void InputSystem::Render(std::shared_ptr<Scene> pScene)
+	void InputSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
 	{
 	}
 

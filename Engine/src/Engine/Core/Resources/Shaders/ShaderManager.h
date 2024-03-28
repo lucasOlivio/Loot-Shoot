@@ -15,6 +15,7 @@ namespace MyEngine
 	public:
 		virtual void SetBasePath(const std::string& basePath);
 		virtual size_t LoadResource(const std::string& name);
+		size_t LoadComputeShader(const std::string& name);
 
 		virtual void DeleteResource(const std::string& name);
 		virtual void DeleteResource(const size_t& index);
@@ -55,6 +56,7 @@ namespace MyEngine
 		bool m_WasThereACompileError(uint shaderID, std::string& errorText);
 		bool m_WasThereALinkError(uint programID, std::string& errorText);
 		size_t m_CreateProgramFromFile(std::string shaderProgram);
+		size_t m_CreateComputeProgramFromFile(std::string shaderProgram);
 		bool m_CompileShaderFromSource(uint shaderId,
 										std::vector<std::string>& vecSource, 
 										std::string& error);

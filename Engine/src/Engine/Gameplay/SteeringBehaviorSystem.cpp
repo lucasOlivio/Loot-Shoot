@@ -96,7 +96,7 @@ namespace MyEngine
         }
     }
 
-    void SteeringBehaviorSystem::Render(std::shared_ptr<Scene> pScene)
+    void SteeringBehaviorSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

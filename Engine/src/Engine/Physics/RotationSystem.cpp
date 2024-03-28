@@ -54,7 +54,7 @@ namespace MyEngine
         }
     }
 
-    void RotationSystem::Render(std::shared_ptr<Scene> pScene)
+    void RotationSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

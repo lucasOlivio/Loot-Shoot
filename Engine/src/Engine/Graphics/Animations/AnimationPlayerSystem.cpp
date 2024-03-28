@@ -187,7 +187,7 @@ namespace MyEngine
         }
     }
 
-    void AnimationPlayerSystem::Render(std::shared_ptr<Scene> pScene)
+    void AnimationPlayerSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

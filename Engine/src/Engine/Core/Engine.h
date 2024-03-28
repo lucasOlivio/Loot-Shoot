@@ -68,6 +68,7 @@ namespace MyEngine
 		std::shared_ptr<iRendererManager> m_rendererManager;
 
 		float m_lastTime = 0.0f;
+		float m_lastRenderTime = 0.0f;
 		std::vector<float> m_frameTimes;
 
 		bool m_isRunning;

@@ -57,7 +57,7 @@ namespace MyEngine
         }
     }
 
-    void MovementSystem::Render(std::shared_ptr<Scene> pScene)
+    void MovementSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 

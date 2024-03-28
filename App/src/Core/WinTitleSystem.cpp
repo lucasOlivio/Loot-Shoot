@@ -33,7 +33,7 @@ namespace MyEngine
         pWindow->UnlockWrite();
     }
 
-    void WinTitleSystem::Render(std::shared_ptr<Scene> pScene)
+    void WinTitleSystem::Render(std::shared_ptr<Scene> pScene, float deltaTime)
     {
     }
 
